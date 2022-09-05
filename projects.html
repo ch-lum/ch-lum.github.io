@@ -20,16 +20,16 @@
 				<!-- Header -->
 					<header id="header">
 						<span class="logo"><a href="index.html" style="border: 0px;"><img src="images/logo.png" alt="" /></a></span>
-						<h1>Curriculum Vitae</h1>
-						<p>What have I been up to?</p>
+						<h1>Projects</h1>
+						<p>Anything I've worked hard on</p>
 					</header>
-				
+
 				<!-- Nav -->
 					<nav id="nav">
 						<ul>
 							<li><a href="index.html">Introduction</a></li>
-							<li><a href="projects.html">Projects</a></li>
-							<li><a href="#second" class="active">CV</a></li>
+							<li><a href="#first" class="active">Projects</a></li>
+							<li><a href="cv.html">CV</a></li>
 							<li><a href="#cta">Get Started</a></li>
 						</ul>
 					</nav>
@@ -39,41 +39,43 @@
 
 						<!-- Content -->
 							<section id="content" class="main">
-								<a href="#" class="button">Download CV</a>
-								<h2><br />Work Experience</h2>
-								<p><b>Interpretative Programs Assistant</b> @ UC San Diego—Birch Aquarium, Sep 2022-Present</p>
-								<ul>
-									<li>Thing 1</li>
-									<li>Thing 2</li>
-								</ul>
-								<p><b>Orienation Leader</b> @ UC San Diego—Warren College, Apr 2022-Sep 2022</p>
-								<ul>
-									<li>Created and led an inclusive and engaging orientation for incoming first year students</li>
-									<li>Fostered campus culture by promoting connections between new students</li>
-								</ul>
-								<p><b>Coding and Robotics Instructor</b> @ Code Ninjas, Feb 2020-Mar 2021</p>
-								<ul>
-									<li>Led coding summer camps for aspiring youth in HTML, Python, and JavaScript</li>
-								</ul>
-
-								<h2>Volunteer Work</h2>
-								<p>
-									<b>Interpretive Volunteer</b> @ UC San Diego—Birch Aquarium, Mar 2022-Sep 2022<br />
-									<b>Youth Ocean Advocate</b> @ Seattle Aquarium, Nov 2018-Sep 2021
-								</p>
-
-								<h2>Education</h2>
-								<p><b>BS Data Science, Business Minor</b> @ UC San Diego—Halıcıoğlu Data Science Institute, Rady School of Management, Sep 2021-Present</p>
-
-								<h2>Projects</h2>
-								<p><b>Almost the Same</b>, Personal Project, 2022</p>
-								<ul>
-									<li>Using a dataset of all words in the English language, created a network to understand connections between the words based on their similar spellings. Took this to look at novels and observe a hidden secret of writing.</li>
-								</ul>
-								<p><b><i>Our Orcas Are Dying</i></b>, speech @ Sammamish Strikes Back climate strike, 2019</p>
-								<ul>
-									<li>Highlighted the local impacts of climate change by focusing on its impacts in the Puget Sound's marine ecosystem, primarily through the interactions between orcas, chinook salmon, and northern fur seals.</li>
-								</ul>
+								<span class="image main"><img src="images/pic04.jpg" alt="" /></span>
+								<ul class="projects">
+									<li>
+										<div class="selimage">
+											<span class="image"><a href="#"><img src="images/sametoword.png" alt="same to word"/></a></span>
+										</div>
+										<h3>Almost the same</h3>
+										<p>Personal project exploring English through words that are <i>almost</i> the same using NetworkX and Gephi to visualize.</p>
+										<a href="https://github.com/ch-lum/Almost-the-same" target="_blank" rel="noopener noreferrer" class="button">GitHub</a>
+										<a href="projects/almost the same.html" class="button">Blog</a>
+									</li>
+									<li>
+										<div class="selimage">
+											<span class="image"><a href="#"><img src="images/ourorcasaredying.png" alt="orca"/></a></span>
+										</div>
+										<h3><i>Our Orcas Are Dying</i></h3>
+										<p>Climate strike speech calling to action by bringing focus to the animals in our local ecosystem, primarily orcas and salmon.</p>
+										<a href="#" class="button disabled">GitHub</a>
+										<a href="#" class="button">Blog</a>
+									</li>
+								<!-- WHAT MORE LOOKS LIKE
+								<ul class="projects">
+									<li>
+										<div class="selimage">
+											<span class="image"><a href="#"><img src="images/sametoword.png" alt="same to word"/></a></span>
+										</div>
+										<h3>Almost the same</h3>
+										<p>Personal project exploring English through words that are <i>almost</i> the same using NetworkX and Gephi to visualize.</p>
+									</li>
+									<li>
+										<div class="selimage">
+											<span class="image"><a href="#"><img src="images/ourorcasaredying.png" alt="orca"/></a></span>
+										</div>
+										<h3><i>Our Orcas Are Dying</i></h3>
+										<p>Climate strike speech calling to action by bringing focus to the animals in our local ecosystem, primarily orcas and salmon.</p>
+									</li>
+								-->
 							</section>
 
 					</div>
@@ -105,6 +107,7 @@
 					</footer>
 
 			</div>
+		</div>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
