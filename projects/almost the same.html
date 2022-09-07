@@ -40,13 +40,15 @@
 						<!-- Content -->
 							<section id="content" class="main">
 								<span class="image main"><img src="../images/Almostthesamegephi.png" alt="" /></span>
-								<div style="padding: 0 6em; font-size: 18px;">
+								<div class="article"
 									<p><strong>September 6, 2022</strong><br>Christopher Lum</p> <!-- Date -->
 
 									<p>What started as a simple game on a walk, <i>Almost the Same</i> took me on a journey into graphs and data viz in an unexpected first project. Despite some terrible code and questionable decisions, I came out of this project by getting my hands dirty in the very essence of data science and exploratory data analysis.</p>
+
 									<h2>Background</h2>
 									<p>A strange fondness for words started in one of two places years ago: either on YouTube by pretending to be a linguist—watching video after video on conlangs, or an addiction to the iMessage Game Pigeon game, Word Hunt. Which came first isn’t entirely certain, but what persevered is a curiosity for the structure of English and a knack for word games.</p>
 									<p>We came up with this game on a walk (as we would later discover, this wasn’t some brand new game, and people had been playing it before us—bummer!). The goal was to connect two words, for example ROAD and NAME, with words that contain all but one letter in common, both the letter itself and its position. With ROAD, we could jump to either TOAD or ROAM. This game entertained us for the better part of a half hour, and we were beginning to pick up on some strategies. It’s hard to move vowels around, so multi-lettered sounds did a lot of work for us. Additionally, the game was almost always doable with four letters, but was much more difficult with five. Maybe we just weren’t that good!</p>
+
 									<h2>Why do it in your head?</h2>
 									<p>On a road trip, we showed this game to our friend John. He wasn’t great at the game (sorry!) but together we started wondering how we could code an algorithm to solve these for us. Once we got home, we agreed to work on it for the night and come back in the morning and see what solutions we had for each other. Before we parted, we discussed some ways that we could come up with a solution together. I proposed using a tree to comb through every single combination and eventually reach the target word. He mentioned that a graph would be easier and that’s actually what I was looking for, so I took his advice and carried it into my code that night. </p>
 									<h2>Forbidden code</h2>

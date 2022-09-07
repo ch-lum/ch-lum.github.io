@@ -1799,6 +1799,29 @@ input, select, textarea {
 
 		}
 
+/* Article */
+
+	.article {
+		font-size: 18px;
+	}
+
+		@media screen and (max-width: 1680px) {
+
+			body {
+				padding: 0 6em;
+			}
+
+		}
+
+		@media screen and (max-width: 1280px) {
+			
+			body {
+				padding: 0 0.2em;
+			}
+			
+
+		}
+
 /* Box */
 
 	.box {
