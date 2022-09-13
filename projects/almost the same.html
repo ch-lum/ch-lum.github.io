@@ -30,7 +30,7 @@
 							<li><a href="../index.html">About Me</a></li>
 							<li><a href="../projects.html" class="active">Projects</a></li>
 							<li><a href="../cv.html">CV</a></li>
-							<li><a href="#cta">Get Started</a></li>
+							<li><a href="#footer">Contact</a></li>
 						</ul>
 					</nav>
 
@@ -40,14 +40,14 @@
 						<!-- Content -->
 							<section id="content" class="main">
 								<span class="image main"><img src="../images/Almostthesamegephi.png" alt="" /></span>
-								<div class="article"
+								<div class="article"></div>
 									<p><strong>September 6, 2022</strong><br>Christopher Lum</p> <!-- Date -->
 
 									<p>What started as a simple game on a walk, <i>Almost the Same</i> took me on a journey into graphs and data viz in an unexpected first project. Despite some terrible code and questionable decisions, I came out of this project by getting my hands dirty in the very essence of data science and exploratory data analysis.</p>
 
 									<h2>Background</h2>
-									<p>A strange fondness for words started in one of two places years ago: either on YouTube by pretending to be a linguist—watching video after video on conlangs, or an addiction to the iMessage Game Pigeon game, Word Hunt. Which came first isn’t entirely certain, but what persevered is a curiosity for the structure of English and a knack for word games.</p>
-									<p>We came up with this game on a walk (as we would later discover, this wasn’t some brand new game, and people had been playing it before us—bummer!). The goal was to connect two words, for example ROAD and NAME, with words that contain all but one letter in common, both the letter itself and its position. With ROAD, we could jump to either TOAD or ROAM. This game entertained us for the better part of a half hour, and we were beginning to pick up on some strategies. It’s hard to move vowels around, so multi-lettered sounds did a lot of work for us. Additionally, the game was almost always doable with four letters, but was much more difficult with five. Maybe we just weren’t that good!</p>
+									<p>A strange fondness for words started in one of two places years ago: either on YouTube by pretending to be a linguist—watching video after video on conlangs, or an addiction to the iMessage Game Pigeon game, Word Hunt. Which came first isn’t entirely certain, but what persevered was a curiosity for the structure of English and a knack for word games.</p>
+									<p>We came up with this game on a walk (as we would later discover, this wasn’t some brand new game, and people had been playing it before us—bummer!). The goal was to connect two words, for example ROAD and NAME, with words that contain all but one letter in common—both the letter itself and its position. With ROAD, we could jump to either TOAD or ROAM. This game entertained us for the better part of a half hour, and we were beginning to pick up on some strategies. It’s hard to move vowels around, so multi-lettered sounds did a lot of work for us. Additionally, the game was almost always doable with four letters, but was much more difficult with five. Maybe we just weren’t that good!</p>
 
 									<h2>Why do it in your head?</h2>
 									<p>On a road trip, we showed this game to our friend John. He wasn’t great at the game (sorry!) but together we started wondering how we could code an algorithm to solve these for us. Once we got home, we agreed to work on it for the night and come back in the morning and see what solutions we had for each other. Before we parted, we discussed some ways that we could come up with a solution together. I proposed using a tree to comb through every single combination and eventually reach the target word. He mentioned that a graph would be easier and that’s actually what I was looking for, so I took his advice and carried it into my code that night. </p>
@@ -66,10 +66,10 @@
 									<p> Despite this, in four and five-letter word networks, there are no large and isolated communities (>20 words and no edges to the main network) forming. In the six-letter word network, we finally see words that form distinct networks from each other—The main one primarily ending with -es, -ed, -en, and the other ending with -ing. </p>
 									<p>Another interesting thing is that in the four-letter word network, over 98% of the words are somehow connected to the main network. Crazy! And a lot of the words that aren’t connected are words I don’t really recognize that made it into the dictionary I was using. That explains why the game in four letters always seemed doable—because it was!</p>
 									<p>Alright, but what about five-letter words? Was I just bad at the game, or do most words just not connect? In the five-letter word network, 77% of words are connected. This means when playing with a five-letter words, there’s about a one-in-four chance your game is just impossible to end. Definitely seemed like more when I was playing!</p>
-									<p>Let’s dive a little more into the four-letter word network. What is the longest shortest path? What is the diameter of the network? Well, the average shortest path length is around 5.5 words. The longest path in the network, however, is a whopping 20 words long! A fun coincidence is that one of those edges is the word EDGE! Less fun is that the other end is the Roman numeral VIII, which somehow snuck into the library. There is a 19-long path between EDGE and EVIL though, so close enough.</p>
+									<p>Let’s dive a little more into the four-letter word network. What is the longest shortest path? Or in other words, what is the diameter of the network? Well, the average shortest path length is around 5.5 words; The longest path in the network, however, is a whopping 20 words long! A fun coincidence is that one of those edges is the word EDGE! Less fun is that the other end is the Roman numeral VIII, which somehow snuck into the library. There is a 19-long path between EDGE and EVIL though, so close enough.</p>
 									<blockquote>Edge → edgy → eddy → edda → edna → erna → erma → elma → alma → alms → ales → oles → odes → odis → obis → obit → omit → emit → emil → evil</blockquote>
 									<p>I’m not entirely sure about most of those words (and neither is autocorrect), but that’s what you get when you use a giant dictionary and are looking for outliers. I did leave implementation to change the dictionary used, however, so perhaps finer tuning is possible to make results you can always be happy with.</p>
-									<p>Here’s a question: What word has the most connections? In other words, which node in the network has the highest degree? To start, I think we should think about the properties of that word. Where would the vowel(s) appear? What consonants would be the most conducive for fitting into many words? Well, if you guessed MARS, then you would be correct. In case you were curious, here are the 32 words that connect to MARS!</p>
+									<p>Here’s a question: What word has the most connections? In other words, which node in the network has the highest degree? To start, I think we should think about the properties of that word. Where would the vowel(s) appear? What consonants would be the most conducive for fitting into many words? Take a second to think. Well if you guessed MARS, then you would be correct. In case you were curious, here are the 32 words that connect to MARS!</p>
 									<blockquote>LARS, MARA, MARC, MARI, MARK, SARS, BARS, CARS, EARS, GARS, JARS, OARS, PARS, TARS, VARS, WARS, MFRS, MASS, MAYS, MACS, MADS, MAGS, MAMS, MANS, MAPS, MATS, MAWS, MARX, MARY, MARE, MARL, MART</blockquote>
 									<p>That’s pretty good! Mostly words that I can recognize. Looking at the word, we can kind of see what makes it such a strong word for this. Ending with an S introduces a lot of plural three letter words. Additionally, having an R as the third letter is a good consonant, because it can connect to other consonants at the end (I’m not a linguist but this analysis feels right).</p>
 
@@ -91,30 +91,27 @@
 					</div>
 
 				<!-- Footer -->
-					<footer id="footer">
-						<section>
-							<h2>About Me</h2>
-							<p>WHAT DO I PUT DOWN HERE</p>
-							<ul class="actions">
-								<li><a href="#" class="button">Learn More</a></li>
-							</ul>
-						</section>
-						<section>
-							<h2>Contact</h2>
-							<dl class="alt">
-								<dt>City</dt>
-								<dd>San Diego, CA</dd>
-								<dt>Email</dt>
-								<dd><a href="mailto:cslum@ucsd.edu">cslum@ucsd.edu</a></dd>
-							</dl>
-							<ul class="icons">
-								<li><a href="https://github.com/ch-lum" class="icon brands fa-github alt" target="_blank" rel="noopener noreferrer"><span class="label">GitHub</span></a></li>
-								<li><a href="https://www.linkedin.com/in/ch-lum/" class="icon brands fa-linkedin alt" target="_blank" rel="noopener noreferrer"><span class="label">LinkedIn</span></a></li>
-								<li><a href="https://vsco.co/ch-lum/gallery" class="icon solid fa-camera-retro alt" target="_blank" rel="noopener noreferrer"><span class="label">VSCO</span></a></li>
-							</ul>
-						</section>
-						<p class="copyright">Christopher Lum | <a href="../index.html">Back to home</a>.</p>
-					</footer>
+				<footer id="footer">
+					<section>
+						<h2>About Me</h2>
+						<p>My goal is to use data to effectively share stories and to solve and communicate optimal solutions for whatever lies ahead. Feel free to contact me if you would like to work together.</p>
+					</section>
+					<section>
+						<h2>Contact</h2>
+						<dl class="alt">
+							<dt>City</dt>
+							<dd>San Diego, CA</dd>
+							<dt>Email</dt>
+							<dd>cslum[at]ucsd.edu</dd>
+						</dl>
+						<ul class="icons">
+							<li><a href="https://github.com/ch-lum" class="icon brands fa-github alt" target="_blank" rel="noopener noreferrer"><span class="label">GitHub</span></a></li>
+							<li><a href="https://www.linkedin.com/in/ch-lum/" class="icon brands fa-linkedin alt" target="_blank" rel="noopener noreferrer"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://vsco.co/ch-lum/gallery" class="icon solid fa-camera-retro alt" target="_blank" rel="noopener noreferrer"><span class="label">VSCO</span></a></li>
+						</ul>
+					</section>
+					<p class="copyright">Christopher Lum | <a href="#">Back to top</a>.</p>
+				</footer>
 
 			</div>
 
