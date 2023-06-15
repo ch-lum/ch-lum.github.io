@@ -52,11 +52,11 @@
 
 									<h2>Baseline Model</h2>
 
-									<p>What should I do to start? A little birdie (my friend John) is telling me to predict Jinx every time and to call it a day. While I could totally do that, no. For the record, that would have an accuracy of about 30%.</p>
+									<p>What should I do to start? A little birdie (my friend John) is telling me to predict Jinx every time and to call it a day. While I could totally do that, no. For the record, that would have an accuracy of about 15%.</p>
 
 									<p>For this first model, I used a random forest classifier. I decided this, because I like decision trees, and what's better than one tree, if not a forest? So now that I've settled on my estimator, here are the features I started with. Your four teammate champions, five opponent champions, the ten banned champions, and the league, and the patch. Patch is ordinal, and everything else is nominal. To start, I decided to just one hot encode all of the features. Simple enough, right? WRONG. Simple one hot encoding like this creates 2652 features. Cute! We started with a nice, round, 22 features. That's what you get when you have 162 champions, I guess.</p>
 
-									<p>Anyways! Looking past that, the untuned random forest started with a test accuracy of 46%. That's pretty good! I think... I'm not really sure. I don't really know how high this can get. My friend thinks that he can get about 30% himself (<i>what if I tested him?</i>). I think this model is fairly good as it stands since there's technically 162 total options. This model is already one and a half times better than picking Jinx every time and is 75 times better than picking a champion at random. But I would like it to at least be better than 50%. Can that be too much to ask for? (<i>Spoilers: It was a lot to ask for</i>)</p>
+									<p>Anyways! Looking past that, the untuned random forest started with a test accuracy of 46%. That's pretty good! I think... I'm not really sure. I don't really know how high this can get. My friend thinks that he can get about 30% himself (<i>what if I tested him?</i>). I think this model is fairly good as it stands since there's technically 162 total options. This model is already three times better than picking Jinx every time and is 75 times better than picking a champion at random. But I would like it to at least be better than 50%. Can that be too much to ask for? (<i>Spoilers: It was a lot to ask for</i>)</p>
 
 									<h2>Final Model</h2>
 
