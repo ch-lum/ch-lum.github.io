@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<!--
+	Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Christopher Lum</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<span class="logo"><a href="../index.html" style="border: 0px;"><img src="../images/logo.png" alt="" /></a></span>
+						<h1>ProPublica 990 Parser</h1>
+						<p>Automating an Antiquated Task</p>
+					</header>
+				
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="../index.html">About Me</a></li>
+							<li><a href="../projects.html" class="active">Projects</a></li>
+							<li><a href="../assets/documents/cv.pdf">CV</a></li>
+							<li><a href="#footer">Contact</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Content -->
+							<section id="content" class="main">
+								<span class="image main"><img src="../images/rl_banner.jpeg" alt="" /></span>
+								<div class="article"></div>
+									<p><strong>September 27, 2023</strong><br>Christopher Lum</p> <!-- Date -->
+									<p><a href="https://github.com/ch-lum/propublica-parser">Github</a></p>
+
+									<p>One of the most satisfying feelings is when things finally come together. 
+									Scrambling around for months with blank canvases, disconnected pieces, 
+									and a vision, never ceases to combine with immense satisfaction
+									–being able to see the final product at the end of the tunnel. 
+									This happens often in projects by starting at a blank python file, 
+									but this one, my ProPublica Parser, begins much earlier. 
+									Months before I knew what problem I needed to solve, I sat in a classroom, 
+									learning the tools for the first time.</p>
+
+									<p>The story of the ProPublica Parser follows a class, 
+									my first internship, and it all coming together.</p>
+
+									<h2>DSC 80 at UC San Diego</h2>
+
+									<p>The Halıcıoğlu Data Science Institute wraps up its lower division courses 
+									with an applications-based course called DSC 80: Practice and Application of Data Science. 
+									Throughout the course, small projects are assigned that target very specific skills. 
+									HTTP web scraping, regex, feature engineering, and more are all examples of topics of the course.</p>
+
+									<p>This class serves as background for my ProPublica Parser. 
+									Being my first project-based course in Data Science, 
+									it felt great to be able to take what we’re learning and immediately use it on datasets. 
+									My final project write ups can be found as 
+									part one <a href="https://ch-lum.github.io/projects/lol%20madness%201.html">here</a> 
+									and part two <a href="https://ch-lum.github.io/projects/lol%20madness%202.html">here</a>. 
+									I had learned a lot from this course, most impactful was learning how to use APIs and how to scrape webpages. 
+									I had tried teaching myself before but the formal education here made the concepts much clearer. 
+									Little did I know I would get to apply these skills immediately.</p>
+
+									<h2>San Diego County Taxpayers Association</h2>
+									
+									<p>My first data science internship was the following summer. 
+									Here, the overarching goal was to analyze the effectiveness of how San Diego County spends money on solutions to homelessness. 
+									As an earlier cohort of interns at the organization, 
+									we were primarily tasked with building datasets that we could analyze at a later time. 
+									One dataset we had was full of figures of different nonprofits over the years on their 990 tax forms. 
+									I was initially assigned a stack of organizations to then scrape, <i>by hand</i>, 
+									and fill into a Google Sheet. <i>By hand</i>? 
+									Immediately, I recognized that this was a process that could be done much faster.</p>
+
+									<h2>ProPublica Parser</h2>
+
+									<p>Fortunately for me, in 2017, ProPublica began uploading organizations’ tax forms in XML. 
+									This was especially convenient as I had just learned how to scrape XML files in DSC 80. 
+									From our existing dataset, I had a set of organizations’ identification numbers that I could use to find their ProPublica page. 
+									I used BeautifulSoup to parse the XML files and Pandas to flag errors in the XMLs. 
+									The pipeline for the scraping takes in an organization ID, finds the XMLs, then parses each XML as a row for a table.</p>
+
+									<p>In the end, my parser was able to double the size of our dataset 
+									by being able to quickly scrape more years and more organizations. 
+									It accurately scraped 98.5% of all 990s and flagged the errors for a human to fix. 
+									In fact, it made less errors than when we had done it by hand; 
+									Several errors were caught by looking at the discrepancies between our old data and our new data.
+									The errors were consistent, being only in one column and being due to an error in the XML itself.</p>
+
+									<p>The prior three months of DSC 80 were incredibly satisfying to be able to apply in a real-world scenario. 
+									I wasn’t entirely expecting to be able to use the course topics so quickly after using them. 
+									This class has taught me to really focus on understanding my classes and prioritize learning over a grade. 
+									Ultimately, development of the parser saved immense amounts of time and meant we could focus on other projects. 
+									My contributions can be found 
+									<a href="https://github.com/ch-lum/propublica-parser">here</a> and the overall project can be found at 
+									<a href="https://github.com/dbyers15/SDCTA-homelessness/tree/main/XML%20parser">this</a> repo.</p>
+
+									<p><i>Christopher Lum</i></p>
+
+								</div>
+								
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+				<footer id="footer">
+					<section>
+						<h2>About Me</h2>
+						<p>My goal is to use data to effectively share stories and to solve and communicate optimal solutions for whatever lies ahead. Feel free to contact me if you would like to work together.</p>
+					</section>
+					<section>
+						<h2>Contact</h2>
+						<dl class="alt">
+							<dt>City</dt>
+							<dd>San Diego, CA</dd>
+							<dt>Email</dt>
+							<dd>lum[at]ucsd.edu</dd>
+						</dl>
+						<ul class="icons">
+							<li><a href="https://github.com/ch-lum" class="icon brands fa-github alt" target="_blank" rel="noopener noreferrer"><span class="label">GitHub</span></a></li>
+							<li><a href="https://www.linkedin.com/in/ch-lum/" class="icon brands fa-linkedin alt" target="_blank" rel="noopener noreferrer"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://vsco.co/ch-lum/gallery" class="icon solid fa-camera-retro alt" target="_blank" rel="noopener noreferrer"><span class="label">VSCO</span></a></li>
+						</ul>
+					</section>
+					<p class="copyright">Christopher Lum | <a href="#">Back to top</a>.</p>
+				</footer>
+
+			</div>
+
+		<!-- Anchor -->
+			<img src="../images/footerimage.png" style="width:100%; margin-top: -10em; pointer-events: none; user-select: none;">
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+
+	</body>
+</html>
