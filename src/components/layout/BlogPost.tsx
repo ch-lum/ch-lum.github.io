@@ -15,7 +15,7 @@ export default function BlogPost({ title, date, readingTime, content }: BlogPost
         <div className="text-gray-600">{date} · {readingTime}</div>
       </header>
 
-      <div className="prose lg:prose-lg">
+      <div className="prose lg:prose-lg prose-img:mx-auto">
         {content}
       </div>
     </article>
