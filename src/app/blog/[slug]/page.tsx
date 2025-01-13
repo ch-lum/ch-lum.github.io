@@ -16,6 +16,19 @@ interface Props {
 export default async function BlogPostPage(props: Props) {
   const { slug } = await props.params
   const post = getPostBySlug(slug)
+  const allPosts = getAllPosts()
+  
+  // Get 2 random posts that aren't the current post
+  const relatedPosts = allPosts
+    .filter(p => p.slug !== slug)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 2)
+    .map(p => ({
+      title: p.title,
+      slug: p.slug,
+      description: p.description
+    }))
+
   const { content } = await compileMDX({
     source: post.content,
     components: {},
@@ -27,6 +40,7 @@ export default async function BlogPostPage(props: Props) {
       date={post.date}
       readingTime={post.readingTime}
       content={content}
+      relatedPosts={relatedPosts}
     />
   )
 } 
