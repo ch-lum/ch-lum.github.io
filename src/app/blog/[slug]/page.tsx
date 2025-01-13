@@ -1,6 +1,7 @@
 import { getPostBySlug, getAllPosts } from '@/lib/mdx'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import BlogPost from '@/components/layout/BlogPost'
+import { PageProps } from 'next/types'
 
 export async function generateStaticParams() {
   const posts = getAllPosts()
@@ -9,13 +10,10 @@ export async function generateStaticParams() {
   }))
 }
 
-type Props = {
-  params: {
-    slug: string
-  }
-}
-
-export default async function BlogPage({ params }: Props) {
+export default async function BlogPost({
+  params,
+  searchParams,
+}: PageProps<{ slug: string }>) {
   const post = getPostBySlug(params.slug)
   const { content } = await compileMDX({
     source: post.content,
