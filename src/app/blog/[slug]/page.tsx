@@ -9,13 +9,16 @@ export async function generateStaticParams() {
   }))
 }
 
-type Props = {
-  params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+interface PageParams {
+  slug: string
 }
 
-export default async function BlogPostPage(props: Props) {
-  const post = getPostBySlug(props.params.slug)
+export default async function BlogPostPage({
+  params,
+}: {
+  params: PageParams
+}) {
+  const post = getPostBySlug(params.slug)
   const { content } = await compileMDX({
     source: post.content,
     components: {},
