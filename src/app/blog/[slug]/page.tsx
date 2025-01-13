@@ -9,14 +9,11 @@ export async function generateStaticParams() {
   }))
 }
 
-interface PageParams {
-  slug: string
-}
-
 export default async function BlogPostPage({
   params,
 }: {
-  params: PageParams
+  params: { slug: string },
+  searchParams?: { [key: string]: string | string[] | undefined }
 }) {
   const post = getPostBySlug(params.slug)
   const { content } = await compileMDX({
