@@ -11,6 +11,7 @@ interface BlogPost {
   date: string;
   readingTime: string;
   description: string;
+  excerpt?: string;
 }
 
 export function getPostBySlug(slug: string): BlogPost {
