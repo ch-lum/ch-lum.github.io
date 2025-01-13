@@ -14,10 +14,10 @@ export default function HomePage() {
         <div className="relative">
           <div className="relative bg-white p-8 rounded-2xl border border-accent/20">
             <h1 className="text-4xl font-bold mb-4">
-              Hi, I'm Christopher Lum 👋
+              Hi, I&apos;m Christopher Lum 👋
             </h1>
             <p className="text-xl text-gray-600 mb-6">
-              I'm a data scientist and software engineer passionate about using data 
+              I&apos;m a data scientist and software engineer passionate about using data 
               to tell stories and solve problems.
             </p>
             <div className="flex space-x-4">
