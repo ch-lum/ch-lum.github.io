@@ -1,101 +1,99 @@
 import Image from "next/image";
+import Link from "next/link";
+import { getAllPosts } from "@/lib/mdx";
+import { projects } from "@/lib/projects";
 
-export default function Home() {
+export default function HomePage() {
+  const recentPosts = getAllPosts().slice(0, 3);
+  const recentProjects = projects.slice(0, 3);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Hero Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24 animate-fade-in-down">
+        <div className="relative">
+          <div className="relative bg-white p-8 rounded-2xl border border-accent/20">
+            <h1 className="text-4xl font-bold mb-4">
+              Hi, I'm Christopher Lum 👋
+            </h1>
+            <p className="text-xl text-gray-600 mb-6">
+              I'm a data scientist and software engineer passionate about using data 
+              to tell stories and solve problems.
+            </p>
+            <div className="flex space-x-4">
+              <Link 
+                href="/projects"
+                className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-opacity"
+              >
+                View Projects
+              </Link>
+              <Link
+                href="/blog"
+                className="border border-accent text-accent px-6 py-2 rounded-lg hover:bg-accent hover:text-white transition-colors"
+              >
+                Read Blog
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <div className="relative w-fit">
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/images/profile.jpg"
+            alt="Christopher Lum"
+            width={400}
+            height={400}
+            className="rounded-2xl"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+      </div>
+
+      {/* Recent Works Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+        {/* Recent Projects */}
+        <div className="animate-[fade-in-down_0.5s_ease-out_0.2s] opacity-0 [animation-fill-mode:forwards]">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Recent Projects</h2>
+            <Link href="/projects" className="text-accent hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="space-y-6">
+            {recentProjects.map((project, index) => (
+              <Link 
+                key={index} 
+                href={project.link}
+                className="block p-6 border border-accent/20 rounded-lg hover:border-accent/40 transition-colors"
+              >
+                <h3 className="font-bold mb-2">{project.title}</h3>
+                <p className="text-gray-600">{project.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Blog Posts */}
+        <div className="animate-[fade-in-down_0.5s_ease-out_0.4s] opacity-0 [animation-fill-mode:forwards]">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Recent Posts</h2>
+            <Link href="/blog" className="text-accent hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="space-y-6">
+            {recentPosts.map((post) => (
+              <Link 
+                key={post.slug} 
+                href={`/blog/${post.slug}`}
+                className="block p-6 border border-accent/20 rounded-lg hover:border-accent/40 transition-colors"
+              >
+                <h3 className="font-bold mb-2">{post.title}</h3>
+                <p className="text-gray-600 mb-2">{post.description}</p>
+                <div className="text-sm text-gray-500">{post.date}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
