@@ -13,16 +13,14 @@ export default function HomePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24 animate-fade-in-down">
         <div className="relative">
           <div className="relative bg-white p-8 rounded-2xl border border-accent/20">
-            <h1 className="text-4xl font-bold mb-4">
-              Hi, I&apos;m Chris!
-            </h1>
+            <h1 className="text-4xl font-bold mb-4">Hi, I&apos;m Chris!</h1>
             <p className="text-xl text-gray-600 mb-6">
-              I&apos;m a data scientist and software engineer passionate about telling 
-              stories with data. Data visualization pushes me to think creatively about
-              the human side of data.
+              I&apos;m a data scientist and software engineer passionate about
+              telling stories with data. Data visualization pushes me to think
+              creatively about the human side of data.
             </p>
             <div className="flex space-x-4">
-              <Link 
+              <Link
                 href="/projects"
                 className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-opacity"
               >
@@ -60,8 +58,8 @@ export default function HomePage() {
           </div>
           <div className="space-y-6">
             {recentProjects.map((project, index) => (
-              <Link 
-                key={index} 
+              <Link
+                key={index}
                 href={project.link}
                 className="block p-6 border border-accent/20 rounded-lg hover:border-accent/40 transition-colors"
               >
@@ -82,8 +80,8 @@ export default function HomePage() {
           </div>
           <div className="space-y-6">
             {recentPosts.map((post) => (
-              <Link 
-                key={post.slug} 
+              <Link
+                key={post.slug}
                 href={`/blog/${post.slug}`}
                 className="block p-6 border border-accent/20 rounded-lg hover:border-accent/40 transition-colors"
               >

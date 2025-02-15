@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 gap-y-2">
           <Link 
             href="/" 
-            className="text-xl font-bold hover:text-gray-600 transition-colors"
+            className="texÍt-xl font-bold hover:text-gray-600 transition-colors"
           >
             Christopher Lum
           </Link>
