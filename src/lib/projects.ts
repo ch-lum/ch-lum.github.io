@@ -15,11 +15,25 @@ export const projects: Project[] = [
     tags: ['Research', 'Data Science Pedagogy', 'SIGCSE 2025']
   },
   {
+    title: 'ClassBuzz',
+    description: 'Led a team of undergraduates to develop an in-class polling tool used by 400+ students quarterly in HDSI.',
+    image: '/images/banners/classbuzz_banner.jpg',
+    link: 'https://tryclassbuzz.com',
+    tags: ['Full Stack', 'Next.JS', 'Educational Technology']
+  },
+  {
     title: 'Comment Section Sentiment Analysis',
     description: 'Visualization of positive and negative comments from a Facebook comment section.',
     image: '/images/banners/comment_vis_banner.jpg',
     link: 'https://ch-lum.github.io/comment-vis/',
     tags: ['D3.js', 'Sentiment Analysis', 'Data Visualization']
+  },
+  {
+    title: 'Pandas Tutor',
+    description: 'A tool to visualize Pandas table manipulations used at UC San Diego intro data science courses. I made the memory management more efficient so it can be used with larger datasets.',
+    image: '/images/banners/pandas_tutor_banner.jpg',
+    link: 'https://pandastutor.com/',
+    tags: ['Backend', 'Educational Technology', 'Pandas']
   },
   {
     title: 'San Diego Parking Meters',
