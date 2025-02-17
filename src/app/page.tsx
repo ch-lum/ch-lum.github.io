@@ -51,7 +51,7 @@ export default function HomePage() {
         {/* Recent Projects */}
         <div className="animate-[fade-in-down_0.5s_ease-out_0.2s] opacity-0 [animation-fill-mode:forwards]">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Recent Projects</h2>
+            <h2 className="text-2xl font-bold">Top Projects</h2>
             <Link href="/projects" className="text-accent hover:underline">
               View all →
             </Link>
