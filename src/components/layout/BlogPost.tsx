@@ -1,5 +1,5 @@
 // import { MDXRemote } from 'next-mdx-remote'
-import Link from 'next/link'
+import Link from "next/link";
 
 interface BlogPostProps {
   title: string;
@@ -13,18 +13,20 @@ interface BlogPostProps {
   }>;
 }
 
-export default function BlogPost({ 
-  title, 
-  date, 
-  readingTime, 
+export default function BlogPost({
+  title,
+  date,
+  readingTime,
   content,
-  relatedPosts 
+  relatedPosts,
 }: BlogPostProps) {
   return (
     <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <header className="mb-8 animate-[fade-in-down_0.5s_ease-out] opacity-0 [animation-fill-mode:forwards]">
         <h1 className="text-4xl font-bold mb-2">{title}</h1>
-        <div className="text-gray-600">{date} · {readingTime}</div>
+        <div className="text-gray-600">
+          {date} · {readingTime}
+        </div>
       </header>
 
       <div className="prose lg:prose-lg prose-img:mx-auto animate-[fade-in-down_0.5s_ease-out_0.2s] opacity-0 [animation-fill-mode:forwards]">
@@ -36,7 +38,7 @@ export default function BlogPost({
           <h2 className="text-2xl font-bold mb-6">See More</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {relatedPosts.map((post) => (
-              <Link 
+              <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
                 className="block p-6 border rounded-lg hover:border-accent transition-colors"
@@ -49,5 +51,5 @@ export default function BlogPost({
         </div>
       )}
     </article>
-  )
-} 
+  );
+}
