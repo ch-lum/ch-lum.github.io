@@ -9,6 +9,15 @@ export interface Project {
 export const projects: Project[] = [
   {
     title:
+      "Privacy in Practice: The Feasibility of Differential Privacy for Telemetry Analysis",
+    description:
+      "Replicated four analysis papers on Intel Telemetry data using differential privacy to pioneer DP in telemetry analysis.",
+    image: "/images/banners/privacy_banner.jpg",
+    link: "https://ch-lum.github.io/privacy-in-practice/",
+    tags: ["Research", "Differential Privacy", "Telemetry Analysis"],
+  },
+  {
+    title:
       "“I’m not sure, but...”: Expert Practices that Enable Effective Code Comprehension in Data Science",
     description:
       "Christopher Lum*, Guoxuan Xu*, Sam Lau (*equal contribution). ACM Technical Symposium on Computer Science Education (SIGCSE), 2025.",
