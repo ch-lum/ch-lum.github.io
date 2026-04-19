@@ -7,8 +7,8 @@ import Footer from "../components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Christopher Lum",
-  description: "Personal portfolio and blog of Christopher Lum",
+  title: "Chris Lum",
+  description: "Personal portfolio and blog of Chris Lum",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

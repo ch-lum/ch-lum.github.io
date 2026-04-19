@@ -38,7 +38,7 @@ export default function HomePage() {
         <div className="relative w-fit">
           <Image
             src="/images/profile.jpg"
-            alt="Christopher Lum"
+            alt="Chris Lum"
             width={400}
             height={400}
             className="rounded-2xl"

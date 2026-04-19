@@ -9,7 +9,7 @@ export default function Navbar() {
     { label: 'Home', href: '/' },
     { label: 'Projects', href: '/projects' },
     { label: 'Blog', href: '/blog' },
-    { label: 'CV', href: '/documents/christopher-lum-cv.pdf' },
+    { label: 'CV', href: '/documents/chrissy-lum-cv.pdf' },
   ]
 
   return (
@@ -20,7 +20,7 @@ export default function Navbar() {
             href="/" 
             className="texÍt-xl font-bold hover:text-gray-600 transition-colors"
           >
-            Christopher Lum
+            Chris Lum
           </Link>
           
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
