@@ -13,7 +13,7 @@ export default function HomePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24 animate-fade-in-down">
         <div className="relative">
           <div className="relative bg-white p-8 rounded-2xl border border-accent/20">
-            <h1 className="text-4xl font-bold mb-4">Hi, I&apos;m Chris!</h1>
+            <h1 className="text-4xl font-bold mb-4">Hi, I&apos;m Chrissy!</h1>
             <p className="text-xl text-gray-600 mb-6">
               I&apos;m a data scientist and software engineer passionate about
               telling stories with data. Data visualization pushes me to think
@@ -38,7 +38,7 @@ export default function HomePage() {
         <div className="relative w-fit">
           <Image
             src="/images/profile.jpg"
-            alt="Chris Lum"
+            alt="Chrissy Lum"
             width={400}
             height={400}
             className="rounded-2xl"

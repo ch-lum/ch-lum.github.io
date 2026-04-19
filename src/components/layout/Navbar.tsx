@@ -20,7 +20,7 @@ export default function Navbar() {
             href="/" 
             className="texÍt-xl font-bold hover:text-gray-600 transition-colors"
           >
-            Chris Lum
+            Chrissy Lum
           </Link>
           
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
