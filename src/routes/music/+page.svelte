@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { flip } from 'svelte/animate';
   import musicCsv from '../../../content/music.csv?raw';
   import spotifyAlbums from '../../../content/spotify-albums.json';
 
@@ -11,6 +12,7 @@
     spotifyUrl: string;
   };
   type Album = SpotifyAlbum & { note: string; synced: boolean };
+  type SortKey = 'name' | 'artist' | 'releaseDate';
 
   function parseLine(line: string) {
     const values: string[] = [];
@@ -54,7 +56,16 @@
   });
 
   let selected = $state<Album | null>(null);
+  let sortBy = $state<SortKey>('name');
   let detailsDialog: HTMLDialogElement;
+
+  const sortedAlbums = $derived(
+    [...albums].sort((a, b) => {
+      if (sortBy === 'releaseDate') return b.releaseDate.localeCompare(a.releaseDate);
+      if (sortBy === 'artist') return (a.artists[0] ?? '').localeCompare(b.artists[0] ?? '') || a.name.localeCompare(b.name);
+      return a.name.localeCompare(b.name);
+    })
+  );
 
   function showDetails(album: Album) {
     selected = album;
@@ -89,9 +100,19 @@
     <p class="intro">Albums that found a place in my life, and a few words about why.</p>
   </header>
 
+  <div class="controls">
+    <label>Arrange by
+      <select bind:value={sortBy}>
+        <option value="name">Name</option>
+        <option value="artist">Artist</option>
+        <option value="releaseDate">Release Date</option>
+      </select>
+    </label>
+  </div>
+
   <section class="albums" aria-label="Album archive">
-    {#each albums as album (album.id)}
-      <article>
+    {#each sortedAlbums as album (album.id)}
+      <article animate:flip={{ duration: 550 }}>
         <button class="album" onclick={() => showDetails(album)}>
           {#if album.artwork}
             <img src={album.artwork} alt={`Cover of ${album.name}`} />
@@ -146,7 +167,10 @@
   h1 { margin: 0; font-size: clamp(4rem, 10vw, 8rem); font-weight: 400; line-height: .85; }
   .eyebrow { margin: 0 0 .65rem; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; }
   .intro { max-width: 24rem; margin: 0; font-size: 1.05rem; line-height: 1.5; }
-  .albums { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); padding-top: 4rem; }
+  .controls { display: flex; min-height: 5rem; align-items: center; justify-content: flex-end; }
+  label { display: flex; align-items: center; gap: .65rem; font-size: .85rem; }
+  select { border: 1px solid rgb(48 43 36 / 35%); background: transparent; color: inherit; font: inherit; padding: .55rem .9rem; }
+  .albums { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); }
   article { min-width: 0; }
   button { color: inherit; font: inherit; }
   .album { display: block; width: 100%; border: 0; background: transparent; cursor: pointer; padding: 0; text-align: left; }
