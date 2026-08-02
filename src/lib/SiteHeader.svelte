@@ -6,7 +6,7 @@
   <nav aria-label="Primary navigation">
     <a href="/">Home</a>
     <a href="/about/">About</a>
-    <a href="/blog/">Blog</a>
+    <a href="/long-form/">Blog</a>
   </nav>
 </header>
 
