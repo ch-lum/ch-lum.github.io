@@ -7,6 +7,7 @@
     <a href="/">Home</a>
     <a href="/about/">About</a>
     <a href="/long-form/">Blog</a>
+    <a href="/Chrissy-Lum-Resume.pdf" target="_blank" rel="noreferrer">CV</a>
   </nav>
 </header>
 
