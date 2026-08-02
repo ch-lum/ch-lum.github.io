@@ -17,9 +17,9 @@
 
 <main>
   <section class="intro" aria-labelledby="projects-title">
-    <p class="eyebrow">Selected work</p>
+    <p class="eyebrow">Some things I've done</p>
     <h1 id="projects-title">Projects</h1>
-    <p class="career-note">I’m a data analyst with a data science background, interested in turning messy systems into useful tools, explanations, and decisions. My work tends to live somewhere between research, education, visualization, and building the thing myself.</p>
+    <p class="career-note">Professionally, I am a data scientist looking at hotel room prices at Caesars Entertainment</p>
   </section>
 
   <section class="computer" aria-label="Project desktop">

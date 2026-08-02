@@ -20,13 +20,13 @@ export const navigation = [
     hoverImage: '/home_imgs/short-form-open.PNG',
     motion: 'swap'
   },
-  {
-    label: 'D&D',
-    href: '/dnd/',
-    image: '/home_imgs/dnd-closed.PNG',
-    hoverImage: '/home_imgs/dnd-open.PNG',
-    motion: 'swap'
-  },
+  // {
+  //   label: 'D&D',
+  //   href: '/dnd/',
+  //   image: '/home_imgs/dnd-closed.PNG',
+  //   hoverImage: '/home_imgs/dnd-open.PNG',
+  //   motion: 'swap'
+  // },
   { label: 'coffee', href: '/coffee/', image: '/home_imgs/kettle.PNG', motion: 'tip' },
   { label: 'music', href: '/music/', image: '/home_imgs/record.png', motion: 'spin' }
 ] as const;

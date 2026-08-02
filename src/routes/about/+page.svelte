@@ -25,11 +25,11 @@
     <p class="eyebrow">Contact Me</p>
     <h2 id="contact-title">My Digital Footprint</h2>
     <ul>
+      <li><a href="mailto:chrlum03@gmail.com"><span>Email</span><small>chrlum03@gmail.com</small></a></li>
       <li><a href="https://substack.com/@ch0rcoal" target="_blank" rel="noreferrer"><span>Substack</span><small>Visit profile ↗</small></a></li>
       <li><a href="https://open.spotify.com/user/thegreatgecko" target="_blank" rel="noreferrer"><span>Spotify</span><small>Visit profile ↗</small></a></li>
       <li><a href="https://github.com/ch-lum" target="_blank" rel="noreferrer"><span>GitHub</span><small>Visit profile ↗</small></a></li>
       <li><a href="https://www.linkedin.com/in/ch-lum/" target="_blank" rel="noreferrer"><span>LinkedIn</span><small>Visit profile ↗</small></a></li>
-      <li><a href="mailto:chrlum03@gmail.com"><span>Email</span><small>chrlum03@gmail.com</small></a></li>
     </ul>
   </section>
 </main>

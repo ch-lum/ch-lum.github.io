@@ -28,7 +28,7 @@
 
 <main>
   <header>
-    <p>Essays, projects & reflections</p>
+    <p>Things I put thought into</p>
     <h1>Long Form</h1>
   </header>
 
