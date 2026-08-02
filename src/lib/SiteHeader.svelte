@@ -1,6 +1,6 @@
 <header>
   <a class="signature" href="/" aria-label="Chrissy Lum — home">
-    <img src="/placeholders/autograph-start.svg" alt="" />
+    <img src="/home_imgs/autograph-start.svg" alt="" />
   </a>
 
   <nav aria-label="Primary navigation">

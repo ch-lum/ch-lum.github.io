@@ -11,7 +11,7 @@
 <main>
   <section class="portrait-card" aria-labelledby="intro-title">
     <div class="words">
-      <img class="autograph" src="/placeholders/autograph-start.svg" alt="Chrissy Lum" />
+      <img class="autograph" src="/home_imgs/autograph-start.svg" alt="Chrissy Lum" />
       <div class="introduction">
         <h1 id="intro-title"><a class="about-link" href="/about/">Who am I?</a></h1>
         <p>
@@ -21,7 +21,7 @@
         </p>
       </div>
     </div>
-    <img class="portrait" src="/placeholders/portrait.JPG" alt="Chrissy Lum" />
+    <img class="portrait" src="/home_imgs/portrait.JPG" alt="Chrissy Lum" />
   </section>
 
   <nav aria-label="Explore the site">
@@ -32,7 +32,7 @@
 </main>
 
 <style>
-  main { width: min(58rem, calc(100% - 3rem)); margin: 0 auto; padding: clamp(3rem, 9vh, 7rem) 0 4rem; }
+  main { width: min(78rem, calc(100% - 3rem)); margin: 0 auto; padding: clamp(3rem, 9vh, 7rem) 0 4rem; }
   .portrait-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -49,7 +49,7 @@
   .about-link:focus-visible { outline: none; }
   p { margin: 0; font-size: clamp(.78rem, 1.05vw, .9rem); line-height: 1.55; }
   .portrait { width: 100%; height: 100%; object-fit: cover; }
-  nav { display: flex; justify-content: center; gap: clamp(1rem, 6vw, 4rem); margin-top: clamp(2.4rem, 7vw, 5rem); }
+  nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: clamp(2.4rem, 7vw, 5rem); }
   @media (max-width: 600px) {
     main { width: min(100% - 2rem, 30rem); padding-top: 2rem; }
     .portrait-card { grid-template-columns: 1fr; width: min(100%, 22rem); aspect-ratio: auto; }
