@@ -1,3 +1,4 @@
-roast_date,roaster,region,producer,elevation,process,variety,roast_level,image
-2026-06-14,Harbor & Pine,Huila Colombia,Finca El Mirador,1750–1950 masl,Washed,Caturra & Castillo,Light,2026-06-14.svg
-2026-07-03,North Star Coffee,Guji Ethiopia,Ayele Tulu,2000–2200 masl,Natural,Heirloom,Light-medium,2026-07-03.svg
+roast_date,name,roaster,region,producer,elevation,process,variety,roast_level,image
+2026-06-26,Monte Azul,Mothership Coffee Roasters,Chiapas Mexico,Monte Azul,1200-1700 masl,Washed,Typica & Bourbon & Caturra & Catuai,Medium,2026-06-26.PNG
+2026-05-18,Chiapas Smallholder Farms,Mothership Coffee Roasters,Chiapas Mexico,Smallholder Farms,1200-1900 masl,Washed,Bourbon & Catuai & Catimor & Caturra & Pacamara & Typica,Medium,2026-05-18.PNG
+2026-04-29,Fernando Diaz,Bird Rock Coffee Roasters,Santa Rosa Guatemala,Fernando Diaz,1650-1800 masl,Pinapple Fermentation,Bourbon,Light,2026-04-29.PNG

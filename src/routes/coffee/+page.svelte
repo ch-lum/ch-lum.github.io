@@ -6,6 +6,7 @@
   type ClusterKey = 'roaster' | 'region' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
   type Coffee = {
     roastDate: string;
+    name: string;
     roaster: string;
     region: string;
     producer: string;
@@ -57,18 +58,22 @@
     const headers = parseLine(headerLine);
     const seenDates = new Set<string>();
     return lines.filter((line) => line.trim()).map((line) => {
-      const row = Object.fromEntries(headers.map((header, index) => [header, parseLine(line)[index] ?? '']));
+      const values = parseLine(line);
+      const row = Object.fromEntries(headers.map((header, index) => [header, values[index] ?? '']));
+      const optional = (field: string, fallback = 'Not provided') => row[field]?.trim() || fallback;
+      if (!row.roast_date?.trim()) throw new Error('Every coffee row needs a roast_date.');
       if (seenDates.has(row.roast_date)) throw new Error(`Duplicate roast date: ${row.roast_date}`);
       seenDates.add(row.roast_date);
       return {
         roastDate: row.roast_date,
-        roaster: row.roaster,
-        region: row.region,
-        producer: row.producer,
-        elevation: row.elevation,
-        process: row.process,
-        variety: row.variety,
-        roastLevel: row.roast_level,
+        name: optional('name', 'Unnamed coffee'),
+        roaster: optional('roaster'),
+        region: optional('region'),
+        producer: optional('producer'),
+        elevation: optional('elevation'),
+        process: optional('process'),
+        variety: optional('variety'),
+        roastLevel: optional('roast_level'),
         image: `/coffee_bags/${row.image || `${row.roast_date}.png`}`
       };
     });
@@ -129,9 +134,9 @@
         {#if view === 'cluster' && (index === 0 || displayedCoffees[index - 1][clusterBy] !== coffee[clusterBy])}
           <h2>{coffee[clusterBy]}</h2>
         {/if}
-        <button class="bag" onclick={() => showDetails(coffee)} aria-label={`View ${coffee.roaster} coffee details`}>
-          <img src={coffee.image} alt={`${coffee.roaster} coffee bag from ${coffee.region}`} />
-          <span class="bag-copy"><strong>{coffee.roaster}</strong><small>{coffee.region}</small></span>
+        <button class="bag" onclick={() => showDetails(coffee)} aria-label={`View ${coffee.name} coffee details`}>
+          <img src={coffee.image} alt={`${coffee.name} coffee bag from ${coffee.region}`} />
+          <span class="bag-copy"><strong>{coffee.name}</strong><small>{coffee.region}</small></span>
         </button>
         {#if view === 'timeline'}<time datetime={coffee.roastDate}>{formatDate(coffee.roastDate)}</time>{/if}
       </article>
@@ -143,8 +148,8 @@
   {#if selected}
     <button class="close" onclick={() => detailsDialog.close()} aria-label="Close details">×</button>
     <div class="dialog-layout">
-      <img src={selected.image} alt={`${selected.roaster} coffee bag`} />
-      <div><p class="eyebrow">{selected.region}</p><h2>{selected.roaster}</h2>
+      <img src={selected.image} alt={`${selected.name} coffee bag`} />
+      <div><p class="eyebrow">{selected.roaster}</p><h2>{selected.name}</h2>
         <dl>{#each fields as field}<div><dt>{field[0]}</dt><dd>{field[1] === 'roastDate' ? formatDate(selected[field[1]]) : selected[field[1]]}</dd></div>{/each}</dl>
       </div>
     </div>

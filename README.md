@@ -22,3 +22,5 @@ pnpm build
 3. Put that filename in the optional `image` column. If `image` is blank, the site looks for a date-named PNG such as `2026-07-03.png`.
 
 If a value contains a comma, wrap that CSV value in double quotes. Elevation is stored as text, so ranges such as `1750–1950 masl` work as written.
+
+Only `roast_date` is required, and it must be unique. Empty metadata cells display as “Not provided,” an empty `name` displays as “Unnamed coffee,” and an empty `image` falls back to `ROAST_DATE.png`.
