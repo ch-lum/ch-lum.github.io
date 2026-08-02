@@ -11,34 +11,10 @@
     body: string;
   };
 
-  const files = import.meta.glob('../../../content/short-form/*.md', {
-    eager: true,
-    query: '?raw',
-    import: 'default'
-  }) as Record<string, string>;
-
-  function parseEntry(path: string, raw: string): Entry {
-    const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-    if (!match) throw new Error(`${path} needs a frontmatter block.`);
-    const metadata = Object.fromEntries(match[1].split(/\r?\n/).filter(Boolean).map((line) => {
-      const separator = line.indexOf(':');
-      return [line.slice(0, separator).trim(), line.slice(separator + 1).trim()];
-    }));
-    const medium = metadata.medium === 'image' ? 'image' : 'text';
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(metadata.date)) throw new Error(`${path} needs a YYYY-MM-DD date.`);
-    if (medium === 'image' && !metadata.image) throw new Error(`${path} needs an image path.`);
-    return {
-      slug: path.split('/').pop()?.replace(/\.md$/, '') ?? path,
-      title: metadata.title || 'Untitled',
-      date: metadata.date,
-      tags: (metadata.tags || '').split(',').map((tag) => tag.trim()).filter(Boolean),
-      medium,
-      image: metadata.image,
-      body: match[2].trim()
-    };
-  }
-
-  const entries = Object.entries(files).map(([path, raw]) => parseEntry(path, raw)).sort((a, b) => a.date.localeCompare(b.date));
+  let { data }: { data: { entries: Entry[] } } = $props();
+  // This archive is prerendered from static content, so its page data is immutable.
+  // svelte-ignore state_referenced_locally
+  const entries = data.entries;
   let currentIndex = $state(entries.length - 1);
   let direction = $state(1);
   let showMenu = $state(false);
@@ -138,6 +114,8 @@
 
       <p class="position">{currentIndex + 1} / {entries.length}</p>
     </section>
+  {:else}
+    <p class="empty">No short-form entries found.</p>
   {/if}
 </main>
 
@@ -169,6 +147,7 @@
   article.image img { width: 100%; max-height: 34rem; object-fit: contain; }
   .position { margin: 0; text-align: center; font-size: .75rem; opacity: .55; }
   .menu { width: min(48rem, 100%); margin: 3rem auto 0; }
+  .empty { margin: 5rem 0; text-align: center; opacity: .7; }
   .menu-heading { border-bottom: 1px solid rgb(48 43 36 / 25%); padding-bottom: .8rem; }
   ol { margin: 0; padding: 0; list-style: none; }
   li { border-bottom: 1px solid rgb(48 43 36 / 18%); }
