@@ -33,3 +33,19 @@ Only `roast_date` is required, and it must be unique. Empty metadata cells displ
 4. Run `pnpm sync:music`, then commit both the CSV and updated `content/spotify-albums.json`.
 
 Wrap notes containing commas in double quotes. The sync command uses Spotify's Client Credentials flow, so secrets remain local and the deployed website stays static. Playback uses Spotify's official album embed because Web API preview URLs are deprecated and may be unavailable.
+
+## Adding short-form work
+
+Add a dated Markdown file to `content/short-form/`. Use this frontmatter:
+
+```md
+---
+title: My title
+date: 2026-08-02
+tags: poem, personal
+medium: text
+---
+Your text goes here.
+```
+
+For a doodle or other image, set `medium: image`, add `image: /short-form/filename.png`, and place the artwork in `public/short-form/`. Entries are ordered by date. Text supports paragraphs, line breaks, bold, italics, and Markdown links; MDX is intentionally unnecessary unless an entry eventually needs its own interactive component.
