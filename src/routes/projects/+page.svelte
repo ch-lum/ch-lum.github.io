@@ -56,8 +56,11 @@
   .computer { width: min(66rem, 100%); margin: clamp(4rem, 9vw, 7rem) auto 0; }
   .monitor { position: relative; z-index: 1; padding: clamp(.7rem, 1.6vw, 1.25rem); border: 2px solid #7e817d; border-radius: clamp(1rem, 2vw, 1.8rem); background: linear-gradient(145deg, #dadad2, #aaa9a1); box-shadow: inset 3px 3px 4px rgb(255 255 255 / 75%), inset -4px -4px 6px rgb(59 57 52 / 28%), 0 1.8rem 3rem rgb(48 43 36 / 22%); }
   .monitor::after { position: absolute; right: 2.2rem; bottom: .25rem; width: .45rem; height: .45rem; border-radius: 50%; background: #69a448; box-shadow: 0 0 .35rem #b9e69a; content: ''; }
-  .screen { position: relative; min-height: clamp(30rem, 61vw, 43rem); overflow: hidden; border: .35rem solid #555954; border-radius: .65rem; background: url('/wallpaper.jpg') center / cover no-repeat #66aee8; box-shadow: inset 0 0 1rem rgb(0 0 0 / 42%); font-family: Arial, sans-serif; }
-  .desktop { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(7rem, 1fr)); align-content: start; gap: clamp(1.7rem, 4vw, 3.5rem) clamp(1rem, 5vw, 4rem); padding: clamp(1.5rem, 4vw, 3rem); padding-bottom: 5rem; }
+  .screen { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border: .35rem solid #555954; border-radius: .65rem; background: url('/wallpaper.jpg') center / cover no-repeat #66aee8; box-shadow: inset 0 0 1rem rgb(0 0 0 / 42%); font-family: Arial, sans-serif; }
+  .desktop { position: absolute; z-index: 2; inset: 0 0 2.15rem; display: grid; grid-template-columns: repeat(3, minmax(7rem, 1fr)); align-content: start; gap: clamp(1.7rem, 4vw, 3.5rem) clamp(1rem, 5vw, 4rem); overflow-y: auto; padding: clamp(1.5rem, 4vw, 3rem); padding-bottom: 4rem; scrollbar-color: #d4d0c8 #efefef; scrollbar-width: auto; }
+  .desktop::-webkit-scrollbar { width: 1rem; }
+  .desktop::-webkit-scrollbar-track { border-left: 1px solid #808080; background: #efefef; }
+  .desktop::-webkit-scrollbar-thumb { border: 2px outset #f3f3f3; background: #d4d0c8; }
   .app { position: relative; display: flex; min-width: 0; flex-direction: column; align-items: center; color: white; text-align: center; text-decoration: none; text-shadow: 1px 1px 2px #173551, -1px -1px 1px rgb(0 0 0 / 30%); }
   .icon { display: grid; width: clamp(4.4rem, 8vw, 6.2rem); aspect-ratio: 1; place-items: center; overflow: hidden; border: 2px solid rgb(255 255 255 / 78%); border-radius: .55rem; background: #e6e7de; box-shadow: 2px 3px 0 rgb(19 54 89 / 44%); transition: transform 150ms ease, filter 150ms ease; }
   .icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -80,7 +83,7 @@
     main { width: calc(100% - 2rem); padding-top: 2rem; }
     .intro { grid-template-columns: 1fr; }
     .eyebrow { grid-column: auto; margin-bottom: -1rem; }
-    .screen { min-height: 41rem; }
+    .screen { height: 41rem; aspect-ratio: auto; }
     .desktop { grid-template-columns: repeat(2, minmax(6rem, 1fr)); gap: 2.3rem .75rem; padding: 1.5rem .8rem 5rem; }
     .tooltip { position: fixed; top: auto; right: 1rem; bottom: 1rem; left: 1rem; width: auto; transform: translateY(.25rem); }
     .app:hover .tooltip, .app:focus-visible .tooltip { transform: none; }
