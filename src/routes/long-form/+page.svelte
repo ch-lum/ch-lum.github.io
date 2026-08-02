@@ -52,7 +52,7 @@
 
 <style>
   main { width: min(72rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 8rem; overflow: hidden; }
-  header { margin-bottom: clamp(4rem, 10vw, 8rem); }
+  header { margin-bottom: clamp(4rem, 10vw, 8rem); border-bottom: 1px solid rgb(48 43 36 / 35%); padding-bottom: 1.5rem; }
   header p { margin: 0 0 .7rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
   h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 400; line-height: .9; }
   ol { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin: 0; padding: 0; overflow-anchor: none; list-style: none; }
