@@ -7,7 +7,7 @@ export type LongFormPost = {
   body: string;
 };
 
-const files = import.meta.glob('../../../content/blog/*.mdx', {
+const files = import.meta.glob('../../../content/long-form/*.md', {
   eager: true,
   query: '?raw',
   import: 'default'
@@ -31,7 +31,7 @@ function parsePost(path: string, raw: string): LongFormPost {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(metadata.date)) throw new Error(`${path} needs a YYYY-MM-DD date.`);
 
   return {
-    slug: path.split('/').pop()?.replace(/\.mdx$/, '') ?? path,
+    slug: path.split('/').pop()?.replace(/\.md$/, '') ?? path,
     title: metadata.title || 'Untitled',
     date: metadata.date,
     readingTime: metadata.readingTime || '',
