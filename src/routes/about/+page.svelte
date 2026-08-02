@@ -9,25 +9,27 @@
       <p class="eyebrow">A little more</p>
       <h1 id="about-title">About</h1>
       <div class="paragraphs">
-        <p>I’m a data analyst with a background in data science, and I’m most interested in the space where technical work meets real human decisions. I like taking complicated systems apart, understanding what makes them tick, and putting them back together in a form that is genuinely useful.</p>
-        <p>My work has moved through research, education, visualization, and product development. Whether I’m studying privacy, building a classroom tool, or explaining an analysis, I care about making the final result thoughtful, legible, and pleasant to use.</p>
-        <p>Outside of work, I’m usually collecting records, trying new coffee, writing down stray thoughts, or finding another reason to make something more elaborate than it strictly needs to be. This website is a growing cabinet for those interests and whatever comes next.</p>
+        <p>What more is there to share about myself? Reflecting in this manner, one as public and forthright, yet peacocky and brash as this website. I like to think there's a lot to me. I have hobbies and interests and there are some things I am good at. Others not so much.</p>
+        <p>What am I good at? A lot of things, I think. I spent a whole bunch of time teaching myself how to communicate well. Worked at aquariums and as a tour guide all in the name of public speaking. Also math and problem solving. I actually really enjoy the work I do in my career. Data science is so awesome. And I don't think my poems are half bad.</p>
+        <p>What am I bad at? For one, expressing myself earnestly is difficult. I disdain resumes and Instagram pages. It is hard for me to think about how others will perceive me. Also, cooking. I think I lack the drive to cook.</p>
+        <p>I hope this website has treated you well, and that you have been able to paint some new color into your life about mine.</p>
       </div>
     </div>
 
     <figure>
-      <img src="/about/profile-placeholder.svg" alt="Placeholder for Chrissy Lum's profile" />
+      <img src="/about/profile.PNG" alt="Chrissy Lum" />
     </figure>
   </section>
 
   <section class="contact" aria-labelledby="contact-title">
-    <p class="eyebrow">Elsewhere</p>
-    <h2 id="contact-title">Find me online</h2>
+    <p class="eyebrow">Contact Me</p>
+    <h2 id="contact-title">My Digital Footprint</h2>
     <ul>
-      <li><span>Substack</span><small>Add link</small></li>
-      <li><span>Spotify</span><small>Add link</small></li>
-      <li><span>GitHub</span><small>Add link</small></li>
-      <li><span>LinkedIn</span><small>Add link</small></li>
+      <li><a href="https://substack.com/@ch0rcoal" target="_blank" rel="noreferrer"><span>Substack</span><small>Visit profile ↗</small></a></li>
+      <li><a href="https://open.spotify.com/user/thegreatgecko" target="_blank" rel="noreferrer"><span>Spotify</span><small>Visit profile ↗</small></a></li>
+      <li><a href="https://github.com/ch-lum" target="_blank" rel="noreferrer"><span>GitHub</span><small>Visit profile ↗</small></a></li>
+      <li><a href="https://www.linkedin.com/in/ch-lum/" target="_blank" rel="noreferrer"><span>LinkedIn</span><small>Visit profile ↗</small></a></li>
+      <li><a href="mailto:chrlum03@gmail.com"><span>Email</span><small>chrlum03@gmail.com</small></a></li>
     </ul>
   </section>
 </main>
@@ -44,7 +46,10 @@
   .contact { border-top: 1px solid rgb(48 43 36 / 35%); padding-top: 2rem; text-align: center; }
   h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 400; }
   ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem clamp(2rem, 6vw, 5rem); margin: 2.5rem 0 0; padding: 0; list-style: none; }
-  li { display: grid; gap: .3rem; min-width: 5rem; }
+  li { min-width: 5rem; }
+  li a { display: grid; gap: .3rem; color: inherit; text-decoration: none; text-underline-offset: .25em; }
+  li a:hover span, li a:focus-visible span { text-decoration: underline; }
+  li a:focus-visible { outline: 1px solid #6f5b42; outline-offset: .4rem; }
   li span { font-size: 1.05rem; }
   li small { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; opacity: .55; }
   @media (max-width: 700px) {
