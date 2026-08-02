@@ -53,11 +53,12 @@
   .nav-item:hover.swap .base, .nav-item:focus-visible.swap .base { opacity: 0; }
   .nav-item:hover.swap .open, .nav-item:focus-visible.swap .open { opacity: 1; }
   .nav-item:hover.tip .base, .nav-item:focus-visible.tip .base { transform: rotate(18deg) translateY(-.2rem); }
-  .nav-item:hover.spin .base, .nav-item:focus-visible.spin .base { animation: record-spin 6s linear infinite; }
+  .nav-item.spin .base { animation: record-spin 6s linear infinite paused; }
+  .nav-item:hover.spin .base, .nav-item:focus-visible.spin .base { animation-play-state: running; }
   .nav-item:focus-visible { outline: 1px solid #6f5b42; outline-offset: .5rem; }
   @keyframes record-spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) {
     img, .picture, .label { transition-duration: .01ms; }
-    .nav-item:hover.spin .base, .nav-item:focus-visible.spin .base { animation: none; }
+    .nav-item.spin .base { animation: none; }
   }
 </style>
