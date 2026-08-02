@@ -2,8 +2,8 @@
   import { flip } from 'svelte/animate';
   import coffeeCsv from '../../../content/coffee.csv?raw';
 
-  type View = 'grid' | 'timeline' | 'cluster';
   type ClusterKey = 'roaster' | 'region' | 'country' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
+  type ArrangeKey = 'roastDate' | ClusterKey;
   type Coffee = {
     roastDate: string;
     name: string;
@@ -30,7 +30,8 @@
     ['Roast level', 'roastLevel']
   ] as const;
 
-  const clusterOptions: { label: string; value: ClusterKey }[] = [
+  const arrangeOptions: { label: string; value: ArrangeKey }[] = [
+    { label: 'Roast Date', value: 'roastDate' },
     { label: 'Roaster', value: 'roaster' },
     { label: 'Producer', value: 'producer' },
     { label: 'Region', value: 'region' },
@@ -78,20 +79,19 @@
         process: optional('process'),
         variety: optional('variety'),
         roastLevel: optional('roast_level'),
-        image: `/coffee_bags/${row.image || `${row.roast_date}.png`}`
+        image: `/coffee_bags/${row.image || `${row.roast_date}.PNG`}`
       };
     });
   }
 
   const coffees = parseCoffee(coffeeCsv);
-  let view = $state<View>('grid');
-  let clusterBy = $state<ClusterKey>('roaster');
+  let arrangeBy = $state<ArrangeKey>('roastDate');
   let selected = $state<Coffee | null>(null);
   let detailsDialog: HTMLDialogElement;
 
   const displayedCoffees = $derived(
     [...coffees].sort((a, b) => {
-      if (view === 'cluster') return a[clusterBy].localeCompare(b[clusterBy]) || b.roastDate.localeCompare(a.roastDate);
+      if (arrangeBy !== 'roastDate') return a[arrangeBy].localeCompare(b[arrangeBy]) || b.roastDate.localeCompare(a.roastDate);
       return b.roastDate.localeCompare(a.roastDate);
     })
   );
@@ -118,31 +118,23 @@
   </header>
 
   <div class="controls">
-    <div class="view-switcher" aria-label="Coffee view">
-      <button class:active={view === 'grid'} onclick={() => view = 'grid'}>Grid</button>
-      <button class:active={view === 'timeline'} onclick={() => view = 'timeline'}>Timeline</button>
-      <button class:active={view === 'cluster'} onclick={() => view = 'cluster'}>Cluster</button>
-    </div>
-    {#if view === 'cluster'}
-      <label>Group by
-        <select bind:value={clusterBy}>
-          {#each clusterOptions as option}<option value={option.value}>{option.label}</option>{/each}
-        </select>
-      </label>
-    {/if}
+    <label>Arrange by
+      <select bind:value={arrangeBy}>
+        {#each arrangeOptions as option}<option value={option.value}>{option.label}</option>{/each}
+      </select>
+    </label>
   </div>
 
-  <section class="collection {view}" aria-live="polite">
+  <section class="collection" class:grid={arrangeBy === 'roastDate'} class:cluster={arrangeBy !== 'roastDate'} aria-live="polite">
     {#each displayedCoffees as coffee, index (coffee.roastDate)}
       <article animate:flip={{ duration: 650 }}>
-        {#if view === 'cluster' && (index === 0 || displayedCoffees[index - 1][clusterBy] !== coffee[clusterBy])}
-          <h2>{coffee[clusterBy]}</h2>
+        {#if arrangeBy !== 'roastDate' && (index === 0 || displayedCoffees[index - 1][arrangeBy] !== coffee[arrangeBy])}
+          <h2>{coffee[arrangeBy]}</h2>
         {/if}
         <button class="bag" onclick={() => showDetails(coffee)} aria-label={`View ${coffee.name} coffee details`}>
           <img src={coffee.image} alt={`${coffee.name} coffee bag from ${coffee.region}`} />
           <span class="bag-copy"><strong>{coffee.name}</strong><small>{formatDate(coffee.roastDate)}</small></span>
         </button>
-        {#if view === 'timeline'}<time datetime={coffee.roastDate}>{formatDate(coffee.roastDate)}</time>{/if}
       </article>
     {/each}
   </section>
@@ -166,12 +158,9 @@
   h1 { margin: 0; font-size: clamp(4rem, 10vw, 8rem); font-weight: 400; line-height: .85; }
   .eyebrow { margin: 0 0 .65rem; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; }
   .intro { max-width: 24rem; margin: 0; font-size: 1.05rem; line-height: 1.5; }
-  .controls { display: flex; min-height: 5rem; align-items: center; justify-content: space-between; gap: 1rem; }
-  .view-switcher { display: flex; gap: .25rem; }
+  .controls { display: flex; min-height: 5rem; align-items: center; justify-content: flex-end; gap: 1rem; }
   button, select { color: inherit; font: inherit; }
-  .view-switcher button, select { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; }
-  .view-switcher button { cursor: pointer; }
-  .view-switcher button.active { color: #f7f3e9; background: #302b24; }
+  select { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; }
   label { display: flex; align-items: center; gap: .65rem; font-size: .85rem; }
   .collection { position: relative; display: grid; gap: 2rem; }
   .collection.grid, .collection.cluster { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
@@ -184,10 +173,6 @@
   .bag-copy { display: grid; gap: .2rem; margin-top: .6rem; }
   .bag-copy strong { font-size: 1rem; font-weight: 400; }
   .bag-copy small { font-size: .78rem; opacity: .7; }
-  .timeline { grid-template-columns: 1fr; width: min(40rem, 100%); margin: 1rem auto; padding-left: 7rem; border-left: 1px solid rgb(48 43 36 / 35%); gap: 3rem; }
-  .timeline article { position: relative; width: min(20rem, 100%); }
-  .timeline article::before { position: absolute; top: 4rem; left: -7.35rem; width: .65rem; height: .65rem; border-radius: 50%; background: #302b24; content: ''; }
-  time { position: absolute; top: 3.8rem; right: calc(100% + 7.8rem); width: 7rem; font-size: .8rem; text-align: right; }
   dialog { width: min(52rem, calc(100% - 2rem)); max-height: calc(100vh - 2rem); border: 1px solid rgb(48 43 36 / 40%); background: #edf0e4; color: #302b24; padding: clamp(1.5rem, 5vw, 3rem); }
   dialog::backdrop { background: rgb(30 28 24 / 55%); backdrop-filter: blur(3px); }
   .close { position: absolute; top: .7rem; right: 1rem; border: 0; background: transparent; cursor: pointer; font-size: 2rem; }
@@ -205,9 +190,6 @@
     .controls { align-items: flex-start; flex-direction: column; justify-content: center; }
     .collection.grid, .collection.cluster { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
     .bag img { height: 11rem; }
-    .timeline { padding-left: 4.5rem; }
-    .timeline article::before { left: -4.85rem; }
-    time { right: calc(100% + 5.2rem); width: 5rem; }
     .dialog-layout { grid-template-columns: 1fr; }
     .dialog-layout > img { height: 14rem; }
   }
