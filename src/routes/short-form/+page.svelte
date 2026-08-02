@@ -63,12 +63,12 @@
 
 <svelte:head>
   <title>Short Form — Chrissy Lum</title>
-  <meta name="description" content="Short thoughts, poems, and doodles by Chrissy Lum." />
+  <meta name="description" content="Short notes by Chrissy Lum." />
 </svelte:head>
 
 <main>
   <header class="archive-header">
-    <div><p class="eyebrow">Thoughts, poems & doodles</p><h1>Short Form</h1></div>
+    <div><p class="eyebrow">I wish I could share it all</p><h1>Short Form</h1></div>
     <button class="menu-toggle" onclick={() => showMenu = !showMenu}>{showMenu ? 'Close menu' : 'Menu'}</button>
   </header>
 
