@@ -134,7 +134,7 @@
   nav { display: flex; gap: .5rem; }
   nav button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; cursor: pointer; padding: .5rem .75rem; }
   nav button:disabled { cursor: default; opacity: .3; }
-  .stage { display: grid; min-height: 34rem; place-items: center; padding: 2rem 0; }
+  .stage { display: grid; min-height: 34rem; align-items: start; justify-items: center; padding: 2rem 0; }
   article { grid-area: 1 / 1; width: min(100%, 42rem); }
   article h2 { margin: 0 0 1.5rem; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; text-align: center; }
   article.text { min-height: 28rem; background: #f2efe5; box-shadow: 0 1.4rem 3rem rgb(48 43 36 / 12%); padding: clamp(2rem, 7vw, 5rem); }
