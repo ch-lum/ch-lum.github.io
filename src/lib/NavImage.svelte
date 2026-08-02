@@ -31,11 +31,12 @@
     transition: opacity .25s ease, transform .25s ease;
   }
   .nav-item:hover .label, .nav-item:focus-visible .label { opacity: 1; transform: translateY(0); }
-  .nav-item:hover.tip img, .nav-item:focus-visible.tip img { transform: rotate(-18deg) translateY(-.2rem); }
-  .nav-item:hover.spin img, .nav-item:focus-visible.spin img { transform: rotate(360deg); }
+  .nav-item:hover.tip img, .nav-item:focus-visible.tip img { transform: rotate(18deg) translateY(-.2rem); }
+  .spin img { animation: record-spin 14s linear infinite; }
   .nav-item:focus-visible { outline: 1px solid #6f5b42; outline-offset: .5rem; }
+  @keyframes record-spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) {
     img, .label { transition-duration: .01ms; }
-    .nav-item:hover.spin img, .nav-item:focus-visible.spin img { transform: rotate(12deg); }
+    .spin img { animation: none; }
   }
 </style>
