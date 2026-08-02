@@ -16,11 +16,6 @@
 # sveltekit
 /.svelte-kit/
 
-# legacy Next.js build artifacts
-/.next/
-/out/
-next-env.d.ts
-
 # production
 /build
 
