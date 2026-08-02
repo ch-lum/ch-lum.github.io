@@ -1,10 +1,132 @@
 [
   {
-    "id": "4aawyAB9vmqN3uQ7FjRGTy",
-    "name": "Global Warming",
-    "releaseDate": "2012-11-16",
-    "artists": ["Pitbull"],
-    "artwork": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e022c5b24ecfa39523a75c993c4",
-    "spotifyUrl": "https://open.spotify.com/album/4aawyAB9vmqN3uQ7FjRGTy"
+    "id": "0p4awV64ILfveFGtZBsaAD",
+    "name": "Crumbling",
+    "releaseDate": "2019-06-17",
+    "artists": [
+      "Mid-Air Thief"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b273978da07b260f80bcc4ba02a4",
+    "spotifyUrl": "https://open.spotify.com/album/0p4awV64ILfveFGtZBsaAD"
+  },
+  {
+    "id": "0NJRPgK15C8qoLuQv1hChv",
+    "name": "Mother Earth's Plantasia",
+    "releaseDate": "2019-03-22",
+    "artists": [
+      "Mort Garson"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b2738f06939f22ae1590f569c644",
+    "spotifyUrl": "https://open.spotify.com/album/0NJRPgK15C8qoLuQv1hChv"
+  },
+  {
+    "id": "77CZUF57sYqgtznUe3OikQ",
+    "name": "I Love My Computer",
+    "releaseDate": "2025-08-08",
+    "artists": [
+      "Ninajirachi"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b2733b9b742c5c525af6e6767d87",
+    "spotifyUrl": "https://open.spotify.com/album/77CZUF57sYqgtznUe3OikQ"
+  },
+  {
+    "id": "4T7qu6MdxoGjzZPErRWgsO",
+    "name": "HALO",
+    "releaseDate": "2026-04-03",
+    "artists": [
+      "Tiffany Day"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b273b5b273ebd1632a05019cd75c",
+    "spotifyUrl": "https://open.spotify.com/album/4T7qu6MdxoGjzZPErRWgsO"
+  },
+  {
+    "id": "4JDXBZdRPId4devseaAOKH",
+    "name": "DECIDE",
+    "releaseDate": "2022-09-16",
+    "artists": [
+      "Djo"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b273fddfffec51b4580acae727c1",
+    "spotifyUrl": "https://open.spotify.com/album/4JDXBZdRPId4devseaAOKH"
+  },
+  {
+    "id": "35qVMfUfBN6q2xzm9rZn5a",
+    "name": "INSIDE",
+    "releaseDate": "2021-06-10",
+    "artists": [
+      "Bo Burnham"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b27388fed14b936c38007a302413",
+    "spotifyUrl": "https://open.spotify.com/album/35qVMfUfBN6q2xzm9rZn5a"
+  },
+  {
+    "id": "7KeBfU7MZe7LFqgse8blI7",
+    "name": "SALVATION",
+    "releaseDate": "2025-02-27",
+    "artists": [
+      "Rebecca Black"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b2731b0ebd92e279013e2a37ae1c",
+    "spotifyUrl": "https://open.spotify.com/album/7KeBfU7MZe7LFqgse8blI7"
+  },
+  {
+    "id": "5xnXOCf5aZgZ43DgGN4EDv",
+    "name": "Volcano",
+    "releaseDate": "2023-08-11",
+    "artists": [
+      "Jungle"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b27377619f14cb03e11baf5761d1",
+    "spotifyUrl": "https://open.spotify.com/album/5xnXOCf5aZgZ43DgGN4EDv"
+  },
+  {
+    "id": "6xduu32sm4aidoLhaxYkUA",
+    "name": "Being So Normal",
+    "releaseDate": "2018-06-28",
+    "artists": [
+      "Peach Pit"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b27300b39b4a73d28536690b355c",
+    "spotifyUrl": "https://open.spotify.com/album/6xduu32sm4aidoLhaxYkUA"
+  },
+  {
+    "id": "3Vk0be2qEuqARxrC6U5ZV3",
+    "name": "You and Your Friends",
+    "releaseDate": "2020-04-03",
+    "artists": [
+      "Peach Pit"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b27335c3de6175656a6abf864ce5",
+    "spotifyUrl": "https://open.spotify.com/album/3Vk0be2qEuqARxrC6U5ZV3"
+  },
+  {
+    "id": "1itqJ1Ss7xUhNq0XoV1Ndk",
+    "name": "Phantom Pop",
+    "releaseDate": "2014-10-07",
+    "artists": [
+      "Wild Party"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b273b2b05168e86b0af78ede0d97",
+    "spotifyUrl": "https://open.spotify.com/album/1itqJ1Ss7xUhNq0XoV1Ndk"
+  },
+  {
+    "id": "39vNHJ3nDr6oO9mWLrRpsI",
+    "name": "Aim and Ignite (Deluxe Version)",
+    "releaseDate": "2009-08-25",
+    "artists": [
+      "fun."
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b273cbb38cf3f5a5abe064afa94a",
+    "spotifyUrl": "https://open.spotify.com/album/39vNHJ3nDr6oO9mWLrRpsI"
+  },
+  {
+    "id": "6htgf3qv7vGcsdxLCDxKp8",
+    "name": "Night Visions",
+    "releaseDate": "2012-09-04",
+    "artists": [
+      "Imagine Dragons"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b273b2b2747c89d2157b0b29fb6a",
+    "spotifyUrl": "https://open.spotify.com/album/6htgf3qv7vGcsdxLCDxKp8"
   }
 ]

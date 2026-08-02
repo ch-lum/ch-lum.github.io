@@ -11,8 +11,8 @@
     artwork: string;
     spotifyUrl: string;
   };
-  type Album = SpotifyAlbum & { note: string; synced: boolean };
-  type SortKey = 'name' | 'artist' | 'releaseDate';
+  type Album = SpotifyAlbum & { note: string; owned: boolean; synced: boolean };
+  type SortKey = 'name' | 'artist' | 'releaseDate' | 'owned';
 
   function parseLine(line: string) {
     const values: string[] = [];
@@ -41,8 +41,9 @@
   const cache = new Map((spotifyAlbums as SpotifyAlbum[]).map((album) => [album.id, album]));
   const albums: Album[] = parseMusicCsv(musicCsv).map((entry) => {
     const metadata = cache.get(entry.spotify_id);
+    const owned = ['true', 'yes', '1', 'owned', 'x'].includes(entry.owned?.trim().toLowerCase());
     return metadata
-      ? { ...metadata, note: entry.note || '', synced: true }
+      ? { ...metadata, note: entry.note || '', owned, synced: true }
       : {
           id: entry.spotify_id,
           name: 'Album needs syncing',
@@ -51,6 +52,7 @@
           artwork: '',
           spotifyUrl: `https://open.spotify.com/album/${entry.spotify_id}`,
           note: entry.note || '',
+          owned,
           synced: false
         };
   });
@@ -63,6 +65,7 @@
     [...albums].sort((a, b) => {
       if (sortBy === 'releaseDate') return b.releaseDate.localeCompare(a.releaseDate);
       if (sortBy === 'artist') return (a.artists[0] ?? '').localeCompare(b.artists[0] ?? '') || a.name.localeCompare(b.name);
+      if (sortBy === 'owned') return Number(b.owned) - Number(a.owned) || a.name.localeCompare(b.name);
       return a.name.localeCompare(b.name);
     })
   );
@@ -97,7 +100,7 @@
 <main>
   <header class="page-heading">
     <div><p class="eyebrow">A listening archive</p><h1>Music</h1></div>
-    <p class="intro">Albums that found a place in my life, and a few words about why.</p>
+    <p class="intro">Purchasing albums is hard. Wanting to purchase is easy, so here we are.</p>
   </header>
 
   <div class="controls">
@@ -106,6 +109,7 @@
         <option value="name">Name</option>
         <option value="artist">Artist</option>
         <option value="releaseDate">Release Date</option>
+        <option value="owned">Owned</option>
       </select>
     </label>
   </div>
@@ -115,9 +119,9 @@
       <article animate:flip={{ duration: 550 }}>
         <button class="album" onclick={() => showDetails(album)}>
           {#if album.artwork}
-            <img src={album.artwork} alt={`Cover of ${album.name}`} />
+            <img class:owned={album.owned} src={album.artwork} alt={`Cover of ${album.name}`} />
           {:else}
-            <span class="missing-art" aria-hidden="true">♪</span>
+            <span class="missing-art" class:owned={album.owned} aria-hidden="true">♪</span>
           {/if}
           <span class="album-copy">
             <strong>{album.name}</strong>
@@ -135,7 +139,7 @@
     <button class="close" onclick={closeDetails} aria-label="Close details">×</button>
     <div class="dialog-layout">
       <div>
-        {#if selected.artwork}<img class="dialog-art" src={selected.artwork} alt={`Cover of ${selected.name}`} />{/if}
+        {#if selected.artwork}<img class="dialog-art" class:owned={selected.owned} src={selected.artwork} alt={`Cover of ${selected.name}`} />{/if}
         {#if selected.synced}
           <iframe
             title={`Listen to ${selected.name} on Spotify`}
@@ -153,6 +157,7 @@
         <dl>
           <div><dt>Artists</dt><dd>{selected.artists.join(', ')}</dd></div>
           <div><dt>Released</dt><dd>{formatReleaseDate(selected.releaseDate)}</dd></div>
+          <div><dt>Owned</dt><dd>{selected.owned ? 'Yes' : 'No'}</dd></div>
         </dl>
         <section class="note"><h3>Why it’s here</h3><p>{selected.note || 'No note yet.'}</p></section>
         <a class="modal-link" href={selected.spotifyUrl} target="_blank" rel="noreferrer">Listen on Spotify ↗</a>
@@ -175,6 +180,7 @@
   button { color: inherit; font: inherit; }
   .album { display: block; width: 100%; border: 0; background: transparent; cursor: pointer; padding: 0; text-align: left; }
   .album img, .missing-art { width: 100%; aspect-ratio: 1; object-fit: cover; box-shadow: 0 .8rem 1.8rem rgb(48 43 36 / 18%); transition: transform .3s ease, box-shadow .3s ease; }
+  .owned { outline: 3px solid #b08d2f; outline-offset: 4px; }
   .missing-art { display: grid; place-items: center; background: rgb(255 255 255 / 30%); font-size: 4rem; }
   .album:hover img, .album:focus-visible img, .album:hover .missing-art, .album:focus-visible .missing-art { transform: translateY(-.35rem) rotate(-1deg); box-shadow: 0 1.2rem 2.2rem rgb(48 43 36 / 24%); }
   .album:focus-visible { outline: 1px solid #302b24; outline-offset: .4rem; }
