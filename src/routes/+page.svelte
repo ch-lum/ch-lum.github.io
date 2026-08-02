@@ -11,16 +11,16 @@
 <main>
   <section class="portrait-card" aria-labelledby="intro-title">
     <div class="words">
-      <img class="autograph" src="/placeholders/autograph.svg" alt="Chrissy Lum" />
+      <img class="autograph" src="/placeholders/autograph-start.svg" alt="Chrissy Lum" />
       <div class="introduction">
         <h1 id="intro-title">Hello, I’m Chrissy.</h1>
         <p>
-          This is a placeholder for a short introduction about who I am, what I care about,
-          and the things I’m currently exploring.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+          incididunt ut labore et dolore magna aliqua.
         </p>
       </div>
     </div>
-    <img class="portrait" src="/placeholders/portrait.svg" alt="Placeholder portrait of Chrissy" />
+    <img class="portrait" src="/placeholders/portrait.JPG" alt="Chrissy Lum" />
   </section>
 
   <nav aria-label="Explore the site">

@@ -1,4 +1,4 @@
 export const navigation = [
-  { label: 'coffee', href: '/coffee/', image: '/placeholders/kettle.svg', motion: 'tip' },
-  { label: 'music', href: '/music/', image: '/placeholders/record.svg', motion: 'spin' }
+  { label: 'coffee', href: '/coffee/', image: '/placeholders/kettle.PNG', motion: 'tip' },
+  { label: 'music', href: '/music/', image: '/placeholders/record.png', motion: 'spin' }
 ] as const;
