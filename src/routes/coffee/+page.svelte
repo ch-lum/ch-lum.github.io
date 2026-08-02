@@ -140,7 +140,7 @@
         {/if}
         <button class="bag" onclick={() => showDetails(coffee)} aria-label={`View ${coffee.name} coffee details`}>
           <img src={coffee.image} alt={`${coffee.name} coffee bag from ${coffee.region}`} />
-          <span class="bag-copy"><strong>{coffee.name}</strong><small>{coffee.region}</small></span>
+          <span class="bag-copy"><strong>{coffee.name}</strong><small>{formatDate(coffee.roastDate)}</small></span>
         </button>
         {#if view === 'timeline'}<time datetime={coffee.roastDate}>{formatDate(coffee.roastDate)}</time>{/if}
       </article>
