@@ -1,6 +1,10 @@
 roast_date,name,roaster,region,country,producer,elevation,process,variety,roast_level,image
-2026-06-26,Mexico Marachi,Mothership Coffee Roasters,Chiapas,Mexico,Monte Azul,1200-1700 masl,Washed,Typica & Bourbon & Caturra & Catuai,Medium,2026-06-26.PNG
-2026-05-18,Mexico Chiapas Altura,Mothership Coffee Roasters,Chiapas,Mexico,Smallholder Farms,1200-1900 masl,Washed,Bourbon & Catuai & Catimor & Caturra & Pacamara & Typica,Medium,2026-05-18.PNG
-2026-04-29,Santa Ana,Bird Rock Coffee Roasters,Santa Rosa,Guatemala,Fernando Diaz,1650-1800 masl,Pinapple Fermentation,Bourbon,Light,2026-04-29.PNG
-2026-03-23,Atlas Light,Mothership Coffee Roasters,Medellin,Colombia,Local Producers,1200-1900 masl,Washed,Colombia & Castillo & Caturra,Light,2026-03-23.PNG
-2026-03-05,Guatemala Huehuetenango,Mothership Coffee Roasters,Huehuetenango,Guatemala,AAPICUC,1300-1800 masl,Washed,Catimor & Pache & Caturra & Bourbon,Medium,2026-03-05.PNG
+2026-06-26,Mexico Marachi,Mothership Coffee Roasters,Chiapas,Mexico,Monte Azul,1200-1700 masl,Washed,Typica & Bourbon & Caturra & Catuai,Medium
+2026-05-18,Mexico Chiapas Altura,Mothership Coffee Roasters,Chiapas,Mexico,Smallholder Farms,1200-1900 masl,Washed,Bourbon & Catuai & Catimor & Caturra & Pacamara & Typica,Medium
+2026-04-29,Santa Ana,Bird Rock Coffee Roasters,Santa Rosa,Guatemala,Fernando Diaz,1650-1800 masl,Pinapple Fermentation,Bourbon,Light
+2026-03-23,Atlas Light,Mothership Coffee Roasters,Medellin,Colombia,Local Producers,1200-1900 masl,Washed,Colombia & Castillo & Caturra,Light
+2026-03-05,Guatemala Huehuetenango,Mothership Coffee Roasters,Huehuetenango,Guatemala,AAPICUC,1300-1800 masl,Washed,Catimor & Pache & Caturra & Bourbon,Medium
+2026-01-14,El Pepinal Honey,Bird Rock Coffee Roasters,Usulután Department,El Salvador,Familia Ortiz Barriere,1200-1600 masl,Honey,Bourbon,Light
+2025-11-28,Yirgacheffe,Yaw Farm Coffee Roaster,,Ethiopia,,,,,
+2025-09-27,Dew Drops,Yaw Farm Coffee Roaster,,,,,,,
+2025-08-25,Mexico Grapos Altura,Mothership Coffee Roasters,Chiapas,Mexico,GRAPOS,1300-1600 masl,Honey,Bourbon & Caturra & Catuai & Typica,Medium-dark
