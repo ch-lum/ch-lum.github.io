@@ -1,0 +1,19 @@
+:root {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #302b24;
+  background: #eee5d2;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; }
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(circle at 20% 15%, rgb(255 255 255 / 35%), transparent 35rem), #eee5d2;
+}
+a { color: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+img { display: block; max-width: 100%; }
+::selection { background: #c8a77b; color: #201b16; }
