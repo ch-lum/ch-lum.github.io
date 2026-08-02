@@ -3,12 +3,13 @@
   import coffeeCsv from '../../../content/coffee.csv?raw';
 
   type View = 'grid' | 'timeline' | 'cluster';
-  type ClusterKey = 'roaster' | 'region' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
+  type ClusterKey = 'roaster' | 'region' | 'country' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
   type Coffee = {
     roastDate: string;
     name: string;
     roaster: string;
     region: string;
+    country: string;
     producer: string;
     elevation: string;
     process: string;
@@ -21,6 +22,7 @@
     ['Roasted', 'roastDate'],
     ['Roaster', 'roaster'],
     ['Region', 'region'],
+    ['Country', 'country'],
     ['Producer', 'producer'],
     ['Elevation', 'elevation'],
     ['Process', 'process'],
@@ -32,6 +34,7 @@
     { label: 'Roaster', value: 'roaster' },
     { label: 'Producer', value: 'producer' },
     { label: 'Region', value: 'region' },
+    { label: 'Country', value: 'country' },
     { label: 'Elevation', value: 'elevation' },
     { label: 'Process', value: 'process' },
     { label: 'Variety', value: 'variety' },
@@ -69,6 +72,7 @@
         name: optional('name', 'Unnamed coffee'),
         roaster: optional('roaster'),
         region: optional('region'),
+        country: optional('country'),
         producer: optional('producer'),
         elevation: optional('elevation'),
         process: optional('process'),
