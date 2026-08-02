@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-  <title>Chrissy Lum</title>
+  <title>Ch*!</title>
   <meta name="description" content="The personal website of Chrissy Lum." />
 </svelte:head>
 
@@ -13,10 +13,11 @@
     <div class="words">
       <img class="autograph" src="/placeholders/autograph-start.svg" alt="Chrissy Lum" />
       <div class="introduction">
-        <h1 id="intro-title">Hello, I’m Chrissy.</h1>
+        <h1 id="intro-title">Who am I?</h1>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
+          Isn't that a great question. Even if I tried this blurb wouldn't give you an answer. 
+          I've gone basic, falling in love with physical media once again. This website 
+          is then but a poor projection of my world—and myself—made just for you.
         </p>
       </div>
     </div>
@@ -35,7 +36,7 @@
   .portrait-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: min(100%, 34rem);
+    width: min(100%, 40rem);
     aspect-ratio: 1.55;
     margin: 0 auto;
   }
