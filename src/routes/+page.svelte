@@ -35,22 +35,22 @@
   .portrait-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: min(100%, 48rem);
+    width: min(100%, 34rem);
     aspect-ratio: 1.55;
     margin: 0 auto;
   }
-  .words { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(1.5rem, 4vw, 3rem); }
-  .autograph { width: min(19rem, 100%); }
-  .introduction { max-width: 19rem; }
-  h1 { margin: 0 0 .7rem; font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 400; line-height: 1.1; }
-  p { margin: 0; font-size: clamp(.95rem, 1.5vw, 1.08rem); line-height: 1.55; }
+  .words { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(1rem, 2.8vw, 2.1rem); }
+  .autograph { width: min(13.5rem, 100%); }
+  .introduction { max-width: 13.5rem; }
+  h1 { margin: 0 0 .5rem; font-size: clamp(1.1rem, 2.1vw, 1.4rem); font-weight: 400; line-height: 1.1; }
+  p { margin: 0; font-size: clamp(.78rem, 1.05vw, .9rem); line-height: 1.55; }
   .portrait { width: 100%; height: 100%; object-fit: cover; }
   nav { display: flex; justify-content: center; gap: clamp(1rem, 6vw, 4rem); margin-top: clamp(2.4rem, 7vw, 5rem); }
   @media (max-width: 600px) {
     main { width: min(100% - 2rem, 30rem); padding-top: 2rem; }
-    .portrait-card { grid-template-columns: 1fr; aspect-ratio: auto; }
-    .words { min-height: 19rem; }
-    .portrait { height: min(25rem, 105vw); }
+    .portrait-card { grid-template-columns: 1fr; width: min(100%, 22rem); aspect-ratio: auto; }
+    .words { min-height: 14rem; }
+    .portrait { height: min(18rem, 74vw); }
     nav { gap: 0; }
   }
 </style>
