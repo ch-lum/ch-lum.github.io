@@ -7,12 +7,15 @@ This file preserves the text from the previous website's projects page.
 Replicated four analysis papers on Intel Telemetry data using differential privacy to pioneer DP in telemetry analysis.
 
 - Link: https://ch-lum.github.io/privacy-in-practice/
+- Image: /projects/privacy.jpg
 - Tags: Research, Differential Privacy, Telemetry Analysis
 
 ## “I’m not sure, but...”: Expert Practices that Enable Effective Code Comprehension in Data Science
 
 Christopher Lum*, Guoxuan Xu*, Sam Lau (*equal contribution). ACM Technical Symposium on Computer Science Education (SIGCSE), 2025.
 
+- Link: /documents/2025_sigcse_experts_vs_novices_SIGCSE.pdf
+- Image: /projects/sigcse.jpg
 - Tags: Research, Data Science Pedagogy, SIGCSE 2025
 
 ## ClassBuzz
@@ -20,6 +23,7 @@ Christopher Lum*, Guoxuan Xu*, Sam Lau (*equal contribution). ACM Technical Symp
 Led a team of undergraduates to develop an in-class polling tool used by 400+ students quarterly in HDSI.
 
 - Link: https://tryclassbuzz.com
+- Image: /projects/classbuzz.jpg
 - Tags: Full Stack, Next.JS, Educational Technology
 
 ## Comment Section Sentiment Analysis
@@ -27,6 +31,7 @@ Led a team of undergraduates to develop an in-class polling tool used by 400+ st
 Visualization of positive and negative comments from a Facebook comment section.
 
 - Link: https://ch-lum.github.io/comment-vis/
+- Image: /projects/comment-vis.jpg
 - Tags: D3.js, Sentiment Analysis, Data Visualization
 
 ## Pandas Tutor
@@ -34,6 +39,7 @@ Visualization of positive and negative comments from a Facebook comment section.
 A tool to visualize Pandas table manipulations used at UC San Diego intro data science courses. I made the memory management more efficient so it can be used with larger datasets.
 
 - Link: https://pandastutor.com/
+- Image: /projects/pandas-tutor.jpg
 - Tags: Backend, Educational Technology, Pandas
 
 ## San Diego Parking Meters
@@ -41,4 +47,5 @@ A tool to visualize Pandas table manipulations used at UC San Diego intro data s
 Explore San Diego's neighborhoods by when and where people park.
 
 - Link: https://ch-lum.github.io/sd-parking/
+- Image: /projects/parking.jpg
 - Tags: D3.js, Frontend, Data Visualization
