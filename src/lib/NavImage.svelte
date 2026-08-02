@@ -19,23 +19,24 @@
 <style>
   .nav-item {
     display: grid;
-    grid-template-rows: 11.5rem 1.7rem;
+    grid-template-rows: 10.5rem 1.7rem;
     place-items: center;
-    width: 12rem;
+    width: 12.25rem;
     color: #302b24;
     text-decoration: none;
   }
   .picture {
     display: grid;
-    width: 10.5rem;
-    height: 10.5rem;
+    width: 13rem;
+    height: 9.5rem;
     place-items: center;
     transition: transform .3s cubic-bezier(.2,.8,.2,1);
   }
   img {
     grid-area: 1 / 1;
-    width: 100%;
-    max-height: 100%;
+    width: auto;
+    height: 8.5rem;
+    max-width: 13rem;
     object-fit: contain;
     transition: opacity .2s ease, transform .45s cubic-bezier(.2,.8,.2,1);
   }
