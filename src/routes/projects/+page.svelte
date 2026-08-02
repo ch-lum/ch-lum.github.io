@@ -25,8 +25,6 @@
   <section class="computer" aria-label="Project desktop">
     <div class="monitor">
       <div class="screen">
-        <div class="sky" aria-hidden="true"><span class="cloud cloud-one"></span><span class="cloud cloud-two"></span><span class="far-hill"></span><span class="near-hill"></span></div>
-
         <div class="desktop">
           {#each data.projects as project}
             <a class="app" href={project.link} target={project.link.startsWith('http') ? '_blank' : undefined} rel={project.link.startsWith('http') ? 'noreferrer' : undefined}>
@@ -58,17 +56,7 @@
   .computer { width: min(66rem, 100%); margin: clamp(4rem, 9vw, 7rem) auto 0; }
   .monitor { position: relative; z-index: 1; padding: clamp(.7rem, 1.6vw, 1.25rem); border: 2px solid #7e817d; border-radius: clamp(1rem, 2vw, 1.8rem); background: linear-gradient(145deg, #dadad2, #aaa9a1); box-shadow: inset 3px 3px 4px rgb(255 255 255 / 75%), inset -4px -4px 6px rgb(59 57 52 / 28%), 0 1.8rem 3rem rgb(48 43 36 / 22%); }
   .monitor::after { position: absolute; right: 2.2rem; bottom: .25rem; width: .45rem; height: .45rem; border-radius: 50%; background: #69a448; box-shadow: 0 0 .35rem #b9e69a; content: ''; }
-  .screen { position: relative; min-height: clamp(30rem, 61vw, 43rem); overflow: hidden; border: .35rem solid #555954; border-radius: .65rem; background: #66aee8; box-shadow: inset 0 0 1rem rgb(0 0 0 / 42%); font-family: Arial, sans-serif; }
-  .sky { position: absolute; inset: 0 0 2.15rem; overflow: hidden; background: linear-gradient(#2b91df 0%, #91cdf1 68%, #d8effb 100%); }
-  .cloud, .cloud::before, .cloud::after { position: absolute; display: block; border-radius: 50%; background: rgb(255 255 255 / 82%); content: ''; filter: blur(1px); }
-  .cloud { width: 8rem; height: 2rem; }
-  .cloud::before { left: 1.2rem; bottom: 0; width: 3.3rem; height: 3.3rem; }
-  .cloud::after { right: 1rem; bottom: .1rem; width: 2.7rem; height: 2.7rem; }
-  .cloud-one { top: 10%; left: 15%; }
-  .cloud-two { top: 24%; right: 11%; transform: scale(.7); opacity: .72; }
-  .far-hill, .near-hill { position: absolute; display: block; border-radius: 50% 50% 0 0; }
-  .far-hill { right: -15%; bottom: -34%; width: 80%; height: 70%; transform: rotate(-7deg); background: linear-gradient(150deg, #9bcf45, #4c9a2a); }
-  .near-hill { left: -20%; bottom: -43%; width: 100%; height: 85%; transform: rotate(8deg); background: linear-gradient(140deg, #8bcf3d 5%, #3c9824 52%, #1d751e); box-shadow: inset -2rem 2rem 4rem rgb(238 255 130 / 20%); }
+  .screen { position: relative; min-height: clamp(30rem, 61vw, 43rem); overflow: hidden; border: .35rem solid #555954; border-radius: .65rem; background: url('/wallpaper.jpg') center / cover no-repeat #66aee8; box-shadow: inset 0 0 1rem rgb(0 0 0 / 42%); font-family: Arial, sans-serif; }
   .desktop { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(7rem, 1fr)); align-content: start; gap: clamp(1.7rem, 4vw, 3.5rem) clamp(1rem, 5vw, 4rem); padding: clamp(1.5rem, 4vw, 3rem); padding-bottom: 5rem; }
   .app { position: relative; display: flex; min-width: 0; flex-direction: column; align-items: center; color: white; text-align: center; text-decoration: none; text-shadow: 1px 1px 2px #173551, -1px -1px 1px rgb(0 0 0 / 30%); }
   .icon { display: grid; width: clamp(4.4rem, 8vw, 6.2rem); aspect-ratio: 1; place-items: center; overflow: hidden; border: 2px solid rgb(255 255 255 / 78%); border-radius: .55rem; background: #e6e7de; box-shadow: 2px 3px 0 rgb(19 54 89 / 44%); transition: transform 150ms ease, filter 150ms ease; }
