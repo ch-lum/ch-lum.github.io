@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-labelledby="title description">
+  <title id="title">Profile photograph placeholder</title>
+  <desc id="description">A sage square with a simple portrait outline.</desc>
+  <rect width="800" height="800" fill="#c5cdb1"/>
+  <circle cx="400" cy="300" r="135" fill="#e9eadf" stroke="#746b5d" stroke-width="8"/>
+  <path d="M175 735c18-167 104-251 225-251s207 84 225 251" fill="#e9eadf" stroke="#746b5d" stroke-width="8"/>
+  <text x="400" y="765" fill="#514a40" font-family="Georgia, serif" font-size="28" text-anchor="middle">your photo here</text>
+</svg>
