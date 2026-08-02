@@ -99,7 +99,7 @@
 
 <main>
   <header class="page-heading">
-    <div><p class="eyebrow">A listening archive</p><h1>Music</h1></div>
+    <div><p class="eyebrow">A musical wishlist</p><h1>Music</h1></div>
     <p class="intro">Purchasing albums is hard. Wanting to purchase is easy, so here we are.</p>
   </header>
 
@@ -159,7 +159,7 @@
           <div><dt>Released</dt><dd>{formatReleaseDate(selected.releaseDate)}</dd></div>
           <div><dt>Owned</dt><dd>{selected.owned ? 'Yes' : 'No'}</dd></div>
         </dl>
-        <section class="note"><h3>Why it’s here</h3><p>{selected.note || 'No note yet.'}</p></section>
+        <section class="note"><h3>A bit about it</h3><p>{selected.note || 'No note yet.'}</p></section>
         <a class="modal-link" href={selected.spotifyUrl} target="_blank" rel="noreferrer">Listen on Spotify ↗</a>
       </div>
     </div>

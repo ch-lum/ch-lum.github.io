@@ -114,8 +114,8 @@
 <main>
   <header class="page-heading">
     <div><p class="eyebrow">A bean archive</p><h1>Coffee</h1></div>
-    <p class="intro">Bags I have brought home, arranged a few different ways.</p>
-  </header>
+    <p class="intro">At some point I stopped throwing away the bags.</p>
+  </header>``
 
   <div class="controls">
     <label>Arrange by
