@@ -93,7 +93,7 @@
 </script>
 
 <svelte:head>
-  <title>Music — Chrissy Lum</title>
+  <title>Music — Ch*!</title>
   <meta name="description" content="Albums I keep returning to, with personal notes." />
 </svelte:head>
 

@@ -1,5 +1,5 @@
 <svelte:head>
-  <title>About — Chrissy Lum</title>
+  <title>About — Ch*!</title>
   <meta name="description" content="About Chrissy Lum and where to find her online." />
 </svelte:head>
 
@@ -7,7 +7,7 @@
   <section class="about" aria-labelledby="about-title">
     <div class="copy">
       <p class="eyebrow">A little more</p>
-      <h1 id="about-title">About</h1>
+      <h1 id="about-title">About Me</h1>
       <div class="paragraphs">
         <p>What more is there to share about myself? Reflecting in this manner, one as public and forthright, yet peacocky and brash as this website. I like to think there's a lot to me. I have hobbies and interests and there are some things I am good at. Others not so much.</p>
         <p>What am I good at? A lot of things, I think. I spent a whole bunch of time teaching myself how to communicate well. Worked at aquariums and as a tour guide all in the name of public speaking. Also math and problem solving. I actually really enjoy the work I do in my career. Data science is so awesome. And I don't think my poems are half bad.</p>

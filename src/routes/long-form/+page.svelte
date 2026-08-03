@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-  <title>Long Form — Chrissy Lum</title>
+  <title>Long Form — Ch*!</title>
   <meta name="description" content="Long-form writing by Chrissy Lum." />
 </svelte:head>
 

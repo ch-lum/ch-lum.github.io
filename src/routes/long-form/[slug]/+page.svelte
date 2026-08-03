@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.post.title} — Chrissy Lum</title>
+  <title>{data.post.title} — Ch*!</title>
   <meta name="description" content={data.post.description} />
 </svelte:head>
 

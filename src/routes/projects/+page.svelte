@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>Projects — Chrissy Lum</title>
+  <title>Projects — Ch*!</title>
   <meta name="description" content="Selected research, data, visualization, and education projects by Chrissy Lum." />
 </svelte:head>
 

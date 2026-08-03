@@ -107,7 +107,7 @@
 </script>
 
 <svelte:head>
-  <title>Coffee — Chrissy Lum</title>
+  <title>Coffee — Ch*!</title>
   <meta name="description" content="A visual archive of coffees I have brewed." />
 </svelte:head>
 

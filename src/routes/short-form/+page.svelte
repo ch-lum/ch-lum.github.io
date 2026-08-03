@@ -62,7 +62,7 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <svelte:head>
-  <title>Short Form — Chrissy Lum</title>
+  <title>Short Form — Ch*!</title>
   <meta name="description" content="Short notes by Chrissy Lum." />
 </svelte:head>
 
