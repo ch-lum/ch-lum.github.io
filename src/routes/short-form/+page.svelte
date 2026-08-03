@@ -138,9 +138,9 @@
   nav { display: flex; gap: .5rem; }
   nav button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; cursor: pointer; padding: .5rem .75rem; }
   nav button:disabled { cursor: default; opacity: .3; }
-  .stage { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem; min-height: 34rem; align-items: center; gap: clamp(.25rem, 2vw, 1.25rem); padding: 2rem 0; }
+  .stage { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem; min-height: 34rem; align-items: start; gap: clamp(.25rem, 2vw, 1.25rem); padding: 2rem 0; }
   .stage-content { display: grid; width: 100%; align-self: start; justify-items: center; }
-  .side-arrow { display: grid; width: 2.5rem; aspect-ratio: 1; place-items: center; border: 1px solid rgb(48 43 36 / 35%); border-radius: 50%; background: rgb(242 239 229 / 45%); cursor: pointer; font-size: 1.15rem; transition: background .15s ease, transform .15s ease; }
+  .side-arrow { position: sticky; top: 50vh; display: grid; width: 2.5rem; aspect-ratio: 1; place-items: center; translate: 0 -50%; border: 1px solid rgb(48 43 36 / 35%); border-radius: 50%; background: rgb(242 239 229 / 45%); cursor: pointer; font-size: 1.15rem; transition: background .15s ease, transform .15s ease; }
   .side-arrow:hover:not(:disabled), .side-arrow:focus-visible:not(:disabled) { transform: scale(1.08); background: #f2efe5; }
   .side-arrow:disabled { cursor: default; opacity: .25; }
   article { grid-area: 1 / 1; width: min(100%, 42rem); }
