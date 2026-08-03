@@ -124,7 +124,7 @@
 </main>
 
 <style>
-  main { width: min(68rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 7rem; overflow: hidden; }
+  main { width: min(68rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 7rem; overflow-x: clip; }
   .archive-header { display: flex; align-items: end; justify-content: space-between; gap: 2rem; border-bottom: 1px solid rgb(48 43 36 / 28%); padding-bottom: 1.25rem; }
   .eyebrow, .menu-heading { margin: 0 0 .5rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
   h1 { margin: 0; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 400; line-height: .9; }
