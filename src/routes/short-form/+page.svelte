@@ -22,7 +22,7 @@
 
   function navigate(nextIndex: number) {
     if (nextIndex < 0 || nextIndex >= entries.length) return;
-    direction = nextIndex > currentIndex ? 1 : -1;
+    direction = nextIndex < currentIndex ? 1 : -1;
     currentIndex = nextIndex;
   }
 
@@ -35,8 +35,8 @@
     if (showMenu || event.metaKey || event.ctrlKey || event.altKey) return;
     const target = event.target as HTMLElement;
     if (['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName)) return;
-    if (event.key === 'ArrowLeft') navigate(currentIndex - 1);
-    if (event.key === 'ArrowRight') navigate(currentIndex + 1);
+    if (event.key === 'ArrowLeft') navigate(currentIndex + 1);
+    if (event.key === 'ArrowRight') navigate(currentIndex - 1);
   }
 
   function formatDate(date: string) {
@@ -94,22 +94,26 @@
           <span class="tags">{current.tags.join(' · ')}</span>
         </div>
         <nav aria-label="Short-form navigation">
-          <button disabled={currentIndex === 0} onclick={() => navigate(currentIndex - 1)}>← Previous</button>
-          <button disabled={currentIndex === entries.length - 1} onclick={() => navigate(currentIndex + 1)}>Next →</button>
+          <button disabled={currentIndex === entries.length - 1} onclick={() => navigate(currentIndex + 1)}>← Newer</button>
+          <button disabled={currentIndex === 0} onclick={() => navigate(currentIndex - 1)}>Older →</button>
         </nav>
       </div>
 
       <div class="stage">
-        {#key current.slug}
-          <article class:text={current.medium === 'text'} class:image={current.medium === 'image'} in:fly={{ x: direction * 90, duration: 350 }} out:fade={{ duration: 150 }}>
-            <h2>{current.title}</h2>
-            {#if current.medium === 'image'}
-              <img src={current.image} alt={current.title} />
-            {:else}
-              <div class="body">{@html renderBody(current.body)}</div>
-            {/if}
-          </article>
-        {/key}
+        <button class="side-arrow newer" aria-label="View newer entry" disabled={currentIndex === entries.length - 1} onclick={() => navigate(currentIndex + 1)}>←</button>
+        <div class="stage-content">
+          {#key current.slug}
+            <article class:text={current.medium === 'text'} class:image={current.medium === 'image'} in:fly={{ x: direction * 90, duration: 350 }} out:fade={{ duration: 150 }}>
+              <h2>{current.title}</h2>
+              {#if current.medium === 'image'}
+                <img src={current.image} alt={current.title} />
+              {:else}
+                <div class="body">{@html renderBody(current.body)}</div>
+              {/if}
+            </article>
+          {/key}
+        </div>
+        <button class="side-arrow older" aria-label="View older entry" disabled={currentIndex === 0} onclick={() => navigate(currentIndex - 1)}>→</button>
       </div>
 
       <p class="position">{currentIndex + 1} / {entries.length}</p>
@@ -134,7 +138,11 @@
   nav { display: flex; gap: .5rem; }
   nav button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; cursor: pointer; padding: .5rem .75rem; }
   nav button:disabled { cursor: default; opacity: .3; }
-  .stage { display: grid; min-height: 34rem; align-items: start; justify-items: center; padding: 2rem 0; }
+  .stage { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem; min-height: 34rem; align-items: center; gap: clamp(.25rem, 2vw, 1.25rem); padding: 2rem 0; }
+  .stage-content { display: grid; width: 100%; align-self: start; justify-items: center; }
+  .side-arrow { display: grid; width: 2.5rem; aspect-ratio: 1; place-items: center; border: 1px solid rgb(48 43 36 / 35%); border-radius: 50%; background: rgb(242 239 229 / 45%); cursor: pointer; font-size: 1.15rem; transition: background .15s ease, transform .15s ease; }
+  .side-arrow:hover:not(:disabled), .side-arrow:focus-visible:not(:disabled) { transform: scale(1.08); background: #f2efe5; }
+  .side-arrow:disabled { cursor: default; opacity: .25; }
   article { grid-area: 1 / 1; width: min(100%, 42rem); }
   article h2 { margin: 0 0 1.5rem; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; text-align: center; }
   article.text { min-height: 28rem; background: #f2efe5; box-shadow: 0 1.4rem 3rem rgb(48 43 36 / 12%); padding: clamp(2rem, 7vw, 5rem); }
@@ -158,7 +166,8 @@
     main { width: calc(100% - 2rem); padding-top: 2rem; }
     .reader-top { display: block; }
     nav { justify-content: flex-end; margin-top: 1.25rem; }
-    .stage { min-height: 29rem; padding-top: 1.25rem; }
+    .stage { grid-template-columns: 2rem minmax(0, 1fr) 2rem; min-height: 29rem; padding-top: 1.25rem; }
+    .side-arrow { width: 2rem; }
     article.text { min-height: 24rem; }
     li button { gap: 1rem; }
   }
