@@ -43,7 +43,7 @@
     void import('leaflet').then((leaflet) => {
       if (disposed) return;
       const L = leaflet.default;
-      const map = L.map(mapElement, { zoomControl: true, scrollWheelZoom: false, attributionControl: true });
+      const map = L.map(mapElement, { zoomControl: true, scrollWheelZoom: true, attributionControl: true });
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap contributors'
