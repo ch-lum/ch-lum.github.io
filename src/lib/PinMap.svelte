@@ -77,7 +77,10 @@
           iconAnchor: [width / 2, height / 2],
           html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
         });
-        L.marker([pin.latitude, pin.longitude], { icon, keyboard: true, title: pin.name }).addTo(map).on('click', () => onselect(pin));
+        const marker = L.marker([pin.latitude, pin.longitude], { icon, keyboard: true, title: pin.name }).addTo(map);
+        marker.on('click', () => onselect(pin));
+        marker.on('mouseover focus', () => marker.setZIndexOffset(10_000));
+        marker.on('mouseout blur', () => marker.setZIndexOffset(0));
       }
 
       const start = startingGroup();
@@ -118,7 +121,7 @@
   .map-status.error { width: min(22rem, calc(100% - 2rem)); }
   :global(.pin-map-icon) { background: transparent; border: 0; }
   :global(.pin-map-icon img) { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 2px #22332b66); transition: transform .2s ease; }
-  :global(.pin-map-icon span) { position: absolute; top: 100%; left: 50%; width: max-content; max-width: 9rem; transform: translateX(-50%); padding: .15rem .3rem; background: #edf0e4ed; color: #302b24; font-family: Georgia, 'Times New Roman', serif; font-size: .67rem; line-height: 1.1; text-align: center; opacity: 0; pointer-events: none; }
+  :global(.pin-map-icon span) { position: absolute; top: 100%; left: 50%; z-index: 1; width: max-content; max-width: 9rem; transform: translateX(-50%); padding: .15rem .3rem; background: #edf0e4ed; color: #302b24; font-family: Georgia, 'Times New Roman', serif; font-size: .67rem; line-height: 1.1; text-align: center; opacity: 0; pointer-events: none; }
   :global(.pin-map-icon:hover), :global(.pin-map-icon:focus) { z-index: 1000 !important; }
   :global(.pin-map-icon:hover img), :global(.pin-map-icon:focus img) { transform: scale(1.12); }
   :global(.pin-map-icon:hover span), :global(.pin-map-icon:focus span) { opacity: 1; }
