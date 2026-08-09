@@ -93,13 +93,20 @@
     if (arrangeBy === 'city') return compareFields(a, b, ['state', 'country', 'name']);
     if (arrangeBy === 'location') return compareFields(a, b, ['city', 'state', 'country', 'name']);
     if (arrangeBy === 'country') return compareFields(a, b, ['city', 'state', 'name']);
+    if (arrangeBy === 'firstVisit') return a.firstVisit.localeCompare(b.firstVisit) || a.name.localeCompare(b.name);
     return a.name.localeCompare(b.name);
   }));
   function openDetails(pin: Pin) { selected = pin; detailsDialog.showModal(); }
   function closeDetails() { detailsDialog.close(); selected = null; }
   function formatDate(date: string) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
-    return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(`${date}T00:00:00`));
+    if (/^\d{4}$/.test(date)) return date;
+    if (/^\d{4}-\d{2}$/.test(date)) {
+      return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' }).format(new Date(`${date}-01T00:00:00`));
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(`${date}T00:00:00`));
+    }
+    return date;
   }
 </script>
 
