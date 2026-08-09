@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs><filter id="s" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-opacity=".25"/></filter></defs>
+  <g filter="url(#s)" stroke="#493a2a" stroke-width="5">
+    <circle cx="90" cy="89" r="41" fill="#b78b43"/>
+    <circle cx="90" cy="89" r="25" fill="#d9b86c"/>
+    <path d="M90 55v68M56 89h68" fill="none" opacity=".5"/>
+    <circle cx="90" cy="89" r="7" fill="#493a2a" stroke="none"/>
+  </g>
+</svg>

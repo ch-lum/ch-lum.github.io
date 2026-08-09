@@ -4,7 +4,7 @@
     href: string;
     image: string;
     hoverImage?: string;
-    motion: 'swap' | 'tip' | 'spin';
+    motion: 'swap' | 'tip' | 'spin' | 'separate';
   } = $props();
 </script>
 
@@ -53,6 +53,10 @@
   .nav-item:hover.swap .base, .nav-item:focus-visible.swap .base { opacity: 0; }
   .nav-item:hover.swap .open, .nav-item:focus-visible.swap .open { opacity: 1; }
   .nav-item:hover.tip .base, .nav-item:focus-visible.tip .base { transform: rotate(18deg) translateY(-.2rem); }
+  .nav-item.separate .open { opacity: 1; transform: scale(.72); z-index: 0; }
+  .nav-item.separate .base { z-index: 1; }
+  .nav-item:hover.separate .base, .nav-item:focus-visible.separate .base { transform: translateX(-2.1rem) rotate(-7deg); }
+  .nav-item:hover.separate .open, .nav-item:focus-visible.separate .open { transform: translateX(2.1rem) scale(.72) rotate(7deg); }
   .nav-item.spin .base { animation: record-spin 6s linear infinite paused; }
   .nav-item:hover.spin .base, .nav-item:focus-visible.spin .base { animation-play-state: running; }
   .nav-item:focus-visible { outline: 1px solid #6f5b42; outline-offset: .5rem; }

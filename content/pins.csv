@@ -1,0 +1,7 @@
+name,city,state,country,latitude,longitude,first_visit,visits,type,dimensions,image,note
+Monterey Bay Aquarium,Monterey,California,United States,36.6183,-121.9018,2019-06-01,3,Aquarium,1:1,,A reminder of watching the kelp forest sway.
+ABQ BioPark Zoo,Albuquerque,New Mexico,United States,35.0777,-106.6820,,2,Zoo,1:1,,This demo also marks the eastern edge of the western map.
+National Museum of Natural History,Washington,DC,United States,38.8913,-77.0261,2022-04-10,,Museum,1.4:1,,A classic museum pin for the collection.
+Musée d'Orsay,Paris,,France,48.8600,2.3266,2023-05-14,1,Art,1:1,,Art and an excellent clock in the same building.
+Osaka Aquarium Kaiyukan,Osaka,,Japan,34.6545,135.4289,2024-03-20,1,Aquarium,2:2,,A large pin for a very large aquarium.
+Waikīkī Aquarium,Honolulu,Hawaii,United States,21.2658,-157.8213,,5,Aquarium,1:1,,Hawaii is intentionally grouped with Oceania.

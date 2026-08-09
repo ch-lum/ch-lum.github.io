@@ -27,6 +27,13 @@ export const navigation = [
   //   hoverImage: '/home_imgs/dnd-open.PNG',
   //   motion: 'swap'
   // },
+  {
+    label: 'pins',
+    href: '/pins/',
+    image: '/home_imgs/pin-closed.svg',
+    hoverImage: '/home_imgs/pin-backing.svg',
+    motion: 'separate'
+  },
   { label: 'coffee', href: '/coffee/', image: '/home_imgs/kettle.PNG', motion: 'tip' },
   { label: 'music', href: '/music/', image: '/home_imgs/record.png', motion: 'spin' }
 ] as const;

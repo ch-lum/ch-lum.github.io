@@ -34,6 +34,14 @@ Only `roast_date` is required, and it must be unique. Empty metadata cells displ
 
 Wrap notes containing commas in double quotes. The sync command uses Spotify's Client Credentials flow, so secrets remain local and the deployed website stays static. Playback uses Spotify's official album embed because Web API preview URLs are deprecated and may be unavailable.
 
+## Adding pins
+
+1. Add a row to `content/pins.csv`. `name` is required; repeated names are distinguished by `city`.
+2. Add the pin photograph to `public/pins/` and put its filename in the `image` column.
+3. Leave `image` blank to use the illustrated placeholder for its type.
+
+The supported types are `Aquarium`, `Zoo`, `Art`, `Museum`, and `Other`. Write display dimensions as `width:height`: `1:1` is standard size, `2:2` is twice as large, and `1.5:1` makes a landscape pin. Blank `first_visit` and `visits` cells display as “Unknown” and “Many times.” Wrap notes containing commas in double quotes.
+
 ## Adding short-form work
 
 Add a dated Markdown file to `content/short-form/`. Use this frontmatter:
