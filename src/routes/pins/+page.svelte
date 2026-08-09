@@ -8,7 +8,7 @@
   type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit';
   type Pin = MapPin;
 
-  const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Other']);
+  const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Nature', 'Other']);
   const arrangeOptions: { value: ArrangeKey; label: string }[] = [
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
     { value: 'location', label: 'State / Country' }, { value: 'country', label: 'Country' },
@@ -82,7 +82,7 @@
 
 <main>
   <header class="page-heading">
-    <div><p class="eyebrow">Oh, the places you'll go!</p><h1>Pins</h1></div>
+    <div><p class="eyebrow">Oh, the places you'll go!</p><h1>Pins & Places</h1></div>
     <p class="intro">In real life, these aren't organized.</p>
   </header>
   <div class="controls" aria-label="Collection controls">

@@ -28,7 +28,7 @@ export const navigation = [
   //   motion: 'swap'
   // },
   {
-    label: 'pins',
+    label: 'Pins & Places',
     href: '/pins/',
     image: '/home_imgs/pin-closed.svg',
     hoverImage: '/home_imgs/pin-backing.svg',
