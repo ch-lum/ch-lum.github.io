@@ -13,6 +13,8 @@
 
   let { pins, onselect }: { pins: MapPin[]; onselect: (pin: MapPin) => void } = $props();
   let mapElement: HTMLDivElement;
+  let mapLoaded = $state(false);
+  let mapError = $state(false);
 
   function escapeHtml(value: string) {
     return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]!);
@@ -33,7 +35,7 @@
     addGroups('state', (pin) => pin.state ? `${pin.state}|${pin.country}` : '');
     addGroups('country', (pin) => pin.country);
     if (!candidates.length) return { level: 'country' as const, pins };
-    return candidates[candidates.length];
+    return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
   onMount(() => {
@@ -42,12 +44,19 @@
 
     void import('leaflet').then((leaflet) => {
       if (disposed) return;
-      const L = leaflet.default;
+      const L = leaflet.default ?? leaflet;
       const map = L.map(mapElement, { zoomControl: true, scrollWheelZoom: true, attributionControl: true });
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
+      });
+      let failedTiles = 0;
+      tiles.on('load', () => { mapLoaded = true; mapError = false; });
+      tiles.on('tileerror', () => {
+        failedTiles += 1;
+        if (failedTiles >= 4 && !mapLoaded) mapError = true;
+      });
+      tiles.addTo(map);
 
       for (const pin of pins) {
         const width = Math.max(32, pin.width * 38);
@@ -80,6 +89,9 @@
       const resizeObserver = new ResizeObserver(() => map.invalidateSize({ animate: false }));
       resizeObserver.observe(mapElement);
       cleanup = () => { resizeObserver.disconnect(); map.remove(); };
+    }).catch((error) => {
+      console.error('Unable to initialize the pin map.', error);
+      mapError = true;
     });
 
     return () => { disposed = true; cleanup(); };
@@ -87,9 +99,13 @@
 </script>
 
 <div class="map" bind:this={mapElement}></div>
+{#if !mapLoaded && !mapError}<p class="map-status">Loading map…</p>{/if}
+{#if mapError}<p class="map-status error">The map tiles could not load. Check your connection or content blocker, then refresh.</p>{/if}
 
 <style>
   .map { width: 100%; height: 100%; background: #b9c9bd; }
+  .map-status { position: absolute; inset: 50% auto auto 50%; z-index: 1001; transform: translate(-50%, -50%); margin: 0; padding: .55rem .8rem; background: #edf0e4e8; color: #302b24; font-size: .8rem; text-align: center; pointer-events: none; }
+  .map-status.error { width: min(22rem, calc(100% - 2rem)); }
   :global(.pin-map-icon) { background: transparent; border: 0; }
   :global(.pin-map-icon img) { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 2px #22332b66); transition: transform .2s ease; }
   :global(.pin-map-icon span) { position: absolute; top: 100%; left: 50%; width: max-content; max-width: 9rem; transform: translateX(-50%); padding: .15rem .3rem; background: #edf0e4ed; color: #302b24; font-family: Georgia, 'Times New Roman', serif; font-size: .67rem; line-height: 1.1; text-align: center; opacity: 0; pointer-events: none; }
