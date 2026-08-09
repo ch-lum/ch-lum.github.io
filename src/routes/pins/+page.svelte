@@ -8,7 +8,7 @@
   type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit';
   type Pin = MapPin;
 
-  const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Other']);
+  const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Other']);
   const arrangeOptions: { value: ArrangeKey; label: string }[] = [
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
     { value: 'location', label: 'State / Country' }, { value: 'country', label: 'Country' },
