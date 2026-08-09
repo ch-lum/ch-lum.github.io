@@ -89,7 +89,10 @@
       <label>Arrange by <select bind:value={arrangeBy}>{#each arrangeOptions as option}<option value={option.value}>{option.label}</option>{/each}</select></label>
     {:else}
       <button class="shuffle" onclick={() => mapVersion += 1} aria-label="Shuffle map starting location">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 17h2.5c4.5 0 6.2-10 10.5-10h4M16 21h5v-5M4 7h2.5c1.8 0 3.1 1.6 4.2 3.6M13.2 16.3c1.1 1.1 2.3 1.7 3.8 1.7h4" /></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 7h3.5c5 0 6 10 11 10H21M18 14l3 3-3 3" />
+          <path d="M3 17h3.5c5 0 6-10 11-10H21M18 4l3 3-3 3" />
+        </svg>
         Shuffle
       </button>
     {/if}
