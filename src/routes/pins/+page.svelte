@@ -62,24 +62,9 @@
   let selected = $state<Pin | null>(null);
   let detailsDialog: HTMLDialogElement;
 
-  function numberWord(value: number): string {
-    const small = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-    if (value < 20) return small[value];
-    if (value < 100) return `${tens[Math.floor(value / 10)]}${value % 10 ? `-${small[value % 10]}` : ''}`;
-    if (value < 1000) return `${small[Math.floor(value / 100)]} hundred${value % 100 ? ` ${numberWord(value % 100)}` : ''}`;
-    return String(value);
-  }
-
-  function displayVisits(visits: string) {
-    const count = Number(visits);
-    return Number.isInteger(count) && count >= 0 ? numberWord(count) : visits;
-  }
-
   function group(pin: Pin) {
     if (arrangeBy === 'location') return pin.state || pin.country;
     if (arrangeBy === 'firstVisit') return pin.firstVisit === 'Unknown' ? 'Unknown' : pin.firstVisit.slice(0, 4);
-    if (arrangeBy === 'visits') return displayVisits(pin.visits);
     return pin[arrangeBy];
   }
 
@@ -163,7 +148,7 @@
 <dialog bind:this={detailsDialog} onclose={() => selected = null} onclick={(event) => event.target === detailsDialog && closeDetails()}>
   {#if selected}<button class="close" onclick={closeDetails} aria-label="Close details">×</button><div class="dialog-layout">
     <div class="dialog-pin"><img src={selected.image} alt={`${selected.name} pin`} /></div>
-    <div class="details"><p class="eyebrow">{selected.type}</p><h2>{selected.name}</h2><dl><div><dt>Place</dt><dd>{selected.city}{selected.state ? `, ${selected.state}` : ''}, {selected.country}</dd></div><div><dt>First visit</dt><dd>{formatDate(selected.firstVisit)}</dd></div><div><dt>Visits</dt><dd>{displayVisits(selected.visits)}</dd></div></dl><section class="note"><h3>A bit about it</h3><p>{selected.note || 'No note yet.'}</p></section></div>
+    <div class="details"><p class="eyebrow">{selected.type}</p><h2>{selected.name}</h2><dl><div><dt>Place</dt><dd>{selected.city}{selected.state ? `, ${selected.state}` : ''}, {selected.country}</dd></div><div><dt>First visit</dt><dd>{formatDate(selected.firstVisit)}</dd></div><div><dt>Visits</dt><dd>{selected.visits}</dd></div></dl><section class="note"><h3>A bit about it</h3><p>{selected.note || 'No note yet.'}</p></section></div>
   </div>{/if}
 </dialog>
 
