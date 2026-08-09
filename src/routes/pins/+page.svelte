@@ -5,7 +5,7 @@
 
   type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
   type View = 'map' | 'grid';
-  type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit';
+  type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit' | 'visits';
   type Pin = MapPin;
 
   const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Nature', 'Other']);
@@ -13,7 +13,7 @@
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
     { value: 'city', label: 'City' },
     { value: 'location', label: 'State / Country' }, { value: 'country', label: 'Country' },
-    { value: 'firstVisit', label: 'First visit' }
+    { value: 'firstVisit', label: 'First visit' }, { value: 'visits', label: 'Visit count' }
   ];
 
   function parseLine(line: string) {
@@ -76,7 +76,18 @@
     return 0;
   }
 
+  function visitRank(pin: Pin) {
+    if (pin.visits === 'Many times') return Number.POSITIVE_INFINITY;
+    const count = Number(pin.visits);
+    return Number.isFinite(count) ? count : 0;
+  }
+
   const arrangedPins = $derived([...pins].sort((a, b) => {
+    if (arrangeBy === 'visits') {
+      const aVisits = visitRank(a), bVisits = visitRank(b);
+      if (aVisits !== bVisits) return aVisits < bVisits ? 1 : -1;
+      return a.name.localeCompare(b.name);
+    }
     const groupComparison = group(a).localeCompare(group(b));
     if (groupComparison) return groupComparison;
     if (arrangeBy === 'city') return compareFields(a, b, ['state', 'country', 'name']);
