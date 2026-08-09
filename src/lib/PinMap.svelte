@@ -50,7 +50,12 @@
     void import('leaflet').then((leaflet) => {
       if (disposed) return;
       const L = leaflet.default ?? leaflet;
-      const map = L.map(mapElement, { zoomControl: true, scrollWheelZoom: true, attributionControl: true });
+      const map = L.map(mapElement, {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        attributionControl: true,
+        worldCopyJump: true
+      });
       const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap contributors'
