@@ -11,8 +11,9 @@
   const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Nature', 'Other']);
   const arrangeOptions: { value: ArrangeKey; label: string }[] = [
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
+    { value: 'city', label: 'City' },
     { value: 'location', label: 'State / Country' }, { value: 'country', label: 'Country' },
-    { value: 'city', label: 'City' }, { value: 'firstVisit', label: 'First visit' }
+    { value: 'firstVisit', label: 'First visit' }
   ];
 
   function parseLine(line: string) {
@@ -67,7 +68,22 @@
     return pin[arrangeBy];
   }
 
-  const arrangedPins = $derived([...pins].sort((a, b) => group(a).localeCompare(group(b)) || a.name.localeCompare(b.name)));
+  function compareFields(a: Pin, b: Pin, fields: (keyof Pin)[]) {
+    for (const field of fields) {
+      const comparison = String(a[field]).localeCompare(String(b[field]));
+      if (comparison) return comparison;
+    }
+    return 0;
+  }
+
+  const arrangedPins = $derived([...pins].sort((a, b) => {
+    const groupComparison = group(a).localeCompare(group(b));
+    if (groupComparison) return groupComparison;
+    if (arrangeBy === 'city') return compareFields(a, b, ['state', 'country', 'name']);
+    if (arrangeBy === 'location') return compareFields(a, b, ['city', 'state', 'country', 'name']);
+    if (arrangeBy === 'country') return compareFields(a, b, ['city', 'state', 'name']);
+    return a.name.localeCompare(b.name);
+  }));
   function openDetails(pin: Pin) { selected = pin; detailsDialog.showModal(); }
   function closeDetails() { detailsDialog.close(); selected = null; }
   function formatDate(date: string) {
@@ -106,7 +122,9 @@
     <section class="collection" aria-label="Pin collection" aria-live="polite">
       {#each arrangedPins as pin, index (pin.key)}
         <article animate:flip={{ duration: 650 }}>
-          {#if arrangeBy !== 'name' && (index === 0 || group(arrangedPins[index - 1]) !== group(pin))}<h2>{group(pin)}</h2>{/if}
+          {#if arrangeBy !== 'name'}
+            <div class="group-heading">{#if index === 0 || group(arrangedPins[index - 1]) !== group(pin)}<h2>{group(pin)}</h2>{/if}</div>
+          {/if}
           <button class="pin-card" onclick={() => openDetails(pin)}>
             <span class="pin-stage"><img src={pin.image} alt="" /></span><span class="pin-copy"><strong>{pin.name}</strong><small>{pin.city}{pin.state ? `, ${pin.state}` : ''}</small></span>
           </button>
@@ -141,12 +159,13 @@
   .map-box { height: min(68vh, 45rem); min-height: 32rem; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
   .collection { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; gap: 2rem; }
   .collection article { min-width: 0; }
-  .collection article h2 { margin: 0 0 .75rem; font-size: .85rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+  .group-heading { display: flex; height: 1.75rem; align-items: flex-end; }
+  .collection article h2 { margin: 0; font-size: .85rem; font-weight: 400; line-height: 1; letter-spacing: .08em; text-transform: uppercase; }
   .pin-card { width: 100%; border: 0; background: transparent; cursor: pointer; padding: .5rem; text-align: center; transition: transform .25s ease; }
   .pin-card:hover, .pin-card:focus-visible { transform: translateY(-.4rem); }.pin-card:focus-visible { outline: 1px solid #302b24; outline-offset: .25rem; }
   .pin-stage { height: 16rem; display: grid; place-items: center; }
   .pin-stage img { width: 7rem; height: 7rem; max-width: 100%; object-fit: contain; filter: drop-shadow(0 .7rem .5rem rgb(48 43 36 / 18%)); }
-  .pin-copy { display: grid; gap: .2rem; margin-top: .6rem; }.pin-copy strong { font-size: 1rem; font-weight: 400; }.pin-copy small { font-size: .78rem; opacity: .7; }
+  .pin-copy { display: grid; min-height: 3rem; align-content: start; gap: .2rem; margin-top: .6rem; }.pin-copy strong { font-size: 1rem; font-weight: 400; }.pin-copy small { font-size: .78rem; opacity: .7; }
   dialog { width: min(62rem, calc(100% - 2rem)); max-height: calc(100vh - 2rem); overflow-y: auto; border: 1px solid rgb(48 43 36 / 40%); background: #edf0e4; color: #302b24; padding: clamp(1.5rem, 5vw, 3rem); }
   dialog::backdrop { background: rgb(30 28 24 / 55%); backdrop-filter: blur(3px); }.close { position: absolute; top: .7rem; right: 1rem; border: 0; background: transparent; cursor: pointer; font-size: 2rem; }
   .dialog-layout { display: grid; grid-template-columns: minmax(15rem, .9fr) 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
