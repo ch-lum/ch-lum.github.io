@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { flip } from 'svelte/animate';
   import pinsCsv from '../../../content/pins.csv?raw';
 
   type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Other';
@@ -111,6 +112,12 @@
     });
   }
 
+  function mapUrl(regionPins: Pin[]) {
+    const box = bounds(regionPins);
+    const bbox = [box.minLon, box.minLat, box.maxLon, box.maxLat].join(',');
+    return `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik`;
+  }
+
   function group(pin: Pin) {
     if (arrangeBy === 'location') return pin.state || pin.country;
     if (arrangeBy === 'firstVisit') return pin.firstVisit === 'Unknown' ? 'Unknown' : pin.firstVisit.slice(0, 4);
@@ -129,12 +136,14 @@
 <svelte:head><title>Pins — Ch*!</title><meta name="description" content="A map and cabinet of pins collected from places I have visited." /></svelte:head>
 
 <main>
-  <header class="intro"><p class="eyebrow">Souvenirs from here and there</p><h1>Pin collection</h1><p>A small atlas of aquariums, zoos, museums, and other places I wanted to remember.</p></header>
-  <div class="rule"></div>
-  <section class="controls" aria-label="Collection controls">
+  <header class="page-heading">
+    <div><p class="eyebrow">A pin archive</p><h1>Pins</h1></div>
+    <p class="intro">A small atlas of aquariums, zoos, museums, and other places I wanted to remember.</p>
+  </header>
+  <div class="controls" aria-label="Collection controls">
     <div class="view-switch"><button class:active={view === 'map'} onclick={() => view = 'map'}>Map</button><button class:active={view === 'grid'} onclick={() => view = 'grid'}>Grid</button></div>
     {#if view === 'grid'}<label>Arrange by <select bind:value={arrangeBy}>{#each arrangeOptions as option}<option value={option.value}>{option.label}</option>{/each}</select></label>{/if}
-  </section>
+  </div>
 
   {#if view === 'map'}
     <section class="atlas" aria-label="Regional pin maps">
@@ -142,6 +151,7 @@
         {@const positioned = positionPins(region.pins)}
         <article class="region"><div class="region-heading"><h2>{region.label}</h2><span>{region.pins.length} {region.pins.length === 1 ? 'pin' : 'pins'}</span></div>
           <div class="map-box">
+            <iframe class="base-map" src={mapUrl(region.pins)} title={`${region.label} map`} loading="lazy"></iframe>
             <span class="north">N</span>
             {#each positioned as point (point.pin.key)}
               <button class="map-pin" style:left={`${point.x}%`} style:top={`${point.y}%`} style:--dx={`${point.dx}px`} style:--dy={`${point.dy}px`} style:--pin-w={point.pin.width} style:--pin-h={point.pin.height} onclick={() => openDetails(point.pin)} aria-label={`View ${point.pin.name}`}>
@@ -153,26 +163,66 @@
       {/each}
     </section>
   {:else}
-    <section class="pin-grid" aria-label="Pin collection">
+    <section class="collection" aria-label="Pin collection" aria-live="polite">
       {#each arrangedPins as pin, index (pin.key)}
-        {#if arrangeBy !== 'name' && (index === 0 || group(arrangedPins[index - 1]) !== group(pin))}<h2 class="group-title">{group(pin)}</h2>{/if}
-        <button class="pin-card" onclick={() => openDetails(pin)} style:--pin-w={pin.width} style:--pin-h={pin.height}>
-          <span class="pin-stage"><img src={pin.image} alt="" /></span><strong>{pin.name}</strong><small>{pin.city}{pin.state ? `, ${pin.state}` : ''}</small>
-        </button>
+        <article animate:flip={{ duration: 650 }}>
+          {#if arrangeBy !== 'name' && (index === 0 || group(arrangedPins[index - 1]) !== group(pin))}<h2>{group(pin)}</h2>{/if}
+          <button class="pin-card" onclick={() => openDetails(pin)} style:--pin-w={pin.width} style:--pin-h={pin.height}>
+            <span class="pin-stage"><img src={pin.image} alt="" /></span><span class="pin-copy"><strong>{pin.name}</strong><small>{pin.city}{pin.state ? `, ${pin.state}` : ''}</small></span>
+          </button>
+        </article>
       {/each}
     </section>
   {/if}
 </main>
 
 <dialog bind:this={detailsDialog} onclose={() => selected = null} onclick={(event) => event.target === detailsDialog && closeDetails()}>
-  {#if selected}<button class="close" onclick={closeDetails} aria-label="Close details">×</button><div class="modal" style:--pin-w={selected.width} style:--pin-h={selected.height}>
-    <div class="modal-image"><img src={selected.image} alt={`${selected.name} pin`} /></div>
-    <div><p class="eyebrow">{selected.type}</p><h2>{selected.name}</h2><dl><div><dt>Place</dt><dd>{selected.city}{selected.state ? `, ${selected.state}` : ''}, {selected.country}</dd></div><div><dt>First visit</dt><dd>{formatDate(selected.firstVisit)}</dd></div><div><dt>Visits</dt><dd>{selected.visits}</dd></div></dl>{#if selected.note}<section class="note"><h3>A note about this one</h3><p>{selected.note}</p></section>{/if}</div>
+  {#if selected}<button class="close" onclick={closeDetails} aria-label="Close details">×</button><div class="dialog-layout" style:--pin-w={selected.width} style:--pin-h={selected.height}>
+    <div class="dialog-pin"><img src={selected.image} alt={`${selected.name} pin`} /></div>
+    <div class="details"><p class="eyebrow">{selected.type}</p><h2>{selected.name}</h2><dl><div><dt>Place</dt><dd>{selected.city}{selected.state ? `, ${selected.state}` : ''}, {selected.country}</dd></div><div><dt>First visit</dt><dd>{formatDate(selected.firstVisit)}</dd></div><div><dt>Visits</dt><dd>{selected.visits}</dd></div></dl><section class="note"><h3>A bit about it</h3><p>{selected.note || 'No note yet.'}</p></section></div>
   </div>{/if}
 </dialog>
 
 <style>
-  main{width:min(1160px,calc(100% - 2rem));margin:3rem auto 7rem;color:#302b24}.intro{max-width:45rem}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.72rem}.intro h1{font-size:clamp(2.8rem,7vw,5.5rem);margin:.2rem 0}.intro>p:last-child{font-size:1.1rem;line-height:1.7}.rule{height:1px;background:#615b4c;margin:2rem 0 1.2rem}.controls{min-height:2.7rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}.view-switch{display:flex;border:1px solid #615b4c;border-radius:99px;padding:.2rem}.controls button{border:0;background:transparent;padding:.45rem 1rem;border-radius:99px;font:inherit;color:inherit}.controls button.active{background:#302b24;color:#f4efdf}.controls label{font-size:.88rem}.controls select{margin-left:.4rem;padding:.45rem;border:1px solid #817966;background:#f4efdf;color:inherit;font:inherit}.atlas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem}.region:last-child:nth-child(odd){grid-column:1/-1;width:calc(50% - 1rem)}.region-heading{display:flex;align-items:baseline;justify-content:space-between}.region-heading h2{font-size:1.25rem}.region-heading span{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em}.map-box{position:relative;aspect-ratio:1.48;overflow:hidden;border:1px solid #6c7567;border-radius:.35rem;background-color:#b9c9bd;background-image:linear-gradient(#faf6e622 1px,transparent 1px),linear-gradient(90deg,#faf6e622 1px,transparent 1px);background-size:12.5% 16.66%;box-shadow:inset 0 0 3rem #4a61582b}.north{position:absolute;right:.65rem;top:.55rem;font-size:.7rem;font-weight:bold}.map-pin{position:absolute;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy)));border:0;background:transparent;padding:0;cursor:pointer;z-index:1}.map-pin img{display:block;width:calc(var(--pin-w) * 2.3rem);height:calc(var(--pin-h) * 2.3rem);object-fit:contain;filter:drop-shadow(0 3px 2px #22332b55);transition:transform .2s}.map-pin span{position:absolute;left:50%;top:100%;width:max-content;max-width:9rem;transform:translateX(-50%);padding:.15rem .3rem;background:#f4efdfed;font-size:.67rem;line-height:1.1;opacity:0;pointer-events:none}.map-pin:hover{z-index:3}.map-pin:hover img,.map-pin:focus-visible img{transform:scale(1.12)}.map-pin:hover span,.map-pin:focus-visible span{opacity:1}.pin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2rem 1.25rem;align-items:end}.group-title{grid-column:1/-1;margin:1.5rem 0 -.6rem;padding-bottom:.4rem;border-bottom:1px solid #817966;font-size:1.15rem}.pin-card{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;text-align:center}.pin-stage{height:13rem;display:grid;place-items:center}.pin-stage img{width:calc(var(--pin-w) * 5.2rem);height:calc(var(--pin-h) * 5.2rem);max-width:100%;max-height:12rem;object-fit:contain;filter:drop-shadow(0 5px 4px #332b2240);transition:transform .25s}.pin-card:hover img,.pin-card:focus-visible img{transform:translateY(-.35rem) rotate(-2deg)}.pin-card strong,.pin-card small{display:block}.pin-card small{margin-top:.3rem;color:#665f53}dialog{width:min(780px,calc(100% - 2rem));border:1px solid #615b4c;padding:0;background:#f4efdf;color:#302b24;box-shadow:0 22px 70px #24211b66}dialog::backdrop{background:#2e302b99;backdrop-filter:blur(2px)}.close{position:absolute;right:.7rem;top:.5rem;border:0;background:none;font-size:2rem;cursor:pointer}.modal{display:grid;grid-template-columns:minmax(220px,.85fr) 1.15fr;gap:2.5rem;padding:3.5rem}.modal-image{min-height:18rem;display:grid;place-items:center}.modal-image img{width:calc(var(--pin-w) * 7rem);height:calc(var(--pin-h) * 7rem);max-width:100%;max-height:20rem;object-fit:contain;filter:drop-shadow(0 8px 6px #332b2240)}.modal h2{font-size:2rem;margin:.2rem 0 1.5rem}.modal dl{margin:0}.modal dl div{display:grid;grid-template-columns:6rem 1fr;padding:.6rem 0;border-top:1px solid #aaa18d}.modal dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}.modal dd{margin:0}.note{margin-top:1.5rem;padding:1rem 1.2rem;background:#e1e5d3}.note h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .5rem}.note p{margin:0;line-height:1.6}
-  @media(max-width:700px){main{margin-top:2rem}.atlas{grid-template-columns:1fr}.region:last-child:nth-child(odd){grid-column:auto;width:auto}.map-box{aspect-ratio:.95}.map-pin img{width:calc(var(--pin-w) * 1.8rem);height:calc(var(--pin-h) * 1.8rem)}.modal{grid-template-columns:1fr;padding:2.5rem 1.3rem 1.5rem;gap:.5rem}.modal-image{min-height:13rem}.controls{align-items:flex-start;gap:1rem}.pin-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem .5rem}.pin-stage{height:10rem}.pin-stage img{width:calc(var(--pin-w) * 4rem);height:calc(var(--pin-h) * 4rem)}}
-  @media(prefers-reduced-motion:reduce){.map-pin img,.pin-stage img{transition:none}}
+  main { width: min(76rem, calc(100% - 3rem)); margin: 0 auto; padding: 4rem 0 7rem; color: #302b24; }
+  .page-heading { display: flex; align-items: end; justify-content: space-between; gap: 3rem; border-bottom: 1px solid rgb(48 43 36 / 35%); padding-bottom: 1.5rem; }
+  h1 { margin: 0; font-size: clamp(4rem, 10vw, 8rem); font-weight: 400; line-height: .85; }
+  .eyebrow { margin: 0 0 .65rem; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; }
+  .intro { max-width: 24rem; margin: 0; font-size: 1.05rem; line-height: 1.5; }
+  .controls { display: flex; min-height: 5rem; align-items: center; justify-content: space-between; gap: 1rem; }
+  button, select { color: inherit; font: inherit; }
+  label { display: flex; align-items: center; gap: .65rem; font-size: .85rem; }
+  select { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; }
+  .view-switch { display: flex; gap: .35rem; }
+  .view-switch button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
+  .view-switch button.active { background: #302b24; color: #edf0e4; }
+  .atlas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .region:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 1rem); }
+  .region-heading { display: flex; align-items: baseline; justify-content: space-between; }
+  .region-heading h2 { font-size: .85rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+  .region-heading span { font-size: .72rem; opacity: .7; }
+  .map-box { position: relative; aspect-ratio: 1.48; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
+  .base-map { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; filter: sepia(.18) saturate(.72) contrast(.9); }
+  .north { position: absolute; right: .65rem; top: .55rem; padding: .2rem .3rem; background: #edf0e4dd; font-size: .7rem; font-weight: bold; }
+  .map-pin { position: absolute; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))); border: 0; background: transparent; padding: 0; cursor: pointer; z-index: 1; }
+  .map-pin img { display: block; width: calc(var(--pin-w) * 2.3rem); height: calc(var(--pin-h) * 2.3rem); object-fit: contain; filter: drop-shadow(0 3px 2px #22332b55); transition: transform .2s; }
+  .map-pin span { position: absolute; left: 50%; top: 100%; width: max-content; max-width: 9rem; transform: translateX(-50%); padding: .15rem .3rem; background: #edf0e4ed; font-size: .67rem; line-height: 1.1; opacity: 0; pointer-events: none; }
+  .map-pin:hover { z-index: 3; }.map-pin:hover img, .map-pin:focus-visible img { transform: scale(1.12); }.map-pin:hover span, .map-pin:focus-visible span { opacity: 1; }
+  .collection { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; gap: 2rem; }
+  .collection article { min-width: 0; }
+  .collection article h2 { margin: 0 0 .75rem; font-size: .85rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+  .pin-card { width: 100%; border: 0; background: transparent; cursor: pointer; padding: .5rem; text-align: center; transition: transform .25s ease; }
+  .pin-card:hover, .pin-card:focus-visible { transform: translateY(-.4rem); }.pin-card:focus-visible { outline: 1px solid #302b24; outline-offset: .25rem; }
+  .pin-stage { height: 16rem; display: grid; place-items: center; }
+  .pin-stage img { width: calc(var(--pin-w) * 5.2rem); height: calc(var(--pin-h) * 5.2rem); max-width: 100%; max-height: 15rem; object-fit: contain; filter: drop-shadow(0 .7rem .5rem rgb(48 43 36 / 18%)); }
+  .pin-copy { display: grid; gap: .2rem; margin-top: .6rem; }.pin-copy strong { font-size: 1rem; font-weight: 400; }.pin-copy small { font-size: .78rem; opacity: .7; }
+  dialog { width: min(62rem, calc(100% - 2rem)); max-height: calc(100vh - 2rem); overflow-y: auto; border: 1px solid rgb(48 43 36 / 40%); background: #edf0e4; color: #302b24; padding: clamp(1.5rem, 5vw, 3rem); }
+  dialog::backdrop { background: rgb(30 28 24 / 55%); backdrop-filter: blur(3px); }.close { position: absolute; top: .7rem; right: 1rem; border: 0; background: transparent; cursor: pointer; font-size: 2rem; }
+  .dialog-layout { display: grid; grid-template-columns: minmax(15rem, .9fr) 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+  .dialog-pin { min-height: 24rem; display: grid; place-items: center; }.dialog-pin img { width: calc(var(--pin-w) * 8rem); height: calc(var(--pin-h) * 8rem); max-width: 100%; max-height: 26rem; object-fit: contain; filter: drop-shadow(0 .8rem .6rem rgb(48 43 36 / 20%)); }
+  .details { padding-top: 1rem; } dialog h2 { margin: 0 0 1.5rem; font-size: clamp(2.3rem, 6vw, 4.5rem); font-weight: 400; line-height: 1; }
+  dl { margin: 0; } dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; border-top: 1px solid rgb(48 43 36 / 22%); padding: .65rem 0; } dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; } dd { margin: 0; }
+  .note { margin-top: 2.5rem; }.note h3 { margin: 0 0 .7rem; font-size: .78rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; }.note p { margin: 0; font-size: 1.05rem; line-height: 1.65; }
+  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.controls { align-items: flex-start; }.atlas { grid-template-columns: 1fr; }.region:last-child:nth-child(odd) { grid-column: auto; width: auto; }.map-box { aspect-ratio: .95; }.map-pin img { width: calc(var(--pin-w) * 1.8rem); height: calc(var(--pin-h) * 1.8rem); }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 11rem; }.pin-stage img { width: calc(var(--pin-w) * 4rem); height: calc(var(--pin-h) * 4rem); max-height: 10rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
+  @media (prefers-reduced-motion: reduce) { .map-pin img, .pin-card { transition: none; } }
 </style>
