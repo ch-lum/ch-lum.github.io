@@ -1,25 +1,14 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import PinMap, { type MapPin } from '$lib/PinMap.svelte';
   import pinsCsv from '../../../content/pins.csv?raw';
 
   type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Other';
   type View = 'map' | 'grid';
   type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit';
-  type RegionId = 'na-west' | 'na-east' | 'europe' | 'asia' | 'oceania';
-  type Pin = {
-    key: string; name: string; city: string; state: string; country: string;
-    latitude: number; longitude: number; firstVisit: string; visits: string;
-    type: PinType; width: number; height: number; image: string; note: string;
-  };
+  type Pin = MapPin;
 
   const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Other']);
-  const regions: { id: RegionId; label: string }[] = [
-    { id: 'na-west', label: 'North America West' },
-    { id: 'na-east', label: 'North America East' },
-    { id: 'europe', label: 'Europe' },
-    { id: 'asia', label: 'East / Southeast Asia' },
-    { id: 'oceania', label: 'Oceania' }
-  ];
   const arrangeOptions: { value: ArrangeKey; label: string }[] = [
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
     { value: 'location', label: 'State / Country' }, { value: 'country', label: 'Country' },
@@ -74,50 +63,6 @@
   let selected = $state<Pin | null>(null);
   let detailsDialog: HTMLDialogElement;
 
-  function regionFor(pin: Pin): RegionId | null {
-    const state = pin.state.toLowerCase(), country = pin.country.toLowerCase();
-    if (state === 'hawaii' || state === 'hi' || ['australia', 'new zealand', 'fiji'].includes(country)) return 'oceania';
-    if ((pin.longitude >= -25 && pin.longitude <= 45 && pin.latitude >= 34 && pin.latitude <= 72)) return 'europe';
-    if (pin.longitude >= 90 && pin.longitude <= 155 && pin.latitude >= -12 && pin.latitude <= 55) return 'asia';
-    if (pin.longitude >= -170 && pin.longitude <= -50 && pin.latitude >= 14 && pin.latitude <= 75) return pin.longitude <= -106 ? 'na-west' : 'na-east';
-    return null;
-  }
-
-  const populatedRegions = regions.map((region) => ({ ...region, pins: pins.filter((pin) => regionFor(pin) === region.id) })).filter((region) => region.pins.length);
-
-  function bounds(regionPins: Pin[]) {
-    const lats = regionPins.map((pin) => pin.latitude), lons = regionPins.map((pin) => pin.longitude);
-    const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
-    const centerLon = (Math.min(...lons) + Math.max(...lons)) / 2;
-    const latSpan = Math.max(Math.max(...lats) - Math.min(...lats), 5) * 1.35;
-    const lonSpan = Math.max(Math.max(...lons) - Math.min(...lons), 8) * 1.35;
-    return { minLat: centerLat - latSpan / 2, maxLat: centerLat + latSpan / 2, minLon: centerLon - lonSpan / 2, maxLon: centerLon + lonSpan / 2 };
-  }
-
-  function positionPins(regionPins: Pin[]) {
-    const box = bounds(regionPins);
-    const seen = new Map<string, number>();
-    return regionPins.map((pin) => {
-      const location = `${pin.latitude.toFixed(2)},${pin.longitude.toFixed(2)}`;
-      const duplicate = seen.get(location) ?? 0;
-      seen.set(location, duplicate + 1);
-      const angle = duplicate * 2.4;
-      return {
-        pin,
-        x: 7 + ((pin.longitude - box.minLon) / (box.maxLon - box.minLon)) * 86,
-        y: 7 + (1 - (pin.latitude - box.minLat) / (box.maxLat - box.minLat)) * 86,
-        dx: duplicate ? Math.cos(angle) * (12 + duplicate * 4) : 0,
-        dy: duplicate ? Math.sin(angle) * (12 + duplicate * 4) : 0
-      };
-    });
-  }
-
-  function mapUrl(regionPins: Pin[]) {
-    const box = bounds(regionPins);
-    const bbox = [box.minLon, box.minLat, box.maxLon, box.maxLat].join(',');
-    return `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik`;
-  }
-
   function group(pin: Pin) {
     if (arrangeBy === 'location') return pin.state || pin.country;
     if (arrangeBy === 'firstVisit') return pin.firstVisit === 'Unknown' ? 'Unknown' : pin.firstVisit.slice(0, 4);
@@ -137,8 +82,8 @@
 
 <main>
   <header class="page-heading">
-    <div><p class="eyebrow">A pin archive</p><h1>Pins</h1></div>
-    <p class="intro">A small atlas of aquariums, zoos, museums, and other places I wanted to remember.</p>
+    <div><p class="eyebrow">Oh, the places you'll go!</p><h1>Pins</h1></div>
+    <p class="intro">In real life, these aren't organized.</p>
   </header>
   <div class="controls" aria-label="Collection controls">
     <div class="view-switch"><button class:active={view === 'map'} onclick={() => view = 'map'}>Map</button><button class:active={view === 'grid'} onclick={() => view = 'grid'}>Grid</button></div>
@@ -146,21 +91,8 @@
   </div>
 
   {#if view === 'map'}
-    <section class="atlas" aria-label="Regional pin maps">
-      {#each populatedRegions as region}
-        {@const positioned = positionPins(region.pins)}
-        <article class="region"><div class="region-heading"><h2>{region.label}</h2><span>{region.pins.length} {region.pins.length === 1 ? 'pin' : 'pins'}</span></div>
-          <div class="map-box">
-            <iframe class="base-map" src={mapUrl(region.pins)} title={`${region.label} map`} loading="lazy"></iframe>
-            <span class="north">N</span>
-            {#each positioned as point (point.pin.key)}
-              <button class="map-pin" style:left={`${point.x}%`} style:top={`${point.y}%`} style:--dx={`${point.dx}px`} style:--dy={`${point.dy}px`} style:--pin-w={point.pin.width} style:--pin-h={point.pin.height} onclick={() => openDetails(point.pin)} aria-label={`View ${point.pin.name}`}>
-                <img src={point.pin.image} alt="" /><span>{point.pin.name}</span>
-              </button>
-            {/each}
-          </div>
-        </article>
-      {/each}
+    <section class="map-box" aria-label="Map of pin collection">
+      <PinMap {pins} onselect={openDetails} />
     </section>
   {:else}
     <section class="collection" aria-label="Pin collection" aria-live="polite">
@@ -196,18 +128,7 @@
   .view-switch { display: flex; gap: .35rem; }
   .view-switch button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
   .view-switch button.active { background: #302b24; color: #edf0e4; }
-  .atlas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
-  .region:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 1rem); }
-  .region-heading { display: flex; align-items: baseline; justify-content: space-between; }
-  .region-heading h2 { font-size: .85rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
-  .region-heading span { font-size: .72rem; opacity: .7; }
-  .map-box { position: relative; aspect-ratio: 1.48; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
-  .base-map { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; filter: sepia(.18) saturate(.72) contrast(.9); }
-  .north { position: absolute; right: .65rem; top: .55rem; padding: .2rem .3rem; background: #edf0e4dd; font-size: .7rem; font-weight: bold; }
-  .map-pin { position: absolute; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))); border: 0; background: transparent; padding: 0; cursor: pointer; z-index: 1; }
-  .map-pin img { display: block; width: calc(var(--pin-w) * 2.3rem); height: calc(var(--pin-h) * 2.3rem); object-fit: contain; filter: drop-shadow(0 3px 2px #22332b55); transition: transform .2s; }
-  .map-pin span { position: absolute; left: 50%; top: 100%; width: max-content; max-width: 9rem; transform: translateX(-50%); padding: .15rem .3rem; background: #edf0e4ed; font-size: .67rem; line-height: 1.1; opacity: 0; pointer-events: none; }
-  .map-pin:hover { z-index: 3; }.map-pin:hover img, .map-pin:focus-visible img { transform: scale(1.12); }.map-pin:hover span, .map-pin:focus-visible span { opacity: 1; }
+  .map-box { height: min(68vh, 45rem); min-height: 32rem; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
   .collection { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; gap: 2rem; }
   .collection article { min-width: 0; }
   .collection article h2 { margin: 0 0 .75rem; font-size: .85rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
@@ -223,6 +144,6 @@
   .details { padding-top: 1rem; } dialog h2 { margin: 0 0 1.5rem; font-size: clamp(2.3rem, 6vw, 4.5rem); font-weight: 400; line-height: 1; }
   dl { margin: 0; } dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; border-top: 1px solid rgb(48 43 36 / 22%); padding: .65rem 0; } dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; } dd { margin: 0; }
   .note { margin-top: 2.5rem; }.note h3 { margin: 0 0 .7rem; font-size: .78rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; }.note p { margin: 0; font-size: 1.05rem; line-height: 1.65; }
-  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.controls { align-items: flex-start; }.atlas { grid-template-columns: 1fr; }.region:last-child:nth-child(odd) { grid-column: auto; width: auto; }.map-box { aspect-ratio: .95; }.map-pin img { width: calc(var(--pin-w) * 1.8rem); height: calc(var(--pin-h) * 1.8rem); }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 11rem; }.pin-stage img { width: calc(var(--pin-w) * 4rem); height: calc(var(--pin-h) * 4rem); max-height: 10rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
-  @media (prefers-reduced-motion: reduce) { .map-pin img, .pin-card { transition: none; } }
+  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.controls { align-items: flex-start; }.map-box { height: 65vh; min-height: 27rem; }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 11rem; }.pin-stage img { width: calc(var(--pin-w) * 4rem); height: calc(var(--pin-h) * 4rem); max-height: 10rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
+  @media (prefers-reduced-motion: reduce) { .pin-card { transition: none; } }
 </style>
