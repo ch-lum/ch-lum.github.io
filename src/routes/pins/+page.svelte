@@ -3,7 +3,7 @@
   import PinMap, { type MapPin } from '$lib/PinMap.svelte';
   import pinsCsv from '../../../content/pins.csv?raw';
 
-  type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Other';
+  type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
   type View = 'map' | 'grid';
   type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit';
   type Pin = MapPin;
@@ -45,20 +45,18 @@
       if (keys.has(key.toLowerCase())) throw new Error(`Duplicate pin key: ${key}`);
       keys.add(key.toLowerCase());
       const pinType: PinType = types.has(row.type as PinType) ? row.type as PinType : 'Other';
-      const dimensions = row.dimensions.match(/^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/);
       const image = row.image ? (row.image.startsWith('/') ? row.image : `/pins/${row.image}`) : `/pins/placeholders/${pinType.toLowerCase()}.svg`;
       return {
         key, name: row.name, city: row.city || 'Unknown', state: row.state,
         country: row.country || 'Unknown', latitude: Number(row.latitude), longitude: Number(row.longitude),
-        firstVisit: row.first_visit || 'Unknown', visits: row.visits || 'Many times', type: pinType,
-        width: Math.min(Number(dimensions?.[1] ?? 1), 2.5), height: Math.min(Number(dimensions?.[2] ?? 1), 2.5),
-        image, note: row.note
+        firstVisit: row.first_visit || 'Unknown', visits: row.visits || 'Many times', type: pinType, image, note: row.note
       };
     });
   }
 
   const pins = parsePins(pinsCsv);
   let view = $state<View>('map');
+  let mapVersion = $state(0);
   let arrangeBy = $state<ArrangeKey>('name');
   let selected = $state<Pin | null>(null);
   let detailsDialog: HTMLDialogElement;
@@ -87,19 +85,26 @@
   </header>
   <div class="controls" aria-label="Collection controls">
     <div class="view-switch"><button class:active={view === 'map'} onclick={() => view = 'map'}>Map</button><button class:active={view === 'grid'} onclick={() => view = 'grid'}>Grid</button></div>
-    {#if view === 'grid'}<label>Arrange by <select bind:value={arrangeBy}>{#each arrangeOptions as option}<option value={option.value}>{option.label}</option>{/each}</select></label>{/if}
+    {#if view === 'grid'}
+      <label>Arrange by <select bind:value={arrangeBy}>{#each arrangeOptions as option}<option value={option.value}>{option.label}</option>{/each}</select></label>
+    {:else}
+      <button class="shuffle" onclick={() => mapVersion += 1} aria-label="Shuffle map starting location">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 17h2.5c4.5 0 6.2-10 10.5-10h4M16 21h5v-5M4 7h2.5c1.8 0 3.1 1.6 4.2 3.6M13.2 16.3c1.1 1.1 2.3 1.7 3.8 1.7h4" /></svg>
+        Shuffle
+      </button>
+    {/if}
   </div>
 
   {#if view === 'map'}
     <section class="map-box" aria-label="Map of pin collection">
-      <PinMap {pins} onselect={openDetails} />
+      {#key mapVersion}<PinMap {pins} onselect={openDetails} />{/key}
     </section>
   {:else}
     <section class="collection" aria-label="Pin collection" aria-live="polite">
       {#each arrangedPins as pin, index (pin.key)}
         <article animate:flip={{ duration: 650 }}>
           {#if arrangeBy !== 'name' && (index === 0 || group(arrangedPins[index - 1]) !== group(pin))}<h2>{group(pin)}</h2>{/if}
-          <button class="pin-card" onclick={() => openDetails(pin)} style:--pin-w={pin.width} style:--pin-h={pin.height}>
+          <button class="pin-card" onclick={() => openDetails(pin)}>
             <span class="pin-stage"><img src={pin.image} alt="" /></span><span class="pin-copy"><strong>{pin.name}</strong><small>{pin.city}{pin.state ? `, ${pin.state}` : ''}</small></span>
           </button>
         </article>
@@ -109,7 +114,7 @@
 </main>
 
 <dialog bind:this={detailsDialog} onclose={() => selected = null} onclick={(event) => event.target === detailsDialog && closeDetails()}>
-  {#if selected}<button class="close" onclick={closeDetails} aria-label="Close details">×</button><div class="dialog-layout" style:--pin-w={selected.width} style:--pin-h={selected.height}>
+  {#if selected}<button class="close" onclick={closeDetails} aria-label="Close details">×</button><div class="dialog-layout">
     <div class="dialog-pin"><img src={selected.image} alt={`${selected.name} pin`} /></div>
     <div class="details"><p class="eyebrow">{selected.type}</p><h2>{selected.name}</h2><dl><div><dt>Place</dt><dd>{selected.city}{selected.state ? `, ${selected.state}` : ''}, {selected.country}</dd></div><div><dt>First visit</dt><dd>{formatDate(selected.firstVisit)}</dd></div><div><dt>Visits</dt><dd>{selected.visits}</dd></div></dl><section class="note"><h3>A bit about it</h3><p>{selected.note || 'No note yet.'}</p></section></div>
   </div>{/if}
@@ -128,6 +133,8 @@
   .view-switch { display: flex; gap: .35rem; }
   .view-switch button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
   .view-switch button.active { background: #302b24; color: #edf0e4; }
+  .shuffle { display: flex; align-items: center; gap: .45rem; border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
+  .shuffle svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .map-box { height: min(68vh, 45rem); min-height: 32rem; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
   .collection { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; gap: 2rem; }
   .collection article { min-width: 0; }
@@ -135,15 +142,15 @@
   .pin-card { width: 100%; border: 0; background: transparent; cursor: pointer; padding: .5rem; text-align: center; transition: transform .25s ease; }
   .pin-card:hover, .pin-card:focus-visible { transform: translateY(-.4rem); }.pin-card:focus-visible { outline: 1px solid #302b24; outline-offset: .25rem; }
   .pin-stage { height: 16rem; display: grid; place-items: center; }
-  .pin-stage img { width: calc(var(--pin-w) * 5.2rem); height: calc(var(--pin-h) * 5.2rem); max-width: 100%; max-height: 15rem; object-fit: contain; filter: drop-shadow(0 .7rem .5rem rgb(48 43 36 / 18%)); }
+  .pin-stage img { width: 7rem; height: 7rem; max-width: 100%; object-fit: contain; filter: drop-shadow(0 .7rem .5rem rgb(48 43 36 / 18%)); }
   .pin-copy { display: grid; gap: .2rem; margin-top: .6rem; }.pin-copy strong { font-size: 1rem; font-weight: 400; }.pin-copy small { font-size: .78rem; opacity: .7; }
   dialog { width: min(62rem, calc(100% - 2rem)); max-height: calc(100vh - 2rem); overflow-y: auto; border: 1px solid rgb(48 43 36 / 40%); background: #edf0e4; color: #302b24; padding: clamp(1.5rem, 5vw, 3rem); }
   dialog::backdrop { background: rgb(30 28 24 / 55%); backdrop-filter: blur(3px); }.close { position: absolute; top: .7rem; right: 1rem; border: 0; background: transparent; cursor: pointer; font-size: 2rem; }
   .dialog-layout { display: grid; grid-template-columns: minmax(15rem, .9fr) 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
-  .dialog-pin { min-height: 24rem; display: grid; place-items: center; }.dialog-pin img { width: calc(var(--pin-w) * 8rem); height: calc(var(--pin-h) * 8rem); max-width: 100%; max-height: 26rem; object-fit: contain; filter: drop-shadow(0 .8rem .6rem rgb(48 43 36 / 20%)); }
+  .dialog-pin { min-height: 24rem; display: grid; place-items: center; }.dialog-pin img { width: min(18rem, 100%); aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 .8rem .6rem rgb(48 43 36 / 20%)); }
   .details { padding-top: 1rem; } dialog h2 { margin: 0 0 1.5rem; font-size: clamp(2.3rem, 6vw, 4.5rem); font-weight: 400; line-height: 1; }
   dl { margin: 0; } dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; border-top: 1px solid rgb(48 43 36 / 22%); padding: .65rem 0; } dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; } dd { margin: 0; }
   .note { margin-top: 2.5rem; }.note h3 { margin: 0 0 .7rem; font-size: .78rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; }.note p { margin: 0; font-size: 1.05rem; line-height: 1.65; }
-  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.controls { align-items: flex-start; }.map-box { height: 65vh; min-height: 27rem; }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 11rem; }.pin-stage img { width: calc(var(--pin-w) * 4rem); height: calc(var(--pin-h) * 4rem); max-height: 10rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
+  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.controls { align-items: flex-start; }.map-box { height: 65vh; min-height: 27rem; }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 11rem; }.pin-stage img { width: 6rem; height: 6rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
   @media (prefers-reduced-motion: reduce) { .pin-card { transition: none; } }
 </style>

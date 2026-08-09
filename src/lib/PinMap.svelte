@@ -1,9 +1,11 @@
 <script module lang="ts">
+  let previousCandidateIndex = -1;
+
   export type MapPin = {
     key: string; name: string; city: string; state: string; country: string;
     latitude: number; longitude: number; firstVisit: string; visits: string;
-    type: 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Other';
-    width: number; height: number; image: string; note: string;
+    type: 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
+    image: string; note: string;
   };
 </script>
 
@@ -35,7 +37,10 @@
     addGroups('state', (pin) => pin.state ? `${pin.state}|${pin.country}` : '');
     addGroups('country', (pin) => pin.country);
     if (!candidates.length) return { level: 'country' as const, pins };
-    return candidates[Math.floor(Math.random() * candidates.length)];
+    let candidateIndex = Math.floor(Math.random() * candidates.length);
+    if (candidates.length > 1 && candidateIndex === previousCandidateIndex) candidateIndex = (candidateIndex + 1) % candidates.length;
+    previousCandidateIndex = candidateIndex;
+    return candidates[candidateIndex];
   }
 
   onMount(() => {
@@ -59,8 +64,8 @@
       tiles.addTo(map);
 
       for (const pin of pins) {
-        const width = Math.max(32, pin.width * 38);
-        const height = Math.max(32, pin.height * 38);
+        const width = 42;
+        const height = 42;
         const icon = L.divIcon({
           className: 'pin-map-icon',
           iconSize: [width, height],
