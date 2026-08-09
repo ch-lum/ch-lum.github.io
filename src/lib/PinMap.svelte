@@ -33,7 +33,7 @@
     addGroups('state', (pin) => pin.state ? `${pin.state}|${pin.country}` : '');
     addGroups('country', (pin) => pin.country);
     if (!candidates.length) return { level: 'country' as const, pins };
-    return candidates[Math.floor(Math.random() * candidates.length)];
+    return candidates[candidates.length];
   }
 
   onMount(() => {
@@ -49,15 +49,7 @@
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
 
-      const seen = new Map<string, number>();
-
       for (const pin of pins) {
-        const location = `${pin.latitude.toFixed(3)},${pin.longitude.toFixed(3)}`;
-        const duplicate = seen.get(location) ?? 0;
-        seen.set(location, duplicate + 1);
-        const angle = duplicate * 2.4;
-        const latitude = pin.latitude + (duplicate ? Math.sin(angle) * .025 * duplicate : 0);
-        const longitude = pin.longitude + (duplicate ? Math.cos(angle) * .025 * duplicate : 0);
         const width = Math.max(32, pin.width * 38);
         const height = Math.max(32, pin.height * 38);
         const icon = L.divIcon({
@@ -66,7 +58,7 @@
           iconAnchor: [width / 2, height / 2],
           html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
         });
-        L.marker([latitude, longitude], { icon, keyboard: true, title: pin.name }).addTo(map).on('click', () => onselect(pin));
+        L.marker([pin.latitude, pin.longitude], { icon, keyboard: true, title: pin.name }).addTo(map).on('click', () => onselect(pin));
       }
 
       const start = startingGroup();
