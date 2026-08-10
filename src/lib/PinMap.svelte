@@ -150,7 +150,7 @@
 {#if mapError}<p class="map-status error">The map tiles could not load. Check your connection or content blocker, then refresh.</p>{/if}
 
 <style>
-  .map { width: 100%; height: 100%; background: #b9c9bd; }
+  .map { width: 100%; height: 100%; background: #e8e6df; }
   .map-status { position: absolute; inset: 50% auto auto 50%; z-index: 1001; transform: translate(-50%, -50%); margin: 0; padding: .55rem .8rem; background: #edf0e4e8; color: #302b24; font-size: .8rem; text-align: center; pointer-events: none; }
   .map-status.error { width: min(22rem, calc(100% - 2rem)); }
   :global(.pin-map-icon) { background: transparent; border: 0; }

@@ -208,7 +208,7 @@
   .filter-options { display: flex; flex-wrap: wrap; gap: .5rem; padding-top: .85rem; }
   .filter-chip { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .4rem .8rem; font-size: .78rem; cursor: pointer; opacity: .5; }
   .filter-chip.active { background: #302b24; color: #edf0e4; opacity: 1; }
-  .map-box { height: min(68vh, 45rem); min-height: 32rem; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
+  .map-box { height: min(68vh, 45rem); min-height: 32rem; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #e8e6df; }
   .collection { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; gap: 2rem; }
   .collection article { min-width: 0; }
   .group-heading { display: flex; height: 1.75rem; align-items: flex-end; }
