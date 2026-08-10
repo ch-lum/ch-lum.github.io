@@ -73,7 +73,6 @@
   }
 
   const visiblePins = $derived(pins.filter((pin) => activeTypes.has(pin.type)));
-  const filterSignature = $derived([...activeTypes].sort().join(','));
 
   function group(pin: Pin) {
     if (arrangeBy === 'location') return pin.state || pin.country;
@@ -161,7 +160,7 @@
 
   {#if view === 'map'}
     <section class="map-box" aria-label="Map of pin collection">
-      {#key `${mapVersion}:${filterSignature}`}<PinMap pins={visiblePins} onselect={openDetails} />{/key}
+      {#key mapVersion}<PinMap pins={visiblePins} onselect={openDetails} />{/key}
     </section>
   {:else}
     <section class="collection" aria-label="Pin collection" aria-live="polite">

@@ -18,8 +18,38 @@
   let mapLoaded = $state(false);
   let mapError = $state(false);
 
+  let map: any = null;
+  let leaflet: any = null;
+  const markers = new Map<string, any>();
+
   function escapeHtml(value: string) {
     return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]!);
+  }
+
+  function syncMarkers(currentPins: MapPin[]) {
+    if (!map || !leaflet) return;
+    const currentKeys = new Set(currentPins.map((pin) => pin.key));
+    for (const [key, marker] of markers) {
+      if (currentKeys.has(key)) continue;
+      marker.remove();
+      markers.delete(key);
+    }
+    for (const pin of currentPins) {
+      if (markers.has(pin.key)) continue;
+      const width = 42;
+      const height = 42;
+      const icon = leaflet.divIcon({
+        className: 'pin-map-icon',
+        iconSize: [width, height],
+        iconAnchor: [width / 2, height / 2],
+        html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
+      });
+      const marker = leaflet.marker([pin.latitude, pin.longitude], { icon, keyboard: true, title: pin.name }).addTo(map);
+      marker.on('click', () => onselect(pin));
+      marker.on('mouseover focus', () => marker.setZIndexOffset(10_000));
+      marker.on('mouseout blur', () => marker.setZIndexOffset(0));
+      markers.set(pin.key, marker);
+    }
   }
 
   function startingGroup() {
@@ -47,10 +77,11 @@
     let disposed = false;
     let cleanup = () => {};
 
-    void import('leaflet').then((leaflet) => {
+    void import('leaflet').then((imported) => {
       if (disposed) return;
-      const L = leaflet.default ?? leaflet;
-      const map = L.map(mapElement, {
+      leaflet = imported.default ?? imported;
+      const L = leaflet;
+      map = L.map(mapElement, {
         zoomControl: true,
         scrollWheelZoom: true,
         attributionControl: true,
@@ -68,20 +99,7 @@
       });
       tiles.addTo(map);
 
-      for (const pin of pins) {
-        const width = 42;
-        const height = 42;
-        const icon = L.divIcon({
-          className: 'pin-map-icon',
-          iconSize: [width, height],
-          iconAnchor: [width / 2, height / 2],
-          html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
-        });
-        const marker = L.marker([pin.latitude, pin.longitude], { icon, keyboard: true, title: pin.name }).addTo(map);
-        marker.on('click', () => onselect(pin));
-        marker.on('mouseover focus', () => marker.setZIndexOffset(10_000));
-        marker.on('mouseout blur', () => marker.setZIndexOffset(0));
-      }
+      syncMarkers(pins);
 
       if (!pins.length) {
         map.setView([20, 0], 2, { animate: false });
@@ -105,7 +123,13 @@
 
       const resizeObserver = new ResizeObserver(() => map.invalidateSize({ animate: false }));
       resizeObserver.observe(mapElement);
-      cleanup = () => { resizeObserver.disconnect(); map.remove(); };
+      cleanup = () => {
+        resizeObserver.disconnect();
+        map.remove();
+        map = null;
+        leaflet = null;
+        markers.clear();
+      };
     }).catch((error) => {
       console.error('Unable to initialize the pin map.', error);
       mapError = true;
@@ -113,6 +137,10 @@
 
     return () => { disposed = true; cleanup(); };
   });
+
+  // Keep markers in sync with the (filtered) pins list without ever moving the view —
+  // the map should only jump on initial load or when the shuffle button remounts it.
+  $effect(() => { syncMarkers(pins); });
 </script>
 
 <div class="map" bind:this={mapElement}></div>
