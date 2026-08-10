@@ -30,8 +30,8 @@ export const navigation = [
   {
     label: 'Pins & Places',
     href: '/pins/',
-    image: '/home_imgs/pin-closed.svg',
-    hoverImage: '/home_imgs/pin-backing.svg',
+    image: '/home_imgs/pin-closed.PNG',
+    hoverImage: '/home_imgs/pin-backing.PNG',
     motion: 'separate'
   },
   { label: 'coffee', href: '/coffee/', image: '/home_imgs/kettle.PNG', motion: 'tip' },
