@@ -1,5 +1,6 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import { slide } from 'svelte/transition';
   import PinMap, { type MapPin } from '$lib/PinMap.svelte';
   import pinsCsv from '../../../content/pins.csv?raw';
 
@@ -9,6 +10,7 @@
   type Pin = MapPin;
 
   const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Nature', 'Other']);
+  const filterTypes: PinType[] = ['Aquarium', 'Zoo', 'Art', 'Museum', 'Nature', 'Theater', 'Other'];
   const arrangeOptions: { value: ArrangeKey; label: string }[] = [
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
     { value: 'city', label: 'City' },
@@ -61,6 +63,17 @@
   let arrangeBy = $state<ArrangeKey>('name');
   let selected = $state<Pin | null>(null);
   let detailsDialog: HTMLDialogElement;
+  let filtersOpen = $state(false);
+  let activeTypes = $state<Set<PinType>>(new Set(filterTypes));
+
+  function toggleType(type: PinType) {
+    const next = new Set(activeTypes);
+    if (next.has(type)) next.delete(type); else next.add(type);
+    activeTypes = next;
+  }
+
+  const visiblePins = $derived(pins.filter((pin) => activeTypes.has(pin.type)));
+  const filterSignature = $derived([...activeTypes].sort().join(','));
 
   function group(pin: Pin) {
     if (arrangeBy === 'location') return pin.state || pin.country;
@@ -82,7 +95,7 @@
     return Number.isFinite(count) ? count : 0;
   }
 
-  const arrangedPins = $derived([...pins].sort((a, b) => {
+  const arrangedPins = $derived([...visiblePins].sort((a, b) => {
     if (arrangeBy === 'visits') {
       const aVisits = visitRank(a), bVisits = visitRank(b);
       if (aVisits !== bVisits) return aVisits < bVisits ? 1 : -1;
@@ -132,9 +145,23 @@
     {/if}
   </div>
 
+  <div class="filters">
+    <button class="filters-toggle" onclick={() => filtersOpen = !filtersOpen} aria-expanded={filtersOpen}>
+      Filters
+      <svg class="chevron" class:open={filtersOpen} viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+    </button>
+    {#if filtersOpen}
+      <div class="filter-options" transition:slide={{ duration: 200 }}>
+        {#each filterTypes as type}
+          <button class="filter-chip" class:active={activeTypes.has(type)} onclick={() => toggleType(type)} aria-pressed={activeTypes.has(type)}>{type}</button>
+        {/each}
+      </div>
+    {/if}
+  </div>
+
   {#if view === 'map'}
     <section class="map-box" aria-label="Map of pin collection">
-      {#key mapVersion}<PinMap {pins} onselect={openDetails} />{/key}
+      {#key `${mapVersion}:${filterSignature}`}<PinMap pins={visiblePins} onselect={openDetails} />{/key}
     </section>
   {:else}
     <section class="collection" aria-label="Pin collection" aria-live="polite">
@@ -174,6 +201,14 @@
   .view-switch button.active { background: #302b24; color: #edf0e4; }
   .shuffle { display: flex; align-items: center; gap: .45rem; border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
   .shuffle svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .filters { margin: -.5rem 0 1.5rem; }
+  .filters-toggle { display: flex; align-items: center; gap: .4rem; border: 0; background: transparent; padding: .3rem 0; font-size: .8rem; letter-spacing: .04em; cursor: pointer; opacity: .85; }
+  .filters-toggle:hover { opacity: 1; }
+  .chevron { width: .7rem; height: .7rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+  .chevron.open { transform: rotate(180deg); }
+  .filter-options { display: flex; flex-wrap: wrap; gap: .5rem; padding-top: .85rem; }
+  .filter-chip { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .4rem .8rem; font-size: .78rem; cursor: pointer; opacity: .5; }
+  .filter-chip.active { background: #302b24; color: #edf0e4; opacity: 1; }
   .map-box { height: min(68vh, 45rem); min-height: 32rem; overflow: hidden; border: 1px solid rgb(48 43 36 / 35%); background: #b9c9bd; }
   .collection { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; gap: 2rem; }
   .collection article { min-width: 0; }

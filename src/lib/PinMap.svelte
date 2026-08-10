@@ -83,20 +83,24 @@
         marker.on('mouseout blur', () => marker.setZIndexOffset(0));
       }
 
-      const start = startingGroup();
-      const startLatitudes = start.pins.map((pin) => pin.latitude);
-      const startLongitudes = start.pins.map((pin) => pin.longitude);
-      const minLat = Math.min(...startLatitudes), maxLat = Math.max(...startLatitudes);
-      const minLon = Math.min(...startLongitudes), maxLon = Math.max(...startLongitudes);
-      const center: [number, number] = [(minLat + maxLat) / 2, (minLon + maxLon) / 2];
-      if (maxLat - minLat < .001 && maxLon - minLon < .001) {
-        map.setView(center, start.level === 'city' ? 11 : start.level === 'state' ? 7 : 5, { animate: false });
+      if (!pins.length) {
+        map.setView([20, 0], 2, { animate: false });
       } else {
-        map.fitBounds([[minLat, minLon], [maxLat, maxLon]], {
-          padding: [45, 45],
-          maxZoom: start.level === 'city' ? 11 : start.level === 'state' ? 7 : 5,
-          animate: false
-        });
+        const start = startingGroup();
+        const startLatitudes = start.pins.map((pin) => pin.latitude);
+        const startLongitudes = start.pins.map((pin) => pin.longitude);
+        const minLat = Math.min(...startLatitudes), maxLat = Math.max(...startLatitudes);
+        const minLon = Math.min(...startLongitudes), maxLon = Math.max(...startLongitudes);
+        const center: [number, number] = [(minLat + maxLat) / 2, (minLon + maxLon) / 2];
+        if (maxLat - minLat < .001 && maxLon - minLon < .001) {
+          map.setView(center, start.level === 'city' ? 11 : start.level === 'state' ? 7 : 5, { animate: false });
+        } else {
+          map.fitBounds([[minLat, minLon], [maxLat, maxLon]], {
+            padding: [45, 45],
+            maxZoom: start.level === 'city' ? 11 : start.level === 'state' ? 7 : 5,
+            animate: false
+          });
+        }
       }
 
       const resizeObserver = new ResizeObserver(() => map.invalidateSize({ animate: false }));
