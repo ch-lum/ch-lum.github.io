@@ -58,8 +58,15 @@
   }
 
   const pins = parsePins(pinsCsv);
+  const MIN_PIN_SIZE = 24;
+  const MAX_PIN_SIZE = 72;
+  const PIN_SIZE_STEP = 6;
   let view = $state<View>('map');
   let mapVersion = $state(0);
+  let pinSize = $state(42);
+
+  function decreasePinSize() { pinSize = Math.max(MIN_PIN_SIZE, pinSize - PIN_SIZE_STEP); }
+  function increasePinSize() { pinSize = Math.min(MAX_PIN_SIZE, pinSize + PIN_SIZE_STEP); }
   let arrangeBy = $state<ArrangeKey>('name');
   let selected = $state<Pin | null>(null);
   let detailsDialog: HTMLDialogElement;
@@ -127,20 +134,26 @@
 <main>
   <header class="page-heading">
     <div><p class="eyebrow">Oh, the places you'll go!</p><h1>Pins & Places</h1></div>
-    <p class="intro">In real life, these aren't organized.</p>
+    <p class="intro">So this collection is only <i>most</i> of my pins.</p>
   </header>
   <div class="controls" aria-label="Collection controls">
     <div class="view-switch"><button class:active={view === 'map'} onclick={() => view = 'map'}>Map</button><button class:active={view === 'grid'} onclick={() => view = 'grid'}>Grid</button></div>
     {#if view === 'grid'}
       <label>Arrange by <select bind:value={arrangeBy}>{#each arrangeOptions as option}<option value={option.value}>{option.label}</option>{/each}</select></label>
     {:else}
-      <button class="shuffle" onclick={() => mapVersion += 1} aria-label="Shuffle map starting location">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M3 7h3.5c5 0 6 10 11 10H21M18 14l3 3-3 3" />
-          <path d="M3 17h3.5c5 0 6-10 11-10H21M18 4l3 3-3 3" />
-        </svg>
-        Shuffle
-      </button>
+      <div class="map-actions">
+        <div class="pin-size" role="group" aria-label="Pin size">
+          <button onclick={decreasePinSize} disabled={pinSize <= MIN_PIN_SIZE} aria-label="Decrease pin size">−</button>
+          <button onclick={increasePinSize} disabled={pinSize >= MAX_PIN_SIZE} aria-label="Increase pin size">+</button>
+        </div>
+        <button class="shuffle" onclick={() => mapVersion += 1} aria-label="Shuffle map starting location">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 7h3.5c5 0 6 10 11 10H21M18 14l3 3-3 3" />
+            <path d="M3 17h3.5c5 0 6-10 11-10H21M18 4l3 3-3 3" />
+          </svg>
+          Shuffle
+        </button>
+      </div>
     {/if}
   </div>
 
@@ -160,7 +173,7 @@
 
   {#if view === 'map'}
     <section class="map-box" aria-label="Map of pin collection">
-      {#key mapVersion}<PinMap pins={visiblePins} onselect={openDetails} />{/key}
+      {#key mapVersion}<PinMap pins={visiblePins} onselect={openDetails} {pinSize} />{/key}
     </section>
   {:else}
     <section class="collection" aria-label="Pin collection" aria-live="polite">
@@ -198,6 +211,10 @@
   .view-switch { display: flex; gap: .35rem; }
   .view-switch button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
   .view-switch button.active { background: #302b24; color: #edf0e4; }
+  .map-actions { display: flex; align-items: center; gap: 1rem; }
+  .pin-size { display: flex; gap: .35rem; }
+  .pin-size button { border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; line-height: 1; }
+  .pin-size button:disabled { opacity: .35; cursor: not-allowed; }
   .shuffle { display: flex; align-items: center; gap: .45rem; border: 1px solid rgb(48 43 36 / 35%); background: transparent; padding: .55rem .9rem; cursor: pointer; }
   .shuffle svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .filters { margin: -.5rem 0 1.5rem; }

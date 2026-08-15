@@ -13,7 +13,7 @@
   import { onMount } from 'svelte';
   import 'leaflet/dist/leaflet.css';
 
-  let { pins, onselect }: { pins: MapPin[]; onselect: (pin: MapPin) => void } = $props();
+  let { pins, onselect, pinSize = 42 }: { pins: MapPin[]; onselect: (pin: MapPin) => void; pinSize?: number } = $props();
   let mapElement: HTMLDivElement;
   let mapLoaded = $state(false);
   let mapError = $state(false);
@@ -21,13 +21,34 @@
   let map: any = null;
   let leaflet: any = null;
   const markers = new Map<string, any>();
+  let appliedSize = -1; // sentinel: no markers sized yet, so the first applyMarkers() call always (re)builds icons
 
   function escapeHtml(value: string) {
     return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]!);
   }
 
-  function syncMarkers(currentPins: MapPin[]) {
+  // Placeholder-icon pins (no real photo yet) sit behind real-photo pins wherever
+  // markers overlap on the map.
+  function isPlaceholder(pin: MapPin) {
+    return pin.image.includes('/placeholders/');
+  }
+
+  function baseZIndex(pin: MapPin) {
+    return isPlaceholder(pin) ? -1000 : 0;
+  }
+
+  function buildIcon(pin: MapPin, size: number) {
+    return leaflet.divIcon({
+      className: 'pin-map-icon',
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
+      html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
+    });
+  }
+
+  function applyMarkers(currentPins: MapPin[], size: number) {
     if (!map || !leaflet) return;
+    const sizeChanged = size !== appliedSize;
     const currentKeys = new Set(currentPins.map((pin) => pin.key));
     for (const [key, marker] of markers) {
       if (currentKeys.has(key)) continue;
@@ -35,21 +56,24 @@
       markers.delete(key);
     }
     for (const pin of currentPins) {
-      if (markers.has(pin.key)) continue;
-      const width = 42;
-      const height = 42;
-      const icon = leaflet.divIcon({
-        className: 'pin-map-icon',
-        iconSize: [width, height],
-        iconAnchor: [width / 2, height / 2],
-        html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
-      });
-      const marker = leaflet.marker([pin.latitude, pin.longitude], { icon, keyboard: true, title: pin.name }).addTo(map);
+      const existing = markers.get(pin.key);
+      if (existing) {
+        if (sizeChanged) existing.setIcon(buildIcon(pin, size));
+        continue;
+      }
+      const baseZ = baseZIndex(pin);
+      const marker = leaflet.marker([pin.latitude, pin.longitude], {
+        icon: buildIcon(pin, size),
+        keyboard: true,
+        title: pin.name,
+        zIndexOffset: baseZ
+      }).addTo(map);
       marker.on('click', () => onselect(pin));
       marker.on('mouseover focus', () => marker.setZIndexOffset(10_000));
-      marker.on('mouseout blur', () => marker.setZIndexOffset(0));
+      marker.on('mouseout blur', () => marker.setZIndexOffset(baseZ));
       markers.set(pin.key, marker);
     }
+    appliedSize = size;
   }
 
   function startingGroup() {
@@ -101,7 +125,7 @@
       });
       tiles.addTo(map);
 
-      syncMarkers(pins);
+      applyMarkers(pins, pinSize);
 
       if (!pins.length) {
         map.setView([20, 0], 2, { animate: false });
@@ -140,9 +164,10 @@
     return () => { disposed = true; cleanup(); };
   });
 
-  // Keep markers in sync with the (filtered) pins list without ever moving the view —
-  // the map should only jump on initial load or when the shuffle button remounts it.
-  $effect(() => { syncMarkers(pins); });
+  // Keep markers in sync with the (filtered) pins list and current pin size, without
+  // ever moving the view — the map should only jump on initial load or when the
+  // shuffle button remounts it.
+  $effect(() => { applyMarkers(pins, pinSize); });
 </script>
 
 <div class="map" bind:this={mapElement}></div>
