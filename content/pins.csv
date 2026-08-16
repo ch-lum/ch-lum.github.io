@@ -1,86 +1,102 @@
 name,city,state,country,latitude,longitude,first_visit,visits,type,image,note
-St. Louis Aquarium,St. Louis,Missouri,United States,38.62776895514769,-90.20754879832467,2026-02-20,1,Aquarium,,Anastasiya's conference!
-Vancouver Aquarium,Vancouver,British Columbia,Canada,49.300480603812, -123.13087740011878,,2,Aquarium,,My favorite aquarium!
-Point Defiance Zoo and Aquarium,Tacoma,Washington,United States,47.304949662408845, -122.5216637534482,,,Aquarium,,YOCS Summit was here!
-Seattle Aquarium,Seattle,Washington,United States,47.607458038808204, -122.34303090448938,,,Aquarium,,I used to volunteer here
-Museum of History & Industry,Seattle,Washington,United States,47.62733029731781, -122.33660229524621,,,Museum,,"I don't remember anything about this."
-Chihuly Garden and Glass,Seattle,Washington,United States,47.62042246992312, -122.35046906031133,2024-12-16,1,Art,,"This is one of those things that you never do as a local"
-Pacific Science Center,Seattle,Washington,United States,47.62009005167726, -122.35159273147589,,,Museum,,I loved coming here as a kid. Still do.
-Salmon Days 50th Anniversary,Issaquah,Washington,United States,47.53912508633559, -122.03846692963128,,,Other,,It's fish related so here it is
-Oregon Coast Aquarium,Newport,Oregon,United States,44.61765661844447, -124.04724743570107,2019-10-12,1,Aquarium,,Seattle Aquarium volunteering was lit!
-Tillamook Creamery,Tillamook,Oregon,United States,45.484050969747564, -123.84409357020859,2019-10-13,2,Other,,Odd inclusion but it's my favorite pin
-Multnomah Falls,Corbett,Oregon,United States,45.57631527706397, -122.11591864294019,2021-08-21,1,Nature,,The PNW spoils me
-Powell's City of Books,Portland,Oregon,United States,45.523092390983535, -122.68133817308663,2021-07-22,1,Other,,Again this is also one of my favorite pins
-Monterey Bay Aquarium,Monterey,California,United States,36.6183,-121.9018,2022-06-12,1,Aquarium,,Visted on the way home from college wow!
-California Academy of Sciences,San Francisco,California,United States,37.76985611909822, -122.46610006456342,,2,Museum,,Same road trip!
-Steinhart Aquarium at CAS,San Francisco,California,United States,37.76961245827944, -122.46613801425627,,2,Aquarium,,Two aquariums back to back oops!
-Heal the Bay Aquarium,Los Angeles,California,United States,34.01033755323741, -118.49594461785053,2021-12-09,1,Aquarium,,That one pillow wall trip
-Birch Aquarium,San Diego,California,United States,32.865815058714574, -117.25065118226827,2021-09-19,,Aquarium,,I loved working here
-Shark Reef Aquarium,Las Vegas,Nevada,United States,36.08877123249264, -115.17646791785054,2022-05-29,2,Aquarium,,I accidentally had Mackenzie buy me a pin and I never got it back
-OdySea Aquarium,Phoenix,Arizona,United States,33.554726535241, -111.87765311785053,2023-08-28,1,Aquarium,,Sick bathroom
-Musical Instrument Museum,Phoenix,Arizona,United States,33.667987508719136, -111.97828575468581,2023-08-30,2,Museum,,I wanted to go here since 2019 or something
+St. Louis Aquarium,St. Louis,Missouri,United States,38.62776895514769,-90.20754879832467,2026-02-20,1,Aquarium,st-louis-aquarium.PNG,"When I started volunteering at the Seattle Aquarium, I was told that Seattle had one of the best volunteering programs in the country. I definitely still believe this, but the St. Louis Aquarium definitely competes! I was impressed! And I was the only person there, so there were a handful of people staring at me the whole time."
+Vancouver Aquarium,Vancouver,British Columbia,Canada,49.300480603812, -123.13087740011878,,2,Aquarium,vancouver-aquarium.PNG,My favorite aquarium!
+Point Defiance Zoo and Aquarium,Tacoma,Washington,United States,47.304949662408845, -122.5216637534482,,,Aquarium,point-defiance-zoo-and-aquarium.PNG,YOCS Summit was here!
+Seattle Aquarium,Seattle,Washington,United States,47.607458038808204, -122.34303090448938,,,Aquarium,seattle-aquarium.PNG,I used to volunteer here
+Museum of History & Industry,Seattle,Washington,United States,47.62733029731781, -122.33660229524621,2021-08-18,1,Museum,,"SLU day was fun!"
+Burke Museum,Seattle,Washington,United States,47.6605568624118, -122.31162016030946,2020-08-20,1,Museum,,"I came here for the IB diploma. It was so worth it, we extended parking like three times."
+Museum of Pop Culture,Seattle,Washington,United States,47.62143823292052, -122.34821054006869,2019-03-24,5,Museum,,"One of the first hangouts with my future best friend was here. MoPop + Cultural fest + Pacific Science Center + TeenTix. Best $10 you'll ever spend."
+Chihuly Garden and Glass,Seattle,Washington,United States,47.62042246992312, -122.35046906031133,2024-12-16,1,Art,chihuly.PNG,"This is one of those things that you never do as a local"
+Pacific Science Center,Seattle,Washington,United States,47.62009005167726, -122.35159273147589,,,Museum,pacific-science-center.PNG,I loved coming here as a kid. Still do.
+Theo Chocolate,Seattle,Washington,United States,47.651208521047835, -122.35432756630311,,1,Other,theo-chocolate.PNG,"I found out recently that Theo Chocolate merged with another company and no longer make their chocolate in Seattle anymore. That was like, their whole thing to me. I'm not sure if I'll get a Theo chocolate again." 
+Salmon Days 50th Anniversary,Issaquah,Washington,United States,47.53912508633559, -122.03846692963128,,,Other,salmon-days-50.PNG,It's fish related so here it is
+Cougar Mountain Zoo,Issaquah,Washington,United States,47.5524948558218, -122.08074676650422,,,Zoo,,"Zoo!"
+Funko HQ,Everett,Washington,United States,47.980429358938736, -122.20757734332742,2021-07,1,Other,funko-hq.PNG,"There's some cool thrifting in Everett"
+Oregon Coast Aquarium,Newport,Oregon,United States,44.61765661844447, -124.04724743570107,2019-10-12,1,Aquarium,oregon-coast-aquarium.PNG,Seattle Aquarium volunteering was lit!
+Tillamook Creamery,Tillamook,Oregon,United States,45.484050969747564, -123.84409357020859,2019-10-13,2,Other,tillamook.PNG,Odd inclusion but it's my favorite pin
+Multnomah Falls,Corbett,Oregon,United States,45.57631527706397, -122.11591864294019,2021-08-21,1,Nature,multnomah-falls.PNG,"The PNW spoils me"
+Powell's City of Books,Portland,Oregon,United States,45.523092390983535, -122.68133817308663,2021-07-22,1,Other,powell-bookstore.PNG,Again this is also one of my favorite pins
+Monterey Bay Aquarium,Monterey,California,United States,36.6183,-121.9018,2022-06-12,1,Aquarium,monterey-bay-aquarium.PNG,Visted on the way home from college wow!
+California Academy of Sciences,San Francisco,California,United States,37.76985611909822, -122.46610006456342,,2,Museum,california-academy-of-sciences.PNG,Same road trip!
+Steinhart Aquarium at CAS,San Francisco,California,United States,37.76961245827944, -122.46613801425627,,2,Aquarium,california-academy-of-sciences.PNG,Two aquariums back to back oops!
+Heal the Bay Aquarium,Los Angeles,California,United States,34.01033755323741, -118.49594461785053,2021-12-09,1,Aquarium,heal-the-bay-aquarium.PNG,That one pillow wall trip
+Birch Aquarium,San Diego,California,United States,32.865815058714574, -117.25065118226827,2021-09-19,,Aquarium,birch-aquarium.PNG,I loved working here
+Shark Reef Aquarium,Las Vegas,Nevada,United States,36.08877123249264, -115.17646791785054,2022-05-29,2,Aquarium,shark-reef-aquarium.PNG,I accidentally had Mackenzie buy me a pin and I never got it back
+OdySea Aquarium,Phoenix,Arizona,United States,33.554726535241, -111.87765311785053,2023-08-28,1,Aquarium,odysea-aquarium.PNG,Sick bathroom
+Musical Instrument Museum,Phoenix,Arizona,United States,33.667987508719136, -111.97828575468581,2023-08-30,2,Museum,musical-instrument-museum.PNG,I wanted to go here since 2019 or something
 L'Aquàrium de Barcelona,Barcelona,,Spain,41.37681422392231, 2.1844104491432677,2024-08-26,1,Aquarium,,European aquarium
-Museu Nacional d'Art de Catalunya,Barcelona,,Spain,41.36846402647426, 2.1535807259107638,2024-08-27,1,Art,,Sick art
+Museu Nacional d'Art de Catalunya,Barcelona,,Spain,41.36846402647426, 2.1535807259107638,2024-08-27,1,Art,catalonia-national-museum-of-art.PNG,Sick art
 Sagrada Família,Barcelona,,Spain,41.403548573892984, 2.174372200160563,2024-08-25,1,Other,,Crazy place
-Park Güell,Barcelona,,Spain,41.414494771296454, 2.15270522591275,2024-08-25,1,Other,,Wow!
-Casa Batlló,Barcelona,,Spain,41.39169677314369, 2.1649137797496842,2024-08-25,1,Other,,Cool house
-Zoo Antwerpen,Antwerp,,Belgium,51.216369653117496, 4.423412651511006,2023-03-31,1,Zoo,,Most of my pictures were from their fish section
+Park Güell,Barcelona,,Spain,41.414494771296454, 2.15270522591275,2024-08-25,1,Other,park-guell.PNG,Wow!
+Casa Batlló,Barcelona,,Spain,41.39169677314369, 2.1649137797496842,2024-08-25,1,Other,casa-batllo.PNG,Cool house
+37th America's Cup,Barcelona,,Spain,41.377656648220906, 2.183853832426411,2024-08-26,1,Other,37-americas-cup.PNG,"Lucked out to seeing this!"
+Zoo Antwerpen,Antwerp,,Belgium,51.216369653117496, 4.423412651511006,2023-03-31,1,Zoo,zoo-antwerpen.PNG,Most of my pictures were from their fish section
 Rijksmuseum,Amsterdam,,Netherlands,52.35998907890499, 4.88518034355834,2023-03-27,1,Art,,I'm so sad they didn't have a pin. Why didn't I buy a keychain?
-Stedelijk Museum Amsterdam,Amsterdam,,Netherlands,52.35803072913961, 4.879691024582198,2023-03-27,1,Art,,It was here where I saw an Yves Klien in real life for the first time
-Keukenhof,Lisse,,Netherlands,52.26965106877232, 4.547062366929588,2023-04-03,1,Nature,,What a great end to my trip. I am so glad to have gone.
-Manila Ocean Park,Manila,,Philippines,14.579308800000003, 120.97248013553363,2023-12-27,1,Aquarium,,First Asian aquarium!
+Stedelijk Museum Amsterdam,Amsterdam,,Netherlands,52.35803072913961, 4.879691024582198,2023-03-27,1,Art,stedelijk.PNG,It was here where I saw an Yves Klien in real life for the first time
+Van Gogh Museum,Amsterdam,,Netherlands,52.358074765968475, 4.881218863775848,,0,Art,van-gogh-museum.PNG,"Pin with 0 visits? Square that circle, huh? I went into the gift shop and bought the pin before realizing that it was not the gift shop for the Rijks museum. Then it closed when I was trying to go afterwards. Awkward."
+Keukenhof,Lisse,,Netherlands,52.26965106877232, 4.547062366929588,2023-04-03,1,Nature,keukenhof.PNG,What a great end to my trip. I am so glad to have gone.
+Pompeii,Pompeii,,Italy,40.75048211848524, 14.491376705202331,2024-08-22,1,Other,,"They said it was a city frozen in time. I doubted them and then I arrived and they were right. I need to trust the internet."
+Manila Ocean Park,Manila,,Philippines,14.579308800000003, 120.97248013553363,2023-12-27,1,Aquarium,manila-ocean-park.PNG,First Asian aquarium!
 National Museum of Anthropology,Manila,,Philippines,14.585421443957095, 120.98098995667898,2023-12-27,1,Museum,,I loved the Philippines
 National Museum of the Philippines,Manila,,Philippines,14.589536346355846, 120.97478352584898,2023-12-27,1,Art,,Crazy how they only had drafts since the big pieces are in Spain.
+Philippine Tarsier Sanctuary,Bohol,,Philippines,9.690572457660132, 123.95246265804901,2023-12-22,1,Nature,tarsier-sanctuary.PNG,"Tarsiers!"
 National Archaeological Museum,Athens,,Greece,37.989037954071684, 23.732743398868323,2024-08-15,1,Museum,,Should I count it as art? Nah
-Acropolis Museum,Athens,,Greece,37.96843963798275, 23.72851647340859,2024-08-14,1,Museum,,The ruins below were so cool!
-Herakleidon Museum,Athens,,Greece,37.975164675398894, 23.718598373346527,2024-08-16,1,Museum,,Weirdly cool math museum!
+Acropolis Museum,Athens,,Greece,37.96843963798275, 23.72851647340859,2024-08-14,1,Museum,acropolis-museum.PNG,The ruins below were so cool!
+Herakleidon Museum,Athens,,Greece,37.975164675398894, 23.718598373346527,2024-08-16,1,Museum,herakleidon-museum.PNG,Weirdly cool math museum!
 Maui Ocean Center,Wailuku,Hawaii,United States,20.792603280637074, -156.51220070116727,,1,Aquarium,,Was here when I was much younger
-Waikīkī Aquarium,Honolulu,Hawaii,United States,21.2658,-157.8213,,,Aquarium,,Early favorite
+Waikīkī Aquarium,Honolulu,Hawaii,United States,21.2658,-157.8213,,,Aquarium,waikiki-aquarium.PNG,Early favorite
 Bishop Museum,Honolulu,Hawaii,United States,21.332894057174265, -157.87059605415936,,,Museum,,It got real expensive
-Hawaii Army Museum,Honolulu,Hawaii,United States,21.278880862084513, -157.83387413895127,2021-04-07,1,Museum,,Military huh
-Faneuil Hall,Boston,Massachusetts,United States,42.36020312108021, -71.05509799300681,2021-08-28,1,Other,,Dropped off some friends at college
-San Diego Zoo,San Diego,California,United States,32.73593965394214, -117.15097255159692,,5,Zoo,,So lucky to live here (and get to go for free!)
-San Diego Zoo Safari Park,San Diego,California,United States,33.09976611022301, -116.99233711859131,2023-11-18,1,Zoo,,Got real lucky on the sunset this day
-San Diego Air & Space Museum,San Diego,California,United States,32.72625285101192, -117.1543306879205,2022-04-22,1,Museum,,I can't believe they closed early for a special event.
-Fleet Science Center,San Diego,California,United States,32.730764772420166, -117.14697003209777,2023-01-22,1,Museum,,I went here to be by myself post-breakup. It really helped a lot.
+Hawaii Army Museum,Honolulu,Hawaii,United States,21.278880862084513, -157.83387413895127,2021-04-07,1,Museum,hawaii-army-museum.PNG,Military huh
+Kualoa Ranch,Kaneohe,Hawaii,United States,21.518393192573193, -157.85344296311325,2024-07-29,1,Nature,kualoa-ranch.PNG,"Ranch"
+Lion Coffee,Honolulu,Hawaii,United States,21.324268063449715, -157.87985768073034,2023-07-10,1,Other,lion-coffee.PNG,"I love coffee"
+Faneuil Hall,Boston,Massachusetts,United States,42.36020312108021, -71.05509799300681,2021-08-28,1,Other,faneuil-hall.PNG,Dropped off some friends at college
+The Andy Warhol Museum,Pittsburgh,Pennsylvania,United States,40.44839180052384, -80.00254434714127,2025-03-01,1,Art,,"Visiting for SIGCSE. I loved Pittsburgh! And I made a friend who was basically me? Ask me about it next time we're together."
+San Diego Zoo,San Diego,California,United States,32.73593965394214, -117.15097255159692,,5,Zoo,san-diego-zoo.PNG,So lucky to live here (and get to go for free!)
+San Diego Zoo Safari Park,San Diego,California,United States,33.09976611022301, -116.99233711859131,2023-11-18,1,Zoo,san-diego-zoo.PNG,Got real lucky on the sunset this day
+San Diego Air & Space Museum,San Diego,California,United States,32.72625285101192, -117.1543306879205,2022-04-22,1,Museum,sd-air-and-space.PNG,I can't believe they closed early for a special event.
+Fleet Science Center,San Diego,California,United States,32.730764772420166, -117.14697003209777,2023-01-22,1,Museum,fleet-science-center.PNG,I went here to be by myself post-breakup. It really helped a lot.
 San Diego Natural History Museum,San Diego,California,United States,32.73221546606304, -117.14734975135359,2023-01-22,3,Museum,,Having the aquarium reciprocity agreement was awesome.
-San Diego Model Railroad Museum,San Diego,California,United States,32.73113057693154, -117.14861532710269,2023-02-20,2,Museum,,I'm convinced I was Andres's backup date for when his GF was out of town.
+San Diego Model Railroad Museum,San Diego,California,United States,32.73113057693154, -117.14861532710269,2023-02-20,2,Museum,sd-model-railroad-museum.PNG,I'm convinced I was Andres's backup date for when his GF was out of town.
 Museum of Us,San Diego,California,United States,32.73158861302209, -117.15239731389613,2021-04-22,1,Museum,,I visited when I was doing a "campus tour" of UCSD. I had already accepted but I just wanted to see it.
-Museum of Contemporary Art San Diego,San Diego,California,United States,32.84440999610128, -117.27817529997743,2024-04-18,4,Art,,This could have been my first date. I would get married here if I could.
-Modern Art Museum of Fort Worth,Fort Worth,Texas,United States,32.74922223497612, -97.36330141255941,2024-07-20,1,Art,,Anastasiya said that she realized we were serious when I visted her for this trip. I thought we were serious long before SMH.
-Texas Discovery Gardens,Dallas,Texas,United States,32.7750792608006, -96.75983710852643,2024-07-21,1,Nature,,Butterflies! I forgot my wallet this day.
-The Metropolitan Museum of Art,New York,New York,United States,40.77944469557423, -73.96317962993693,2021-08-26,1,Art,,How have I not been back
-Museum of Broadway,New York,New York,United States,40.75764057225175, -73.98434594160291,2024-07-01,1,Museum,,Ran out of time oops.
-The Museum of Modern Art,New York,New York,United States,40.761436971203786, -73.97763779401991,2024-06-27,1,Art,,Yves Klien was CAGED
-Six,New York,New York,United States,40.76026529096828, -73.98680327065618,2024-06-27,1,Theater,,Did not realize it was like a concert in there
-Harry Potter and the Cursed Child,New York,New York,United States,40.75702152340405, -73.98761474801276,2024-06-29,1,Theater,,Crazy set. Also crazy that Courtney decided how 3 hours of my birthday would go.
-The Book of Mormon,New York,New York,United States,40.761167046600285, -73.9856363846675,2024-06-29,1,Theater,,I was supposed to see this in Seattle. Then COVID.
-Hadestown,New York,New York,United States,40.76068098524778, -73.98569569474482,2024-07-02,1,Theater,,I am not a fan of Jordan Fisher
-Top of the Rock,New York,New York,United States,40.759310038964344, -73.97943245398304,2024-07-01,1,Other,,Buildings got stale somehow.
-One World Observatory,New York,New York,United States,40.71302449590818, -74.01317836462776,2024-07-01,1,Other,,It was really tall.
-The Mob Museum,Las Vegas,Nevada,United States,36.17277646867219, -115.14116440128744,2024-03-25,1,Museum,,It was this museum where I thought I needed my Nevada license for local discounts ASAP.
-The Neon Museum,Las Vegas,Nevada,United States,36.17695640352818, -115.13532107013408,2025-03-26,1,Museum,,This spring break I decided to hang out in Vegas a little longer to see where I was gonna spend the start of my career.
-Omega Mart,Las Vegas,Nevada,United States,36.13236635509945, -115.18171282827596,2024-11-30,1,Art,,"I was in Vegas for Thanksgiving. Caesars didn't get back to me yet so I thought I didn't have the job."
+Museum of Contemporary Art San Diego,San Diego,California,United States,32.84440999610128, -117.27817529997743,2024-04-18,4,Art,museum-of-contemporary-art-sd.PNG,This could have been my first date. I would get married here if I could.
+Modern Art Museum of Fort Worth,Fort Worth,Texas,United States,32.74922223497612, -97.36330141255941,2024-07-20,1,Art,modern-art-museum-fw.PNG,Anastasiya said that she realized we were serious when I visted her for this trip. I thought we were serious long before SMH.
+Texas Discovery Gardens,Dallas,Texas,United States,32.7750792608006, -96.75983710852643,2024-07-21,1,Nature,texas-discovery-gardens.PNG,Butterflies! I forgot my wallet this day.
+The Metropolitan Museum of Art,New York,New York,United States,40.77944469557423, -73.96317962993693,2021-08-26,1,Art,the-met.PNG,How have I not been back
+Museum of Broadway,New York,New York,United States,40.75764057225175, -73.98434594160291,2024-07-01,1,Museum,museum-of-broadway.PNG,Ran out of time oops.
+The Museum of Modern Art,New York,New York,United States,40.761436971203786, -73.97763779401991,2024-06-27,1,Art,moma-ny.PNG,Yves Klien was CAGED
+Six,New York,New York,United States,40.76026529096828, -73.98680327065618,2024-06-27,1,Theater,six.PNG,Did not realize it was like a concert in there
+Harry Potter and the Cursed Child,New York,New York,United States,40.75702152340405, -73.98761474801276,2024-06-29,1,Theater,hp-and-the-cursed-child.PNG,Crazy set. Also crazy that Courtney decided how 3 hours of my birthday would go.
+The Book of Mormon,New York,New York,United States,40.761167046600285, -73.9856363846675,2024-06-29,1,Theater,book-of-mormon.PNG,I was supposed to see this in Seattle. Then COVID.
+Hadestown,New York,New York,United States,40.76068098524778, -73.98569569474482,2024-07-02,1,Theater,hadestown.PNG,I am not a fan of Jordan Fisher
+Top of the Rock,New York,New York,United States,40.759310038964344, -73.97943245398304,2024-07-01,1,Other,top-of-the-rock.PNG,Buildings got stale somehow.
+One World Observatory,New York,New York,United States,40.71302449590818, -74.01317836462776,2024-07-01,1,Other,one-world-observatory.PNG,It was really tall.
+The Mob Museum,Las Vegas,Nevada,United States,36.17277646867219, -115.14116440128744,2024-03-25,1,Museum,mob-museum.PNG,"This Mob Museum pin was the final pin I took a picture when first creating this page. I have a whole lot of pins! This digitization process has been a whole lot of fun trying to remember and scavenge for information about each. Funnily enough, I am completely guessing about this museum's first visit. I don't actually know."
+The Neon Museum,Las Vegas,Nevada,United States,36.17695640352818, -115.13532107013408,2025-03-26,1,Museum,neon-museum.PNG,This spring break I decided to hang out in Vegas a little longer to see where I was gonna spend the start of my career.
+Omega Mart,Las Vegas,Nevada,United States,36.13236635509945, -115.18171282827596,2024-11-30,1,Art,omega-mart.PNG,"I was in Vegas for Thanksgiving. Caesars didn't get back to me yet so I thought I didn't have the job."
 Atomic Museum,Las Vegas,Nevada,United States,36.1140119983512, -115.14838503197366,2026-04-12,1,Museum,,Second atomic museum I've been to.
-Albuquerque International Balloon Fiesta,Albuquerque,New Mexico,United States,35.193203816046385, -106.59821601471035,2024-10-06,1,Other,,Accidentally turned a family trip and an Anastasiya trip into a single trip.
-National Museum of Nuclear Science & History,Albuquerque,New Mexico,United States,35.06595901969939, -106.53382836663145,2024-10-05,1,Museum,,Dad had so many cool stories about... having to prepare for nuclear war in Hawaii.
-San Francisco Museum of Modern Art,San Francisco,California,United States,37.78567321148595, -122.40096475173632,2026-03-21,1,Art,,I was upset and nearby one day so I sat in the lobby of the museum. I thought I would osmosis the art or something.
+F1 Las Vegas Grand Prix,Las Vegas,Nevada,United States,36.12115884596698, -115.16026827579674,2025-11-20,1,Other,f1-lv.PNG,"So I only saw the practice, sue me! It counts! Zedd also performed and my friend and I got to the rail for that. Shoutout to my ear plugs, because otherwise, I may not have ears anymore."
+Albuquerque International Balloon Fiesta,Albuquerque,New Mexico,United States,35.193203816046385, -106.59821601471035,2024-10-06,1,Other,abq-balloon-fiesta.PNG,Accidentally turned a family trip and an Anastasiya trip into a single trip.
+National Museum of Nuclear Science & History,Albuquerque,New Mexico,United States,35.06595901969939, -106.53382836663145,2024-10-05,1,Museum,national-museum-of-nuclear.PNG,Dad had so many cool stories about... having to prepare for nuclear war in Hawaii.
+San Francisco Museum of Modern Art,San Francisco,California,United States,37.78567321148595, -122.40096475173632,2026-03-21,1,Art,sf-moma.PNG,I was upset and nearby one day so I sat in the lobby of the museum. I thought I would osmosis the art or something.
 de Young Museum,San Francisco,California,United States,37.771431168120685, -122.46888299978153,2026-06-17,1,Art,,Ran in just to see the Monet exhit really quickly. I'm a member now too and I don't even know why.
-Asian Art Museum,San Francisco,California,United States,37.780200854586155, -122.41639653745402,2026-06-14,1,Art,,Mogged around with Charlesy. Best day ever?
-Hamilton,Seattle,Washington,United States,47.61340600218781, -122.33164665393943,2022-08-31,1,Theater,,Lit
-Moulin Rouge,Seattle,Washington,United States,47.61325488125853, -122.33145417289714,2022-12-27,1,Theater,,Surprise
-Les Misérables,San Diego,California,United States,32.71756160979663, -117.16223249292781,2023-10-08,1,Theater,,Holy nosebleeds
-Chicago,San Diego,California,United States,32.71733585312794, -117.1624367880308,2024-02-18,1,Theater,,I went with Gaby
-Carlsbad Caverns,Carlsbad,New Mexico,United States,32.13733270341648, -104.54351386222773,2025-05-26,1,Nature,,Long road trip
-Grand Canyon,Grand Canyon,Arizona,United States,36.08491550321499, -112.17535210317143,2024-01-20,1,Nature,,"Was visiting to make Courtney get over her breakup. Grand Canyon was a bonus."
-Death Valley,Death Valley,California,United States,36.230096733954554, -116.76972418733054,2024-03-24,2,Nature,,"Came here to stargaze one time. It was great. Driving home all alone with everyone else fast asleep, less fun."
-Tahoma,Tahoma,Washington,United States,46.85183551623467, -121.76281215332791,,3,Nature,,"I'm on team rename Mt. Rainier to Tahoma. I just need to start actually doing that."
-Joshua Tree,Joshua Tree,California,United States,34.02599683976423, -116.18158178277113,2023-11-25,4,Nature,,"Came here solo once. Got lost on a trail. I didn't realize how lost I was so I couldn't start to panic. Figured it out eventually though!"
-Yosemite,Yosemite,California,United States,37.85068094839767, -119.53742491637377,,2,Nature,,"Once came here long, long ago for my grandpa's 90th birthday. Didn't remember a thing."
-Petrified Forest National Park,Petrified Forest,Arizona,United States,35.066631272523196, -109.78392847082927,2024-10-07,1,Nature,,"Very quick drive through."
-Saguaro National Park,Tuscon,Arizona,United States,32.191037484608636, -110.73041325499747,2025-05-26,1,Nature,,"Finished all the Arizona National Parks! Least expected national park on the drive from Dallas to San Diego"
-Hawaii Volcanoes National Park,Volcano,Hawaii,United States,19.487614375928004, -155.46467590645204,,2,Nature,,"On my birthday in 2025 I got to see Kiluea erupt! So lucky."
-Haleakala,Haleakala,Hawaii,United States,20.768405760093163, -156.24315497135888,,1,Nature,,"I was young when I went, long before the pin collection. But I remember it all vividly!"
-Gateway Arch,St. Louis,Missouri,United States,38.62474717580023, -90.18536303230957,2026-02-21,1,Nature,,"Yes I marked it nature. Why? Why did the National Park Service mark it nature? Checkmate."
-Zion,Zion,Utah,United States,37.283837734289676, -113.02919594154962,2025-03-24,2,Nature,,"Wow do I love Utah now."
-Bryce Canyon,Bryce Canyon,Utah,United States,37.53176655758609, -112.24770708441896,2025-08-30,1,Nature,,"First of many Utah roadtrips!"
+Asian Art Museum,San Francisco,California,United States,37.780200854586155, -122.41639653745402,2026-06-14,1,Art,asian-art-museum.PNG,Mogged around with Charlesy. Best day ever?
+Hamilton,Seattle,Washington,United States,47.61340600218781, -122.33164665393943,2022-08-31,1,Theater,hamilton.PNG,Lit
+Moulin Rouge,Seattle,Washington,United States,47.61325488125853, -122.33145417289714,2022-12-27,1,Theater,moulin-rouge.PNG,Surprise
+Les Misérables,San Diego,California,United States,32.71756160979663, -117.16223249292781,2023-10-08,1,Theater,les-mis.PNG,Holy nosebleeds
+Chicago,San Diego,California,United States,32.71733585312794, -117.1624367880308,2024-02-18,1,Theater,chicago-musical.PNG,I went with Gaby
+3 Summers of Lincoln,San Diego,California,United States,32.87139529336875, -117.24081174080928,2025-03-07,1,Theater,,"This might have been one of my favorite musicals ever. I need them to record the album, I need them to go to Broadway!"
+Carlsbad Caverns National Park,Carlsbad,New Mexico,United States,32.13733270341648, -104.54351386222773,2025-05-26,1,Nature,carlsbad-caverns.PNG,Long road trip
+Grand Canyon National Park,Grand Canyon,Arizona,United States,36.08491550321499, -112.17535210317143,2024-01-20,1,Nature,grand-canyon.PNG,"Was visiting to make Courtney get over her breakup. Grand Canyon was a bonus."
+Death Valley National Park,Death Valley,California,United States,36.230096733954554, -116.76972418733054,2024-03-24,2,Nature,death-valley.PNG,"Came here to stargaze one time. It was great. Driving home all alone with everyone else fast asleep, less fun."
+Tahoma National Park,Tahoma,Washington,United States,46.85183551623467, -121.76281215332791,,3,Nature,,"I'm on team rename Mt. Rainier to Tahoma. I just need to start actually doing that."
+Joshua Tree National Park,Joshua Tree,California,United States,34.02599683976423, -116.18158178277113,2023-11-25,4,Nature,joshua-tree.PNG,"Came here solo once. Got lost on a trail. I didn't realize how lost I was so I couldn't start to panic. Figured it out eventually though!"
+Yosemite National Park,Yosemite,California,United States,37.85068094839767, -119.53742491637377,,2,Nature,yosemite.PNG,"Once came here long, long ago for my grandpa's 90th birthday. Didn't remember a thing."
+Petrified Forest National Park,Petrified Forest,Arizona,United States,35.066631272523196, -109.78392847082927,2024-10-07,1,Nature,petrified-forest.PNG,"Very quick drive through."
+Saguaro National Park,Tuscon,Arizona,United States,32.191037484608636, -110.73041325499747,2025-05-26,1,Nature,saguaro-np.PNG,"Finished all the Arizona National Parks! Least expected national park on the drive from Dallas to San Diego"
+Hawaii Volcanoes National Park,Volcano,Hawaii,United States,19.487614375928004, -155.46467590645204,,2,Nature,hawaii-volcanoes.PNG,"On my birthday in 2025 I got to see Kiluea erupt! So lucky."
+Haleakala National Park,Haleakala,Hawaii,United States,20.768405760093163, -156.24315497135888,,1,Nature,,"I was young when I went, long before the pin collection. But I remember it all vividly!"
+Gateway Arch National Park,St. Louis,Missouri,United States,38.62474717580023, -90.18536303230957,2026-02-21,1,Nature,gateway-arch.PNG,"Yes I marked it nature. Why? Why did the National Park Service mark it nature? Checkmate."
+Zion National Park,Zion,Utah,United States,37.283837734289676, -113.02919594154962,2025-03-24,2,Nature,zion.PNG,"Wow do I love Utah now."
+Bryce Canyon National Park,Bryce Canyon,Utah,United States,37.53176655758609, -112.24770708441896,2025-08-30,1,Nature,bryce-canyon.PNG,"Hoodoo you do?"
+RLCS 21-22 Winter Major,Los Angeles,California,United States,33.95178976513548, -118.33720754314497,2022-03-29,1,Other,rlcs-21-22.PNG,"The first live RLCS major back after COVID was in LA. I dragged some people to come with me. They bought the $80 tickets then complained about my cheering and joy."
+RLCS 22-23 Winter Major,San Diego,California,United States,32.70612700045696, -117.16125473295475,2023-04-07,1,Other,rlcs-22-23.PNG,"Technically this was held at a Dreamhack. Honestly, that was cool! I don't think I would've gone to a bigger gaming convention without this push."
