@@ -242,6 +242,6 @@
   .details { padding-top: 1rem; } dialog h2 { margin: 0 0 1.5rem; font-size: clamp(2.3rem, 6vw, 4.5rem); font-weight: 400; line-height: 1; }
   dl { margin: 0; } dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; border-top: 1px solid rgb(48 43 36 / 22%); padding: .65rem 0; } dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; } dd { margin: 0; }
   .note { margin-top: 2.5rem; }.note h3 { margin: 0 0 .7rem; font-size: .78rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; }.note p { margin: 0; font-size: 1.05rem; line-height: 1.65; }
-  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.map-box { height: 65vh; min-height: 27rem; }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 5.5rem; }.pin-stage img { width: 6rem; height: 6rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
+  @media (max-width: 650px) { main { width: calc(100% - 2rem); padding-top: 2.5rem; }.page-heading { display: block; }.intro { margin-top: 1.5rem; }.map-box { height: 65vh; min-height: 27rem; }.collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.pin-stage { height: 8rem; }.pin-stage img { width: 6rem; height: 6rem; }.dialog-layout { grid-template-columns: 1fr; }.dialog-pin { min-height: 14rem; } }
   @media (prefers-reduced-motion: reduce) { .pin-card { transition: none; } }
 </style>
