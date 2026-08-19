@@ -54,6 +54,8 @@
     main { width: min(100% - 2rem, 30rem); padding-top: 2rem; }
     .portrait-card { grid-template-columns: 1fr; width: min(100%, 22rem); aspect-ratio: auto; }
     .words { min-height: 14rem; }
+    .autograph, .introduction { margin-inline: auto; }
+    .introduction p { text-align: center; }
     .portrait { height: min(18rem, 74vw); }
     nav { gap: 0; }
   }
