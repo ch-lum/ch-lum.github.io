@@ -111,7 +111,7 @@
         attributionControl: true,
         worldCopyJump: true
       });
-      const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2f2g_1_5d150be260cfe5269c668476', {
         subdomains: 'abcd',
         maxZoom: 20,
         detectRetina: true,
