@@ -128,5 +128,15 @@
     ],
     "artwork": "https://i.scdn.co/image/ab67616d0000b273b2b2747c89d2157b0b29fb6a",
     "spotifyUrl": "https://open.spotify.com/album/6htgf3qv7vGcsdxLCDxKp8"
+  },
+  {
+    "id": "6Per97deaWqrJlKQNX8RGK",
+    "name": "Let’s Start Here.",
+    "releaseDate": "2023-01-27",
+    "artists": [
+      "Lil Yachty"
+    ],
+    "artwork": "https://i.scdn.co/image/ab67616d0000b2736f578b21bce56056473da7e6",
+    "spotifyUrl": "https://open.spotify.com/album/6Per97deaWqrJlKQNX8RGK"
   }
 ]
