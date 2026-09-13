@@ -2,6 +2,7 @@
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import PinMap, { type MapPin } from '$lib/PinMap.svelte';
+  import { thumbImage, fullImage } from '$lib/media';
   import pinsCsv from '../../../content/pins.csv?raw';
 
   type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
@@ -48,11 +49,12 @@
       if (keys.has(key.toLowerCase())) throw new Error(`Duplicate pin key: ${key}`);
       keys.add(key.toLowerCase());
       const pinType: PinType = types.has(row.type as PinType) ? row.type as PinType : 'Other';
-      const image = row.image ? (row.image.startsWith('/') ? row.image : `/pins/${row.image}`) : `/pins/placeholders/${pinType.toLowerCase()}.svg`;
+      const source = row.image ? (row.image.startsWith('/') ? row.image : `/pins/${row.image}`) : `/pins/placeholders/${pinType.toLowerCase()}.svg`;
       return {
         key, name: row.name, city: row.city || 'Unknown', state: row.state,
         country: row.country || 'Unknown', latitude: Number(row.latitude), longitude: Number(row.longitude),
-        firstVisit: row.first_visit || 'Unknown', visits: row.visits || 'Many times', type: pinType, image, note: row.note
+        firstVisit: row.first_visit || 'Unknown', visits: row.visits || 'Many times', type: pinType,
+        image: fullImage(source), thumbImage: thumbImage(source), note: row.note
       };
     });
   }
@@ -183,7 +185,7 @@
             <div class="group-heading">{#if index === 0 || group(arrangedPins[index - 1]) !== group(pin)}<h2>{group(pin)}</h2>{/if}</div>
           {/if}
           <button class="pin-card" onclick={() => openDetails(pin)}>
-            <span class="pin-stage"><img src={pin.image} alt="" /></span><span class="pin-copy"><strong>{pin.name}</strong><small>{pin.city}{pin.state ? `, ${pin.state}` : ''}</small></span>
+            <span class="pin-stage"><img src={pin.thumbImage} alt="" loading="lazy" decoding="async" /></span><span class="pin-copy"><strong>{pin.name}</strong><small>{pin.city}{pin.state ? `, ${pin.state}` : ''}</small></span>
           </button>
         </article>
       {/each}

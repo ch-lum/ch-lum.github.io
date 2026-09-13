@@ -15,6 +15,24 @@ pnpm dev
 pnpm build
 ```
 
+## Image derivatives
+
+Pin photos, coffee bag photos, and home-page nav icons are full-
+resolution source images, but the site only ever displays small
+thumbnails or a modest "detail" size — never the original. `pnpm build`
+automatically runs `scripts/optimize-images.mjs` first (via the
+`prebuild` hook) to generate small WebP derivatives next to each
+source image (`public/<dir>/optimized/thumb/*.webp` and `.../full/*.webp`,
+or a single `.../optimized/*.webp` for nav icons), which is what the
+site actually links to. It's idempotent — safe to re-run, only
+processes new or changed images.
+
+After adding a new pin or coffee photo, run `pnpm optimize-images`
+once so `pnpm dev` immediately has a working thumbnail too (`prebuild`
+only fires for `pnpm build`). Commit the generated `optimized/` files
+alongside the source image. The original full-resolution file stays in
+place untouched — nothing deletes or overwrites it.
+
 ## Adding coffee
 
 1. Add one row to `content/coffee.csv`. Keep `roast_date` unique and use `YYYY-MM-DD`.

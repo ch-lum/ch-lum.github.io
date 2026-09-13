@@ -1,5 +1,6 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import { thumbImage, fullImage } from '$lib/media';
   import coffeeCsv from '../../../content/coffee.csv?raw';
 
   type ClusterKey = 'roaster' | 'region' | 'country' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
@@ -16,6 +17,7 @@
     variety: string;
     roastLevel: string;
     image: string;
+    thumbImage: string;
   };
 
   const fields = [
@@ -79,7 +81,8 @@
         process: optional('process'),
         variety: optional('variety'),
         roastLevel: optional('roast_level'),
-        image: `/coffee_bags/${row.image || `${row.roast_date}.PNG`}`
+        image: fullImage(`/coffee_bags/${row.image || `${row.roast_date}.PNG`}`),
+        thumbImage: thumbImage(`/coffee_bags/${row.image || `${row.roast_date}.PNG`}`)
       };
     });
   }
@@ -132,7 +135,7 @@
           <h2>{coffee[arrangeBy]}</h2>
         {/if}
         <button class="bag" onclick={() => showDetails(coffee)} aria-label={`View ${coffee.name} coffee details`}>
-          <img src={coffee.image} alt={`${coffee.name} coffee bag from ${coffee.region}`} />
+          <img src={coffee.thumbImage} alt={`${coffee.name} coffee bag from ${coffee.region}`} loading="lazy" decoding="async" />
           <span class="bag-copy"><strong>{coffee.name}</strong><small>{formatDate(coffee.roastDate)}</small></span>
         </button>
       </article>

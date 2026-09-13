@@ -5,7 +5,7 @@
     key: string; name: string; city: string; state: string; country: string;
     latitude: number; longitude: number; firstVisit: string; visits: string;
     type: 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
-    image: string; note: string;
+    image: string; thumbImage: string; note: string;
   };
 </script>
 
@@ -42,7 +42,7 @@
       className: 'pin-map-icon',
       iconSize: [size, size],
       iconAnchor: [size / 2, size / 2],
-      html: `<img src="${escapeHtml(pin.image)}" alt=""><span>${escapeHtml(pin.name)}</span>`
+      html: `<img src="${escapeHtml(pin.thumbImage)}" alt=""><span>${escapeHtml(pin.name)}</span>`
     });
   }
 
