@@ -2,6 +2,10 @@
 // thumbnails, map markers, and nav icons don't ship multi-megabyte
 // originals to every visitor. See README's "Image derivatives" section.
 //
+// Sources live in originals/ (archival, never deployed); derivatives are
+// written under the matching public/ folder, which is what actually gets
+// served.
+//
 // Idempotent: skips a derivative if it already exists and is newer than
 // its source, so re-running after adding one new photo is fast.
 import { mkdir, readdir, stat } from 'node:fs/promises';
@@ -14,20 +18,23 @@ const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg']);
 // "full" for the detail dialog. Both are far smaller than the ~1800-3300px
 // originals but sharp at up to 2x their CSS box size.
 const TWO_TIER_DIRS = [
-  { dir: 'public/pins', excludeDirs: ['placeholders', 'optimized'], thumbWidth: 240, fullWidth: 640, quality: 82 },
-  { dir: 'public/coffee_bags', excludeDirs: ['optimized'], thumbWidth: 320, fullWidth: 900, quality: 82 }
+  { sourceDir: 'originals/pins', outputDir: 'public/pins/optimized', thumbWidth: 240, fullWidth: 640, quality: 82 },
+  { sourceDir: 'originals/coffee_bags', outputDir: 'public/coffee_bags/optimized', thumbWidth: 320, fullWidth: 900, quality: 82 }
 ];
 
 // Single-tier: static nav icons and the home-page portrait, each only
 // ever rendered at one size (no detail-view counterpart).
 const SINGLE_TIER_FILES = {
-  'public/home_imgs': {
-    'projects-closed.PNG': 300, 'projects-open.PNG': 300,
-    'long-form-closed.PNG': 300, 'long-form-open.PNG': 300,
-    'short-form-closed.PNG': 300, 'short-form-open.PNG': 300,
-    'pin-closed.PNG': 300, 'pin-backing.PNG': 300,
-    'kettle.PNG': 300, 'record.png': 300,
-    'portrait.JPG': 900
+  'originals/home_imgs': {
+    outputDir: 'public/home_imgs/optimized',
+    widths: {
+      'projects-closed.PNG': 300, 'projects-open.PNG': 300,
+      'long-form-closed.PNG': 300, 'long-form-open.PNG': 300,
+      'short-form-closed.PNG': 300, 'short-form-open.PNG': 300,
+      'pin-closed.PNG': 300, 'pin-backing.PNG': 300,
+      'kettle.PNG': 300, 'record.png': 300,
+      'portrait.JPG': 900
+    }
   }
 };
 
@@ -50,30 +57,29 @@ async function generate(srcPath, destPath, width, quality) {
   generated += 1;
 }
 
-async function processTwoTierDir({ dir, excludeDirs, thumbWidth, fullWidth, quality }) {
+async function processTwoTierDir({ sourceDir, outputDir, thumbWidth, fullWidth, quality }) {
   let entries;
   try {
-    entries = await readdir(dir, { withFileTypes: true });
+    entries = await readdir(sourceDir, { withFileTypes: true });
   } catch {
     return; // directory doesn't exist, nothing to do
   }
   for (const entry of entries) {
     if (entry.isDirectory()) continue;
     if (!IMAGE_EXTENSIONS.has(extname(entry.name).toLowerCase())) continue;
-    if (excludeDirs?.some((excluded) => entry.name.startsWith(excluded))) continue;
     const { name: base } = parse(entry.name);
-    const srcPath = join(dir, entry.name);
-    await generate(srcPath, join(dir, 'optimized', 'thumb', `${base}.webp`), thumbWidth, quality);
-    await generate(srcPath, join(dir, 'optimized', 'full', `${base}.webp`), fullWidth, quality);
+    const srcPath = join(sourceDir, entry.name);
+    await generate(srcPath, join(outputDir, 'thumb', `${base}.webp`), thumbWidth, quality);
+    await generate(srcPath, join(outputDir, 'full', `${base}.webp`), fullWidth, quality);
   }
 }
 
 async function processSingleTierFiles() {
-  for (const [dir, files] of Object.entries(SINGLE_TIER_FILES)) {
-    for (const [filename, width] of Object.entries(files)) {
-      const srcPath = join(dir, filename);
+  for (const [sourceDir, { outputDir, widths }] of Object.entries(SINGLE_TIER_FILES)) {
+    for (const [filename, width] of Object.entries(widths)) {
+      const srcPath = join(sourceDir, filename);
       const { name: base } = parse(filename);
-      await generate(srcPath, join(dir, 'optimized', `${base}.webp`), width, 82);
+      await generate(srcPath, join(outputDir, `${base}.webp`), width, 82);
     }
   }
 }

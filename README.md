@@ -19,24 +19,26 @@ pnpm build
 
 Pin photos, coffee bag photos, and home-page nav icons are full-
 resolution source images, but the site only ever displays small
-thumbnails or a modest "detail" size — never the original. `pnpm build`
-automatically runs `scripts/optimize-images.mjs` first (via the
-`prebuild` hook) to generate small WebP derivatives next to each
-source image (`public/<dir>/optimized/thumb/*.webp` and `.../full/*.webp`,
-or a single `.../optimized/*.webp` for nav icons), which is what the
-site actually links to. It's idempotent — safe to re-run, only
-processes new or changed images.
+thumbnails or a modest "detail" size — never the original. Sources
+live in `originals/<pins|coffee_bags|home_imgs>/`, archived in the repo
+but never deployed. `pnpm build` automatically runs
+`scripts/optimize-images.mjs` first (via the `prebuild` hook) to
+generate small WebP derivatives from each source image into the
+matching `public/<dir>/optimized/` folder
+(`public/<dir>/optimized/thumb/*.webp` and `.../full/*.webp`, or a
+single `.../optimized/*.webp` for nav icons) — that's what the site
+actually links to and what gets deployed. It's idempotent — safe to
+re-run, only processes new or changed images.
 
 After adding a new pin or coffee photo, run `pnpm optimize-images`
 once so `pnpm dev` immediately has a working thumbnail too (`prebuild`
-only fires for `pnpm build`). Commit the generated `optimized/` files
-alongside the source image. The original full-resolution file stays in
-place untouched — nothing deletes or overwrites it.
+only fires for `pnpm build`). Commit the generated `public/.../optimized/`
+files alongside the source image in `originals/`.
 
 ## Adding coffee
 
 1. Add one row to `content/coffee.csv`. Keep `roast_date` unique and use `YYYY-MM-DD`.
-2. Add an image of the bag to `public/coffee_bags/`, preferably using the roast date as its filename.
+2. Add an image of the bag to `originals/coffee_bags/`, preferably using the roast date as its filename.
 3. Put that filename in the optional `image` column. If `image` is blank, the site looks for a date-named PNG such as `2026-07-03.PNG`.
 
 If a value contains a comma, wrap that CSV value in double quotes. Elevation is stored as text, so ranges such as `1750–1950 masl` work as written.
@@ -55,7 +57,7 @@ Wrap notes containing commas in double quotes. The sync command uses Spotify's C
 ## Adding pins
 
 1. Add a row to `content/pins.csv`. `name` is required; repeated names are distinguished by `city`.
-2. Add the pin photograph to `public/pins/` and put its filename in the `image` column.
+2. Add the pin photograph to `originals/pins/` and put its filename in the `image` column.
 3. Leave `image` blank to use the illustrated placeholder for its type.
 
 The supported types are `Aquarium`, `Zoo`, `Art`, `Museum`, `Theater`, `Nature`, and `Other`. Blank `first_visit` and `visits` cells display as “Unknown” and “Many times.” Wrap notes containing commas in double quotes.
