@@ -143,7 +143,7 @@
   </section>
 </main>
 
-<dialog bind:this={detailsDialog} onclick={(event) => event.target === detailsDialog && detailsDialog.close()}>
+<dialog bind:this={detailsDialog} onclose={() => selected = null} onclick={(event) => event.target === detailsDialog && detailsDialog.close()}>
   {#if selected}
     <button class="close" onclick={() => detailsDialog.close()} aria-label="Close details">×</button>
     <div class="dialog-layout">
