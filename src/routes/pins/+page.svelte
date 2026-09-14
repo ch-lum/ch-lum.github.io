@@ -1,8 +1,11 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
+  import { browser } from '$app/environment';
+  import { pushState, replaceState } from '$app/navigation';
   import PinMap, { type MapPin } from '$lib/PinMap.svelte';
   import { thumbImage, fullImage } from '$lib/media';
+  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
   import pinsCsv from '../../../content/pins.csv?raw';
 
   type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'National Park' | 'Other';
@@ -64,23 +67,120 @@
   const MIN_PIN_SIZE = 24;
   const MAX_PIN_SIZE = 72;
   const PIN_SIZE_STEP = 6;
-  let view = $state<View>('map');
+
+  // Initial state hydrates from the URL (once, at component init) so a
+  // deep link like /pins/?view=grid&arrange=city&pin=sf-moma restores
+  // exactly that view. Invalid/unknown param values fall back to defaults,
+  // same defensive posture as parsing the CSV's own `type` column. Uses
+  // `location` (the native, always-accurate browser API) rather than
+  // `page.url` from `$app/state` — see the write-out effect below for why.
+  // Guarded by `browser`, since this runs during prerendering too, where
+  // `location` doesn't exist — the prerendered HTML just reflects defaults,
+  // and hydration picks up the real query string an instant later.
+  const initialParams = new URLSearchParams(browser ? location.search : '');
+  function readView(): View { return initialParams.get('view') === 'grid' ? 'grid' : 'map'; }
+  function readArrange(): ArrangeKey {
+    const raw = initialParams.get('arrange');
+    return (arrangeOptions.some((option) => option.value === raw) ? raw : 'name') as ArrangeKey;
+  }
+  function readTypes(): Set<PinType> {
+    const raw = initialParams.get('types');
+    if (!raw) return new Set(filterTypes);
+    const requested = raw.split(',').filter((value): value is PinType => types.has(value as PinType));
+    return requested.length ? new Set(requested) : new Set(filterTypes);
+  }
+  function readSelected(): Pin | null {
+    const key = initialParams.get('pin');
+    return key ? (pins.find((pin) => pin.key === key) ?? null) : null;
+  }
+
+  let view = $state<View>(readView());
   let mapVersion = $state(0);
   let pinSize = $state(42);
 
   function decreasePinSize() { pinSize = Math.max(MIN_PIN_SIZE, pinSize - PIN_SIZE_STEP); }
   function increasePinSize() { pinSize = Math.min(MAX_PIN_SIZE, pinSize + PIN_SIZE_STEP); }
-  let arrangeBy = $state<ArrangeKey>('name');
-  let selected = $state<Pin | null>(null);
+  let arrangeBy = $state<ArrangeKey>(readArrange());
+  let selected = $state<Pin | null>(readSelected());
   let detailsDialog: HTMLDialogElement;
   let filtersOpen = $state(false);
-  let activeTypes = $state<Set<PinType>>(new Set(filterTypes));
+  let activeTypes = $state<Set<PinType>>(readTypes());
+  // Sentinel: tracks the last-synced modal key across effect runs, so the
+  // write-out effect below can tell "a new modal just opened" (push) apart
+  // from any other change (replace). Deliberately a plain variable, not
+  // `$state` — it's write-out bookkeeping, not reactive UI state.
+  let previousSelectedKey: string | null | undefined = undefined;
 
   function toggleType(type: PinType) {
     const next = new Set(activeTypes);
     if (next.has(type)) next.delete(type); else next.add(type);
     activeTypes = next;
   }
+
+  // Write the current view/arrange/filters/modal state out to the URL.
+  // Filter/sort/view changes replace the current history entry (URL stays
+  // accurate without spamming Back); opening a pin's modal pushes a new
+  // entry, so Back closes it, matching common patterns (Gmail, photo
+  // galleries). Uses `location` rather than `page.url` from `$app/state` —
+  // after a Back-then-Forward sequence through our own shallow-routed
+  // history entries, `page.url` doesn't always resync (a SvelteKit
+  // shallow-routing edge case), which previously caused this effect to
+  // "correct" the URL using stale data right after Forward navigation,
+  // fighting the browser's own navigation. `location` is always accurate,
+  // and reading it here creates no Svelte dependency (it isn't reactive),
+  // so no `untrack` is needed either — this effect's only real
+  // dependencies are the local state vars, exactly as intended.
+  $effect(() => {
+    const params = {
+      view: view === 'map' ? null : view,
+      arrange: arrangeBy === 'name' ? null : arrangeBy,
+      types: activeTypes.size === filterTypes.length ? null : [...activeTypes].join(','),
+      pin: selected?.key ?? null
+    };
+    if (searchMatches(location.search, params)) { previousSelectedKey = selected?.key ?? null; return; }
+    const search = buildSearch(params);
+    const url = `${location.pathname}${search ? `?${search}` : ''}`;
+    const openedModal = selected !== null && selected.key !== previousSelectedKey;
+    safelySyncUrl(() => { if (openedModal) pushState(url, {}); else replaceState(url, {}); });
+    previousSelectedKey = selected?.key ?? null;
+  });
+
+  // Read the URL back into state on Back/Forward navigation. A native
+  // `popstate` listener (rather than a $effect watching page.url) is used
+  // deliberately: `popstate` only ever fires for genuine Back/Forward, never
+  // for our own pushState/replaceState calls, so there's no risk of racing
+  // the write-out effect above — and `location.search` is the browser's own
+  // ground truth, sidestepping a SvelteKit shallow-routing edge case where
+  // `page.url` (from $app/state) doesn't always resync on Back-then-Forward
+  // sequences through our own history entries.
+  function syncFromLocation() {
+    const params = new URLSearchParams(location.search);
+
+    const nextView: View = params.get('view') === 'grid' ? 'grid' : 'map';
+    if (nextView !== view) view = nextView;
+
+    const rawArrange = params.get('arrange');
+    const nextArrange = (arrangeOptions.some((option) => option.value === rawArrange) ? rawArrange : 'name') as ArrangeKey;
+    if (nextArrange !== arrangeBy) arrangeBy = nextArrange;
+
+    const rawTypes = params.get('types');
+    const requestedTypes = rawTypes ? rawTypes.split(',').filter((value): value is PinType => types.has(value as PinType)) : [];
+    const nextTypes = requestedTypes.length ? new Set(requestedTypes) : new Set(filterTypes);
+    const typesChanged = nextTypes.size !== activeTypes.size || [...nextTypes].some((value) => !activeTypes.has(value));
+    if (typesChanged) activeTypes = nextTypes;
+
+    const rawPin = params.get('pin');
+    const nextSelected = rawPin ? (pins.find((pin) => pin.key === rawPin) ?? null) : null;
+    if ((nextSelected?.key ?? null) !== (selected?.key ?? null)) selected = nextSelected;
+  }
+
+  // Keep the native <dialog> element in sync with `selected`, regardless of
+  // whether it changed via a click or a URL-driven update above.
+  $effect(() => {
+    if (!detailsDialog) return;
+    if (selected && !detailsDialog.open) detailsDialog.showModal();
+    else if (!selected && detailsDialog.open) detailsDialog.close();
+  });
 
   const visiblePins = $derived(pins.filter((pin) => activeTypes.has(pin.type)));
 
@@ -118,8 +218,8 @@
     if (arrangeBy === 'firstVisit') return a.firstVisit.localeCompare(b.firstVisit) || a.name.localeCompare(b.name);
     return a.name.localeCompare(b.name);
   }));
-  function openDetails(pin: Pin) { selected = pin; detailsDialog.showModal(); }
-  function closeDetails() { detailsDialog.close(); selected = null; }
+  function openDetails(pin: Pin) { selected = pin; }
+  function closeDetails() { selected = null; }
   function formatDate(date: string) {
     if (/^\d{4}$/.test(date)) return date;
     if (/^\d{4}-\d{2}$/.test(date)) {
@@ -131,6 +231,8 @@
     return date;
   }
 </script>
+
+<svelte:window onpopstate={syncFromLocation} />
 
 <svelte:head><title>Pins — Ch*!</title><meta name="description" content="A map and cabinet of pins collected from places I have visited." /></svelte:head>
 

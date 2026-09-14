@@ -1,6 +1,9 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import { browser } from '$app/environment';
+  import { pushState, replaceState } from '$app/navigation';
   import { thumbImage, fullImage } from '$lib/media';
+  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
   import coffeeCsv from '../../../content/coffee.csv?raw';
 
   type ClusterKey = 'roaster' | 'region' | 'country' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
@@ -88,9 +91,31 @@
   }
 
   const coffees = parseCoffee(coffeeCsv);
-  let arrangeBy = $state<ArrangeKey>('roastDate');
-  let selected = $state<Coffee | null>(null);
+
+  // Initial state hydrates from the URL (once, at component init) so a
+  // deep link like /coffee/?arrange=roaster&coffee=2024-03-15 restores
+  // exactly that view. Invalid/unknown param values fall back to defaults.
+  // Guarded by `browser`, since this runs during prerendering too, where
+  // `location` doesn't exist — the prerendered HTML just reflects defaults,
+  // and hydration picks up the real query string an instant later.
+  const initialParams = new URLSearchParams(browser ? location.search : '');
+  function readArrange(): ArrangeKey {
+    const raw = initialParams.get('arrange');
+    return (arrangeOptions.some((option) => option.value === raw) ? raw : 'roastDate') as ArrangeKey;
+  }
+  function readSelected(): Coffee | null {
+    const roastDate = initialParams.get('coffee');
+    return roastDate ? (coffees.find((coffee) => coffee.roastDate === roastDate) ?? null) : null;
+  }
+
+  let arrangeBy = $state<ArrangeKey>(readArrange());
+  let selected = $state<Coffee | null>(readSelected());
   let detailsDialog: HTMLDialogElement;
+  // Sentinel: tracks the last-synced modal key across effect runs, so the
+  // write-out effect below can tell "a new modal just opened" (push) apart
+  // from any other change (replace). Deliberately a plain variable, not
+  // `$state` — it's write-out bookkeeping, not reactive UI state.
+  let previousSelectedDate: string | null | undefined = undefined;
 
   const displayedCoffees = $derived(
     [...coffees].sort((a, b) => {
@@ -101,13 +126,64 @@
 
   function showDetails(coffee: Coffee) {
     selected = coffee;
-    detailsDialog.showModal();
   }
+
+  // Write the current arrange/modal state out to the URL. Sort changes
+  // replace the current history entry; opening a coffee's modal pushes a
+  // new entry, so Back closes it. Uses `location` rather than `page.url`
+  // from `$app/state` — after a Back-then-Forward sequence through our own
+  // shallow-routed history entries, `page.url` doesn't always resync (a
+  // SvelteKit shallow-routing edge case), which previously caused this
+  // effect to "correct" the URL using stale data right after Forward
+  // navigation. `location` is always accurate and isn't reactive, so no
+  // `untrack` is needed either — this effect's only real dependencies are
+  // the local state vars.
+  $effect(() => {
+    const params = {
+      arrange: arrangeBy === 'roastDate' ? null : arrangeBy,
+      coffee: selected?.roastDate ?? null
+    };
+    if (searchMatches(location.search, params)) { previousSelectedDate = selected?.roastDate ?? null; return; }
+    const search = buildSearch(params);
+    const url = `${location.pathname}${search ? `?${search}` : ''}`;
+    const openedModal = selected !== null && selected.roastDate !== previousSelectedDate;
+    safelySyncUrl(() => { if (openedModal) pushState(url, {}); else replaceState(url, {}); });
+    previousSelectedDate = selected?.roastDate ?? null;
+  });
+
+  // Read the URL back into state on Back/Forward navigation. A native
+  // `popstate` listener (rather than a $effect watching page.url) is used
+  // deliberately: `popstate` only ever fires for genuine Back/Forward, never
+  // for our own pushState/replaceState calls, so there's no risk of racing
+  // the write-out effect above — and `location.search` is the browser's own
+  // ground truth, sidestepping a SvelteKit shallow-routing edge case where
+  // `page.url` (from $app/state) doesn't always resync on Back-then-Forward
+  // sequences through our own history entries.
+  function syncFromLocation() {
+    const params = new URLSearchParams(location.search);
+
+    const rawArrange = params.get('arrange');
+    const nextArrange = (arrangeOptions.some((option) => option.value === rawArrange) ? rawArrange : 'roastDate') as ArrangeKey;
+    if (nextArrange !== arrangeBy) arrangeBy = nextArrange;
+
+    const rawCoffee = params.get('coffee');
+    const nextSelected = rawCoffee ? (coffees.find((coffee) => coffee.roastDate === rawCoffee) ?? null) : null;
+    if ((nextSelected?.roastDate ?? null) !== (selected?.roastDate ?? null)) selected = nextSelected;
+  }
+
+  // Keep the native <dialog> element in sync with `selected`.
+  $effect(() => {
+    if (!detailsDialog) return;
+    if (selected && !detailsDialog.open) detailsDialog.showModal();
+    else if (!selected && detailsDialog.open) detailsDialog.close();
+  });
 
   function formatDate(date: string) {
     return new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(`${date}T00:00:00`));
   }
 </script>
+
+<svelte:window onpopstate={syncFromLocation} />
 
 <svelte:head>
   <title>Coffee — Ch*!</title>
@@ -145,7 +221,7 @@
 
 <dialog bind:this={detailsDialog} onclose={() => selected = null} onclick={(event) => event.target === detailsDialog && detailsDialog.close()}>
   {#if selected}
-    <button class="close" onclick={() => detailsDialog.close()} aria-label="Close details">×</button>
+    <button class="close" onclick={() => selected = null} aria-label="Close details">×</button>
     <div class="dialog-layout">
       <img src={selected.image} alt={`${selected.name} coffee bag`} />
       <div><p class="eyebrow">{selected.roaster}</p><h2>{selected.name}</h2>

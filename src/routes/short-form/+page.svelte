@@ -1,5 +1,8 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
+  import { browser } from '$app/environment';
+  import { pushState } from '$app/navigation';
+  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
 
   type Entry = {
     slug: string;
@@ -15,7 +18,22 @@
   // This archive is prerendered from static content, so its page data is immutable.
   // svelte-ignore state_referenced_locally
   const entries = data.entries;
-  let currentIndex = $state(entries.length - 1);
+
+  // Initial state hydrates from the URL (once, at component init) so a
+  // deep link like /short-form/?entry=some-slug lands on that entry
+  // instead of the newest one. An unknown slug falls back to the default.
+  // Guarded by `browser`, since this runs during prerendering too, where
+  // `location` doesn't exist — the prerendered HTML just reflects the
+  // newest entry, and hydration picks up the real query string an instant
+  // later.
+  function readIndex(): number {
+    const slug = browser ? new URLSearchParams(location.search).get('entry') : null;
+    if (!slug) return entries.length - 1;
+    const index = entries.findIndex((entry) => entry.slug === slug);
+    return index === -1 ? entries.length - 1 : index;
+  }
+
+  let currentIndex = $state(readIndex());
   let direction = $state(1);
   let showMenu = $state(false);
   const current = $derived(entries[currentIndex]);
@@ -24,6 +42,39 @@
     if (nextIndex < 0 || nextIndex >= entries.length) return;
     direction = nextIndex < currentIndex ? 1 : -1;
     currentIndex = nextIndex;
+  }
+
+  // Write the current entry out to the URL as its own history entry, so
+  // Back/Forward move between previously-viewed entries (only fires when
+  // the slug actually needs to change — the initial hydration sync above
+  // is already in sync, so this is a no-op on mount). Uses `location`
+  // rather than `page.url` from `$app/state` — after a Back-then-Forward
+  // sequence through our own shallow-routed history entries, `page.url`
+  // doesn't always resync (a SvelteKit shallow-routing edge case), which
+  // previously caused this effect to "correct" the URL using stale data
+  // right after Forward navigation. `location` is always accurate and
+  // isn't reactive, so no `untrack` is needed either — this effect's only
+  // real dependency is `currentIndex`.
+  $effect(() => {
+    const params = { entry: currentIndex === entries.length - 1 ? null : current.slug };
+    if (searchMatches(location.search, params)) return;
+    const search = buildSearch(params);
+    safelySyncUrl(() => pushState(`${location.pathname}${search ? `?${search}` : ''}`, {}));
+  });
+
+  // Read the URL back into state on Back/Forward navigation. A native
+  // `popstate` listener (rather than a $effect watching page.url) is used
+  // deliberately: `popstate` only ever fires for genuine Back/Forward, never
+  // for our own pushState calls, so there's no risk of racing the write-out
+  // effect above — and `location.search` is the browser's own ground truth,
+  // sidestepping a SvelteKit shallow-routing edge case where `page.url`
+  // (from $app/state) doesn't always resync on Back-then-Forward sequences
+  // through our own history entries.
+  function syncFromLocation() {
+    const slug = new URLSearchParams(location.search).get('entry');
+    const requested = slug ? entries.findIndex((entry) => entry.slug === slug) : entries.length - 1;
+    const resolved = requested === -1 ? entries.length - 1 : requested;
+    if (resolved !== currentIndex) navigate(resolved);
   }
 
   function selectEntry(index: number) {
@@ -59,7 +110,7 @@
   }
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} onpopstate={syncFromLocation} />
 
 <svelte:head>
   <title>Short Form — Ch*!</title>

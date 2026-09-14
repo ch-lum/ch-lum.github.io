@@ -1,5 +1,8 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import { browser } from '$app/environment';
+  import { pushState, replaceState } from '$app/navigation';
+  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
   import musicCsv from '../../../content/music.csv?raw';
   import spotifyAlbums from '../../../content/spotify-albums.json';
 
@@ -13,6 +16,7 @@
   };
   type Album = SpotifyAlbum & { note: string; owned: boolean; synced: boolean };
   type SortKey = 'name' | 'artist' | 'releaseDate' | 'owned';
+  const sortKeys: SortKey[] = ['name', 'artist', 'releaseDate', 'owned'];
 
   function parseLine(line: string) {
     const values: string[] = [];
@@ -57,9 +61,30 @@
         };
   });
 
-  let selected = $state<Album | null>(null);
-  let sortBy = $state<SortKey>('name');
+  // Initial state hydrates from the URL (once, at component init) so a
+  // deep link like /music/?sort=artist&album=<id> restores exactly that
+  // view. Invalid/unknown param values fall back to defaults. Guarded by
+  // `browser`, since this runs during prerendering too, where `location`
+  // doesn't exist — the prerendered HTML just reflects defaults, and
+  // hydration picks up the real query string an instant later.
+  const initialParams = new URLSearchParams(browser ? location.search : '');
+  function readSort(): SortKey {
+    const raw = initialParams.get('sort');
+    return (sortKeys.includes(raw as SortKey) ? raw : 'name') as SortKey;
+  }
+  function readSelected(): Album | null {
+    const id = initialParams.get('album');
+    return id ? (albums.find((album) => album.id === id) ?? null) : null;
+  }
+
+  let selected = $state<Album | null>(readSelected());
+  let sortBy = $state<SortKey>(readSort());
   let detailsDialog: HTMLDialogElement;
+  // Sentinel: tracks the last-synced modal key across effect runs, so the
+  // write-out effect below can tell "a new modal just opened" (push) apart
+  // from any other change (replace). Deliberately a plain variable, not
+  // `$state` — it's write-out bookkeeping, not reactive UI state.
+  let previousSelectedId: string | null | undefined = undefined;
 
   const sortedAlbums = $derived(
     [...albums].sort((a, b) => {
@@ -72,13 +97,61 @@
 
   function showDetails(album: Album) {
     selected = album;
-    detailsDialog.showModal();
   }
 
   function closeDetails() {
-    detailsDialog.close();
     selected = null;
   }
+
+  // Write the current sort/modal state out to the URL. Sort changes
+  // replace the current history entry; opening an album's modal pushes a
+  // new entry, so Back closes it. Uses `location` rather than `page.url`
+  // from `$app/state` — after a Back-then-Forward sequence through our own
+  // shallow-routed history entries, `page.url` doesn't always resync (a
+  // SvelteKit shallow-routing edge case), which previously caused this
+  // effect to "correct" the URL using stale data right after Forward
+  // navigation. `location` is always accurate and isn't reactive, so no
+  // `untrack` is needed either — this effect's only real dependencies are
+  // the local state vars.
+  $effect(() => {
+    const params = {
+      sort: sortBy === 'name' ? null : sortBy,
+      album: selected?.id ?? null
+    };
+    if (searchMatches(location.search, params)) { previousSelectedId = selected?.id ?? null; return; }
+    const search = buildSearch(params);
+    const url = `${location.pathname}${search ? `?${search}` : ''}`;
+    const openedModal = selected !== null && selected.id !== previousSelectedId;
+    safelySyncUrl(() => { if (openedModal) pushState(url, {}); else replaceState(url, {}); });
+    previousSelectedId = selected?.id ?? null;
+  });
+
+  // Read the URL back into state on Back/Forward navigation. A native
+  // `popstate` listener (rather than a $effect watching page.url) is used
+  // deliberately: `popstate` only ever fires for genuine Back/Forward, never
+  // for our own pushState/replaceState calls, so there's no risk of racing
+  // the write-out effect above — and `location.search` is the browser's own
+  // ground truth, sidestepping a SvelteKit shallow-routing edge case where
+  // `page.url` (from $app/state) doesn't always resync on Back-then-Forward
+  // sequences through our own history entries.
+  function syncFromLocation() {
+    const params = new URLSearchParams(location.search);
+
+    const rawSort = params.get('sort');
+    const nextSort = (sortKeys.includes(rawSort as SortKey) ? rawSort : 'name') as SortKey;
+    if (nextSort !== sortBy) sortBy = nextSort;
+
+    const rawAlbum = params.get('album');
+    const nextSelected = rawAlbum ? (albums.find((album) => album.id === rawAlbum) ?? null) : null;
+    if ((nextSelected?.id ?? null) !== (selected?.id ?? null)) selected = nextSelected;
+  }
+
+  // Keep the native <dialog> element in sync with `selected`.
+  $effect(() => {
+    if (!detailsDialog) return;
+    if (selected && !detailsDialog.open) detailsDialog.showModal();
+    else if (!selected && detailsDialog.open) detailsDialog.close();
+  });
 
   function formatReleaseDate(date: string) {
     if (!/^\d{4}(-\d{2})?(-\d{2})?$/.test(date)) return date;
@@ -91,6 +164,8 @@
     return new Intl.DateTimeFormat('en-US', options).format(new Date(`${year}-${month}-${day}T00:00:00`));
   }
 </script>
+
+<svelte:window onpopstate={syncFromLocation} />
 
 <svelte:head>
   <title>Music — Ch*!</title>
