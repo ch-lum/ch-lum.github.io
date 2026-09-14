@@ -4,7 +4,7 @@
   export type MapPin = {
     key: string; name: string; city: string; state: string; country: string;
     latitude: number; longitude: number; firstVisit: string; visits: string;
-    type: 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
+    type: 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'National Park' | 'Other';
     image: string; thumbImage: string; note: string;
   };
 </script>

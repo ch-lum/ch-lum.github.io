@@ -5,13 +5,13 @@
   import { thumbImage, fullImage } from '$lib/media';
   import pinsCsv from '../../../content/pins.csv?raw';
 
-  type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'Nature' | 'Other';
+  type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'National Park' | 'Other';
   type View = 'map' | 'grid';
   type ArrangeKey = 'name' | 'type' | 'location' | 'country' | 'city' | 'firstVisit' | 'visits';
   type Pin = MapPin;
 
-  const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'Nature', 'Other']);
-  const filterTypes: PinType[] = ['Aquarium', 'Zoo', 'Art', 'Museum', 'Nature', 'Theater', 'Other'];
+  const types = new Set<PinType>(['Aquarium', 'Zoo', 'Art', 'Museum', 'Theater', 'National Park', 'Other']);
+  const filterTypes: PinType[] = ['Aquarium', 'Zoo', 'Art', 'Museum', 'National Park', 'Theater', 'Other'];
   const arrangeOptions: { value: ArrangeKey; label: string }[] = [
     { value: 'name', label: 'Name' }, { value: 'type', label: 'Type' },
     { value: 'city', label: 'City' },
@@ -49,7 +49,8 @@
       if (keys.has(key.toLowerCase())) throw new Error(`Duplicate pin key: ${key}`);
       keys.add(key.toLowerCase());
       const pinType: PinType = types.has(row.type as PinType) ? row.type as PinType : 'Other';
-      const source = row.image ? (row.image.startsWith('/') ? row.image : `/pins/${row.image}`) : `/pins/placeholders/${pinType.toLowerCase()}.svg`;
+      const placeholderSlug = pinType.toLowerCase().replace(/\s+/g, '-');
+      const source = row.image ? (row.image.startsWith('/') ? row.image : `/pins/${row.image}`) : `/pins/placeholders/${placeholderSlug}.svg`;
       return {
         key, name: row.name, city: row.city || 'Unknown', state: row.state,
         country: row.country || 'Unknown', latitude: Number(row.latitude), longitude: Number(row.longitude),

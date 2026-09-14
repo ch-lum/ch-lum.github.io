@@ -60,7 +60,7 @@ Wrap notes containing commas in double quotes. The sync command uses Spotify's C
 2. Add the pin photograph to `originals/pins/` and put its filename in the `image` column.
 3. Leave `image` blank to use the illustrated placeholder for its type.
 
-The supported types are `Aquarium`, `Zoo`, `Art`, `Museum`, `Theater`, `Nature`, and `Other`. Blank `first_visit` and `visits` cells display as “Unknown” and “Many times.” Wrap notes containing commas in double quotes.
+The supported types are `Aquarium`, `Zoo`, `Art`, `Museum`, `Theater`, `National Park`, and `Other`. Blank `first_visit` and `visits` cells display as “Unknown” and “Many times.” Wrap notes containing commas in double quotes.
 
 ## Adding short-form work
 
