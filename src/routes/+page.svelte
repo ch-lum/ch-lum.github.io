@@ -21,7 +21,7 @@
         </p>
       </div>
     </div>
-    <img class="portrait" src="/home_imgs/portrait.JPG" alt="Chrissy Lum" />
+    <img class="portrait" src="/home_imgs/optimized/portrait.webp" alt="Chrissy Lum" />
   </section>
 
   <nav aria-label="Explore the site">

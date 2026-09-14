@@ -85,7 +85,7 @@ name,city,state,country,latitude,longitude,first_visit,visits,type,image,note
 ```
 
 - `name` is required. Duplicate names are keyed using name plus city.
-- Supported types are Aquarium, Zoo, Art, Museum, Theater, Nature, and Other.
+- Supported types are Aquarium, Zoo, Art, Museum, Theater, National Park, and Other.
 - Blank images use type illustrations from `public/pins/placeholders/`.
 - Pin photographs go directly in `public/pins/`, with their filename in the CSV.
 - All pins use one fixed square-ish display size; there is no dimensions or ratio field.
