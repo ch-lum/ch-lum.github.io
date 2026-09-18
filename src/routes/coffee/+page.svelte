@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import { flip } from 'svelte/animate';
   import { browser } from '$app/environment';
   import { afterNavigate, pushState, replaceState } from '$app/navigation';
@@ -141,9 +142,14 @@
   // shallow-routed history entries, `page.url` doesn't always resync (a
   // SvelteKit shallow-routing edge case), which previously caused this
   // effect to "correct" the URL using stale data right after Forward
-  // navigation. `location` is always accurate and isn't reactive, so no
-  // `untrack` is needed either — this effect's only real dependencies are
-  // the local state vars.
+  // navigation. `location` is always accurate and isn't reactive. SvelteKit's own
+  // pushState/replaceState, though, read `page.url` internally, and
+  // `page.url` *is* reactive — so those calls are wrapped in `untrack`.
+  // Without it this effect silently depends on `page.url` and re-runs, with
+  // stale local state, the moment SvelteKit's popstate handler updates it
+  // (which happens before our own popstate listener below has synced state
+  // from the URL), writing the just-closed modal's URL back onto the entry
+  // Back had returned to.
   $effect(() => {
     if (!urlReady) return;
     const params = {
@@ -163,10 +169,10 @@
     const search = buildSearch(params);
     const url = `${location.pathname}${search ? `?${search}` : ''}`;
     if (selectedDate !== null && selectedDate !== previousDate) {
-      pushState(url, {});
+      untrack(() => pushState(url, {}));
       modalEntryPushed = true;
     } else {
-      replaceState(url, {});
+      untrack(() => replaceState(url, {}));
     }
   });
 
