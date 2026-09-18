@@ -1,8 +1,8 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
   import { browser } from '$app/environment';
-  import { pushState } from '$app/navigation';
-  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
+  import { afterNavigate, pushState, replaceState } from '$app/navigation';
+  import { buildSearch, searchMatches } from '$lib/url-params';
 
   type Entry = {
     slug: string;
@@ -33,7 +33,15 @@
     return index === -1 ? entries.length - 1 : index;
   }
 
-  let currentIndex = $state(readIndex());
+  const initialIndex = readIndex();
+  let currentIndex = $state(initialIndex);
+  // Write-out bookkeeping (plain, not `$state`): the last index synced to
+  // the URL, so the effect below can tell a genuine move between entries
+  // (push) from a mount-time clean-up of a redundant/unknown param (replace).
+  let previousIndex = initialIndex;
+  // Wait for SvelteKit's router before touching history — see pins/.
+  let urlReady = $state(false);
+  afterNavigate(() => { urlReady = true; });
   let direction = $state(1);
   let showMenu = $state(false);
   const current = $derived(entries[currentIndex]);
@@ -45,9 +53,9 @@
   }
 
   // Write the current entry out to the URL as its own history entry, so
-  // Back/Forward move between previously-viewed entries (only fires when
-  // the slug actually needs to change — the initial hydration sync above
-  // is already in sync, so this is a no-op on mount). Uses `location`
+  // Back/Forward move between previously-viewed entries. Moving between
+  // entries pushes; tidying a redundant or unknown `?entry=` on mount (or
+  // any other write that isn't a move) replaces instead. Uses `location`
   // rather than `page.url` from `$app/state` — after a Back-then-Forward
   // sequence through our own shallow-routed history entries, `page.url`
   // doesn't always resync (a SvelteKit shallow-routing edge case), which
@@ -56,10 +64,14 @@
   // isn't reactive, so no `untrack` is needed either — this effect's only
   // real dependency is `currentIndex`.
   $effect(() => {
+    if (!urlReady) return;
     const params = { entry: currentIndex === entries.length - 1 ? null : current.slug };
+    const moved = currentIndex !== previousIndex;
+    previousIndex = currentIndex;
     if (searchMatches(location.search, params)) return;
     const search = buildSearch(params);
-    safelySyncUrl(() => pushState(`${location.pathname}${search ? `?${search}` : ''}`, {}));
+    const url = `${location.pathname}${search ? `?${search}` : ''}`;
+    if (moved) pushState(url, {}); else replaceState(url, {});
   });
 
   // Read the URL back into state on Back/Forward navigation. A native

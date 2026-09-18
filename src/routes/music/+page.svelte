@@ -1,8 +1,8 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
   import { browser } from '$app/environment';
-  import { pushState, replaceState } from '$app/navigation';
-  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
+  import { afterNavigate, pushState, replaceState } from '$app/navigation';
+  import { buildSearch, searchMatches } from '$lib/url-params';
   import musicCsv from '../../../content/music.csv?raw';
   import spotifyAlbums from '../../../content/spotify-albums.json';
 
@@ -77,14 +77,20 @@
     return id ? (albums.find((album) => album.id === id) ?? null) : null;
   }
 
-  let selected = $state<Album | null>(readSelected());
+  const initialSelected = readSelected();
+  let selected = $state<Album | null>(initialSelected);
   let sortBy = $state<SortKey>(readSort());
   let detailsDialog: HTMLDialogElement;
-  // Sentinel: tracks the last-synced modal key across effect runs, so the
-  // write-out effect below can tell "a new modal just opened" (push) apart
-  // from any other change (replace). Deliberately a plain variable, not
-  // `$state` — it's write-out bookkeeping, not reactive UI state.
-  let previousSelectedId: string | null | undefined = undefined;
+  // Write-out bookkeeping — plain variables, not `$state`; see pins/ for the
+  // full rationale. `previousSelectedId` distinguishes "a new modal just
+  // opened" (push) from any other change (replace) and starts as the
+  // deep-linked album so a mount-time URL clean-up never pushes;
+  // `modalEntryPushed` lets closing the modal pop its history entry.
+  let previousSelectedId: string | null = initialSelected?.id ?? null;
+  let modalEntryPushed = false;
+  // Wait for SvelteKit's router before touching history — see pins/.
+  let urlReady = $state(false);
+  afterNavigate(() => { urlReady = true; });
 
   const sortedAlbums = $derived(
     [...albums].sort((a, b) => {
@@ -114,16 +120,29 @@
   // `untrack` is needed either — this effect's only real dependencies are
   // the local state vars.
   $effect(() => {
+    if (!urlReady) return;
     const params = {
       sort: sortBy === 'name' ? null : sortBy,
       album: selected?.id ?? null
     };
-    if (searchMatches(location.search, params)) { previousSelectedId = selected?.id ?? null; return; }
+    const selectedId = selected?.id ?? null;
+    const previousId = previousSelectedId;
+    previousSelectedId = selectedId;
+    if (searchMatches(location.search, params)) return;
+    if (selectedId === null && previousId !== null && modalEntryPushed) {
+      // Closing a modal that got its own history entry: pop it, like Back.
+      modalEntryPushed = false;
+      history.back();
+      return;
+    }
     const search = buildSearch(params);
     const url = `${location.pathname}${search ? `?${search}` : ''}`;
-    const openedModal = selected !== null && selected.id !== previousSelectedId;
-    safelySyncUrl(() => { if (openedModal) pushState(url, {}); else replaceState(url, {}); });
-    previousSelectedId = selected?.id ?? null;
+    if (selectedId !== null && selectedId !== previousId) {
+      pushState(url, {});
+      modalEntryPushed = true;
+    } else {
+      replaceState(url, {});
+    }
   });
 
   // Read the URL back into state on Back/Forward navigation. A native

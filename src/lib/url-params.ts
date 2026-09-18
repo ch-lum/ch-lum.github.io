@@ -26,16 +26,3 @@ export function searchMatches(currentSearch: string, params: Record<string, stri
   const target = normalize(buildSearch(params));
   return current.length === target.length && current.every(([key, value], index) => key === target[index][0] && value === target[index][1]);
 }
-
-/** Calls a pushState/replaceState invocation, swallowing the "router not
- * initialized yet" error that can fire if this runs during the very first
- * client-side hydration tick — Svelte can run a page's $effects before
- * SvelteKit's router finishes starting up. Harmless to skip once; the next
- * state change safely retries. */
-export function safelySyncUrl(apply: () => void) {
-  try {
-    apply();
-  } catch (error) {
-    if (!(error instanceof Error) || !error.message.includes('router is initialized')) throw error;
-  }
-}

@@ -2,10 +2,10 @@
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import { browser } from '$app/environment';
-  import { pushState, replaceState } from '$app/navigation';
+  import { afterNavigate, pushState, replaceState } from '$app/navigation';
   import PinMap, { type MapPin } from '$lib/PinMap.svelte';
   import { thumbImage, fullImage } from '$lib/media';
-  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
+  import { buildSearch, searchMatches } from '$lib/url-params';
   import pinsCsv from '../../../content/pins.csv?raw';
 
   type PinType = 'Aquarium' | 'Zoo' | 'Art' | 'Museum' | 'Theater' | 'National Park' | 'Other';
@@ -101,15 +101,30 @@
   function decreasePinSize() { pinSize = Math.max(MIN_PIN_SIZE, pinSize - PIN_SIZE_STEP); }
   function increasePinSize() { pinSize = Math.min(MAX_PIN_SIZE, pinSize + PIN_SIZE_STEP); }
   let arrangeBy = $state<ArrangeKey>(readArrange());
-  let selected = $state<Pin | null>(readSelected());
+  const initialSelected = readSelected();
+  let selected = $state<Pin | null>(initialSelected);
   let detailsDialog: HTMLDialogElement;
   let filtersOpen = $state(false);
   let activeTypes = $state<Set<PinType>>(readTypes());
-  // Sentinel: tracks the last-synced modal key across effect runs, so the
-  // write-out effect below can tell "a new modal just opened" (push) apart
-  // from any other change (replace). Deliberately a plain variable, not
-  // `$state` — it's write-out bookkeeping, not reactive UI state.
-  let previousSelectedKey: string | null | undefined = undefined;
+  // Write-out bookkeeping — deliberately plain variables, not `$state`, since
+  // they track what was last synced rather than driving any UI:
+  // - `previousSelectedKey` lets the write-out effect tell "a new modal just
+  //   opened" (push) apart from any other change (replace). It starts as the
+  //   deep-linked pin, if any, so a mount-time URL clean-up never pushes.
+  // - `modalEntryPushed` records that the open modal got its own history
+  //   entry, so closing it via ×/Escape/backdrop can pop that entry again
+  //   instead of leaving a dead duplicate behind that makes Back a no-op.
+  let previousSelectedKey: string | null = initialSelected?.key ?? null;
+  let modalEntryPushed = false;
+  // SvelteKit's pushState/replaceState must not be called before its router
+  // has started, and during hydration this component's first effects run
+  // before that point (the dev build throws a clear "router is initialized"
+  // error; the production build fails deeper inside SvelteKit with a
+  // TypeError, and leaves its history bookkeeping half-done). afterNavigate
+  // fires once the router is ready — on initial load and on client-side
+  // navigation alike — so the write-out effect waits for it.
+  let urlReady = $state(false);
+  afterNavigate(() => { urlReady = true; });
 
   function toggleType(type: PinType) {
     const next = new Set(activeTypes);
@@ -129,20 +144,34 @@
   // fighting the browser's own navigation. `location` is always accurate,
   // and reading it here creates no Svelte dependency (it isn't reactive),
   // so no `untrack` is needed either — this effect's only real
-  // dependencies are the local state vars, exactly as intended.
+  // dependencies are the local state vars (plus `urlReady`), as intended.
   $effect(() => {
+    if (!urlReady) return;
     const params = {
       view: view === 'map' ? null : view,
       arrange: arrangeBy === 'name' ? null : arrangeBy,
       types: activeTypes.size === filterTypes.length ? null : [...activeTypes].join(','),
       pin: selected?.key ?? null
     };
-    if (searchMatches(location.search, params)) { previousSelectedKey = selected?.key ?? null; return; }
+    const selectedKey = selected?.key ?? null;
+    const previousKey = previousSelectedKey;
+    previousSelectedKey = selectedKey;
+    if (searchMatches(location.search, params)) return;
+    if (selectedKey === null && previousKey !== null && modalEntryPushed) {
+      // Closing a modal that got its own history entry: pop that entry (the
+      // same thing Back does) rather than rewriting it in place.
+      modalEntryPushed = false;
+      history.back();
+      return;
+    }
     const search = buildSearch(params);
     const url = `${location.pathname}${search ? `?${search}` : ''}`;
-    const openedModal = selected !== null && selected.key !== previousSelectedKey;
-    safelySyncUrl(() => { if (openedModal) pushState(url, {}); else replaceState(url, {}); });
-    previousSelectedKey = selected?.key ?? null;
+    if (selectedKey !== null && selectedKey !== previousKey) {
+      pushState(url, {});
+      modalEntryPushed = true;
+    } else {
+      replaceState(url, {});
+    }
   });
 
   // Read the URL back into state on Back/Forward navigation. A native

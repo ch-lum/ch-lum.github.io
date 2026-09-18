@@ -1,9 +1,9 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
   import { browser } from '$app/environment';
-  import { pushState, replaceState } from '$app/navigation';
+  import { afterNavigate, pushState, replaceState } from '$app/navigation';
   import { thumbImage, fullImage } from '$lib/media';
-  import { buildSearch, searchMatches, safelySyncUrl } from '$lib/url-params';
+  import { buildSearch, searchMatches } from '$lib/url-params';
   import coffeeCsv from '../../../content/coffee.csv?raw';
 
   type ClusterKey = 'roaster' | 'region' | 'country' | 'producer' | 'elevation' | 'process' | 'variety' | 'roastLevel';
@@ -109,13 +109,19 @@
   }
 
   let arrangeBy = $state<ArrangeKey>(readArrange());
-  let selected = $state<Coffee | null>(readSelected());
+  const initialSelected = readSelected();
+  let selected = $state<Coffee | null>(initialSelected);
   let detailsDialog: HTMLDialogElement;
-  // Sentinel: tracks the last-synced modal key across effect runs, so the
-  // write-out effect below can tell "a new modal just opened" (push) apart
-  // from any other change (replace). Deliberately a plain variable, not
-  // `$state` — it's write-out bookkeeping, not reactive UI state.
-  let previousSelectedDate: string | null | undefined = undefined;
+  // Write-out bookkeeping — plain variables, not `$state`; see pins/ for the
+  // full rationale. `previousSelectedDate` distinguishes "a new modal just
+  // opened" (push) from any other change (replace) and starts as the
+  // deep-linked coffee so a mount-time URL clean-up never pushes;
+  // `modalEntryPushed` lets closing the modal pop its history entry.
+  let previousSelectedDate: string | null = initialSelected?.roastDate ?? null;
+  let modalEntryPushed = false;
+  // Wait for SvelteKit's router before touching history — see pins/.
+  let urlReady = $state(false);
+  afterNavigate(() => { urlReady = true; });
 
   const displayedCoffees = $derived(
     [...coffees].sort((a, b) => {
@@ -139,16 +145,29 @@
   // `untrack` is needed either — this effect's only real dependencies are
   // the local state vars.
   $effect(() => {
+    if (!urlReady) return;
     const params = {
       arrange: arrangeBy === 'roastDate' ? null : arrangeBy,
       coffee: selected?.roastDate ?? null
     };
-    if (searchMatches(location.search, params)) { previousSelectedDate = selected?.roastDate ?? null; return; }
+    const selectedDate = selected?.roastDate ?? null;
+    const previousDate = previousSelectedDate;
+    previousSelectedDate = selectedDate;
+    if (searchMatches(location.search, params)) return;
+    if (selectedDate === null && previousDate !== null && modalEntryPushed) {
+      // Closing a modal that got its own history entry: pop it, like Back.
+      modalEntryPushed = false;
+      history.back();
+      return;
+    }
     const search = buildSearch(params);
     const url = `${location.pathname}${search ? `?${search}` : ''}`;
-    const openedModal = selected !== null && selected.roastDate !== previousSelectedDate;
-    safelySyncUrl(() => { if (openedModal) pushState(url, {}); else replaceState(url, {}); });
-    previousSelectedDate = selected?.roastDate ?? null;
+    if (selectedDate !== null && selectedDate !== previousDate) {
+      pushState(url, {});
+      modalEntryPushed = true;
+    } else {
+      replaceState(url, {});
+    }
   });
 
   // Read the URL back into state on Back/Forward navigation. A native
