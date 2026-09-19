@@ -1,4 +1,7 @@
 <script lang="ts">
+  import PageMeta from '$lib/PageMeta.svelte';
+  import { formatDate } from '$lib/dates';
+
   type Post = {
     slug: string;
     title: string;
@@ -15,16 +18,9 @@
     const [year, month, day] = date.split('-');
     return `${month}/${day}/${year.slice(2)}`;
   }
-
-  function longDate(date: string) {
-    return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(`${date}T00:00:00`));
-  }
 </script>
 
-<svelte:head>
-  <title>Long Form — Ch*!</title>
-  <meta name="description" content="Long-form writing by Chrissy Lum." />
-</svelte:head>
+<PageMeta title="Long Form" description="Long-form writing by Chrissy Lum." />
 
 <main>
   <header>
@@ -40,7 +36,7 @@
           <time class="short-date" datetime={post.date}>{shortDate(post.date)}</time>
           <div class="details">
             <div>
-              <p class="meta"><span>{longDate(post.date)}</span>{#if post.readingTime}<span>{post.readingTime}</span>{/if}</p>
+              <p class="meta"><span>{formatDate(post.date)}</span>{#if post.readingTime}<span>{post.readingTime}</span>{/if}</p>
               {#if post.description}<p class="description">{post.description}</p>{/if}
             </div>
           </div>

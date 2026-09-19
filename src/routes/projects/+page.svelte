@@ -1,4 +1,6 @@
 <script lang="ts">
+  import PageMeta from '$lib/PageMeta.svelte';
+
   type Project = {
     title: string;
     description: string;
@@ -10,10 +12,7 @@
   let { data }: { data: { projects: Project[] } } = $props();
 </script>
 
-<svelte:head>
-  <title>Projects — Ch*!</title>
-  <meta name="description" content="Selected research, data, visualization, and education projects by Chrissy Lum." />
-</svelte:head>
+<PageMeta title="Projects" description="Selected research, data, visualization, and education projects by Chrissy Lum." />
 
 <main>
   <section class="intro" aria-labelledby="projects-title">

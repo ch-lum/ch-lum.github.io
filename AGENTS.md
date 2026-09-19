@@ -36,6 +36,14 @@ The static production output is written to `build/`.
 
 - `src/routes/`: SvelteKit pages.
 - `src/lib/`: shared UI, including `SiteHeader.svelte`, home navigation, and the Leaflet pin map.
+- Shared building blocks for pages (reuse these rather than copying markup/styles between routes):
+  - `CollectionPage.svelte`: collection-page shell (width/padding, eyebrow + oversized title + intro + divider).
+  - `CollectionGrid.svelte`: animated, optionally grouped card grid (Coffee, Pins).
+  - `DetailsDialog.svelte`: pale-green details modal (picture, eyebrow, title, label/value rows, optional note).
+  - `ArrangeSelect.svelte`: the "Arrange by" dropdown.
+  - `PageMeta.svelte`: `<title>… — Ch*!</title>` and meta description.
+  - `url-sync.svelte.ts` (`syncUrl`): two-way sync between page state and the query string, including Back-closes-modal history handling.
+  - `csv.ts` (`parseCsv`) and `dates.ts` (`formatDate`, `formatPartialDate`).
 - `src/styles/global.css`: global serif typography and sage background.
 - `content/`: user-editable CSV, Markdown, and cached metadata.
 - `public/home_imgs/`: landing-page navigation artwork.

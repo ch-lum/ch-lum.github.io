@@ -1,13 +1,14 @@
-// Small shared helpers for syncing page state to the URL's query string.
-// Each page builds its own params object and calls these directly rather
-// than going through a generic "useUrlState" abstraction — every page's
-// state shapes differ enough (a Set, a validated enum, a looked-up object)
-// that a one-size-fits-all API would obscure more than it saves.
+// Small helpers for building and comparing URL query strings, used by
+// `syncUrl` in url-sync.svelte.ts. Each page still converts its own state to
+// and from params (a Set, a validated enum, a looked-up object); only the
+// history bookkeeping around that is shared.
+
+export type SearchParams = Record<string, string | null | undefined>;
 
 /** Builds a query string from a `{ [param]: value }` map, omitting any
  * param whose value is null/undefined/empty (so default-state URLs stay
  * clean, e.g. plain "/pins/" rather than "/pins/?view=map&arrange=name"). */
-export function buildSearch(params: Record<string, string | null | undefined>): string {
+export function buildSearch(params: SearchParams): string {
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value) search.set(key, value);
@@ -20,7 +21,7 @@ export function buildSearch(params: Record<string, string | null | undefined>): 
  * updates and to break write/read-back feedback loops. Compares parsed
  * key/value pairs (via URLSearchParams) rather than raw strings, so this
  * isn't fooled by encoding differences (e.g. "%20" vs "+") or param order. */
-export function searchMatches(currentSearch: string, params: Record<string, string | null | undefined>): boolean {
+export function searchMatches(currentSearch: string, params: SearchParams): boolean {
   const normalize = (search: string) => [...new URLSearchParams(search).entries()].sort(([a], [b]) => a.localeCompare(b));
   const current = normalize(currentSearch);
   const target = normalize(buildSearch(params));

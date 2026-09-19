@@ -1,15 +1,11 @@
 <script lang="ts">
-  let { data } = $props();
+  import PageMeta from '$lib/PageMeta.svelte';
+  import { formatDate } from '$lib/dates';
 
-  function formatDate(date: string) {
-    return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(`${date}T00:00:00`));
-  }
+  let { data } = $props();
 </script>
 
-<svelte:head>
-  <title>{data.post.title} — Ch*!</title>
-  <meta name="description" content={data.post.description} />
-</svelte:head>
+<PageMeta title={data.post.title} description={data.post.description} />
 
 <main>
   <a class="back" href="/long-form/">← Long Form</a>

@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { untrack } from 'svelte';
   import { fade, fly } from 'svelte/transition';
-  import { browser } from '$app/environment';
-  import { afterNavigate, pushState, replaceState } from '$app/navigation';
-  import { buildSearch, searchMatches } from '$lib/url-params';
+  import PageMeta from '$lib/PageMeta.svelte';
+  import { formatDate } from '$lib/dates';
+  import { initialSearchParams, syncUrl } from '$lib/url-sync.svelte';
 
   type Entry = {
     slug: string;
@@ -20,29 +19,16 @@
   // svelte-ignore state_referenced_locally
   const entries = data.entries;
 
-  // Initial state hydrates from the URL (once, at component init) so a
-  // deep link like /short-form/?entry=some-slug lands on that entry
-  // instead of the newest one. An unknown slug falls back to the default.
-  // Guarded by `browser`, since this runs during prerendering too, where
-  // `location` doesn't exist — the prerendered HTML just reflects the
-  // newest entry, and hydration picks up the real query string an instant
-  // later.
-  function readIndex(): number {
-    const slug = browser ? new URLSearchParams(location.search).get('entry') : null;
+  // URL state: /short-form/?entry=some-slug lands on that entry instead of
+  // the newest one. An unknown slug falls back to the newest.
+  function readIndex(params: URLSearchParams): number {
+    const slug = params.get('entry');
     if (!slug) return entries.length - 1;
     const index = entries.findIndex((entry) => entry.slug === slug);
     return index === -1 ? entries.length - 1 : index;
   }
 
-  const initialIndex = readIndex();
-  let currentIndex = $state(initialIndex);
-  // Write-out bookkeeping (plain, not `$state`): the last index synced to
-  // the URL, so the effect below can tell a genuine move between entries
-  // (push) from a mount-time clean-up of a redundant/unknown param (replace).
-  let previousIndex = initialIndex;
-  // Wait for SvelteKit's router before touching history — see pins/.
-  let urlReady = $state(false);
-  afterNavigate(() => { urlReady = true; });
+  let currentIndex = $state(readIndex(initialSearchParams()));
   let direction = $state(1);
   let showMenu = $state(false);
   const current = $derived(entries[currentIndex]);
@@ -53,48 +39,16 @@
     currentIndex = nextIndex;
   }
 
-  // Write the current entry out to the URL as its own history entry, so
-  // Back/Forward move between previously-viewed entries. Moving between
-  // entries pushes; tidying a redundant or unknown `?entry=` on mount (or
-  // any other write that isn't a move) replaces instead. Uses `location`
-  // rather than `page.url` from `$app/state` — after a Back-then-Forward
-  // sequence through our own shallow-routed history entries, `page.url`
-  // doesn't always resync (a SvelteKit shallow-routing edge case), which
-  // previously caused this effect to "correct" the URL using stale data
-  // right after Forward navigation. `location` is always accurate and
-  // isn't reactive. SvelteKit's own
-  // pushState/replaceState, though, read `page.url` internally, and
-  // `page.url` *is* reactive — so those calls are wrapped in `untrack`.
-  // Without it this effect silently depends on `page.url` and re-runs, with
-  // stale local state, the moment SvelteKit's popstate handler updates it
-  // (which happens before our own popstate listener below has synced state
-  // from the URL), writing the just-closed modal's URL back onto the entry
-  // Back had returned to.
-  $effect(() => {
-    if (!urlReady) return;
-    const params = { entry: currentIndex === entries.length - 1 ? null : current.slug };
-    const moved = currentIndex !== previousIndex;
-    previousIndex = currentIndex;
-    if (searchMatches(location.search, params)) return;
-    const search = buildSearch(params);
-    const url = `${location.pathname}${search ? `?${search}` : ''}`;
-    if (moved) untrack(() => pushState(url, {})); else untrack(() => replaceState(url, {}));
+  // Each entry viewed gets its own history entry, so Back/Forward move
+  // between previously-viewed entries.
+  syncUrl({
+    params: () => ({ entry: currentIndex === entries.length - 1 ? null : current.slug }),
+    entry: () => String(currentIndex),
+    restore: (params) => {
+      const index = readIndex(params);
+      if (index !== currentIndex) navigate(index);
+    }
   });
-
-  // Read the URL back into state on Back/Forward navigation. A native
-  // `popstate` listener (rather than a $effect watching page.url) is used
-  // deliberately: `popstate` only ever fires for genuine Back/Forward, never
-  // for our own pushState calls, so there's no risk of racing the write-out
-  // effect above — and `location.search` is the browser's own ground truth,
-  // sidestepping a SvelteKit shallow-routing edge case where `page.url`
-  // (from $app/state) doesn't always resync on Back-then-Forward sequences
-  // through our own history entries.
-  function syncFromLocation() {
-    const slug = new URLSearchParams(location.search).get('entry');
-    const requested = slug ? entries.findIndex((entry) => entry.slug === slug) : entries.length - 1;
-    const resolved = requested === -1 ? entries.length - 1 : requested;
-    if (resolved !== currentIndex) navigate(resolved);
-  }
 
   function selectEntry(index: number) {
     navigate(index);
@@ -107,10 +61,6 @@
     if (['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName)) return;
     if (event.key === 'ArrowLeft') navigate(currentIndex + 1);
     if (event.key === 'ArrowRight') navigate(currentIndex - 1);
-  }
-
-  function formatDate(date: string) {
-    return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(`${date}T00:00:00`));
   }
 
   function escapeHtml(value: string) {
@@ -129,12 +79,9 @@
   }
 </script>
 
-<svelte:window onkeydown={handleKeydown} onpopstate={syncFromLocation} />
+<svelte:window onkeydown={handleKeydown} />
 
-<svelte:head>
-  <title>Short Form — Ch*!</title>
-  <meta name="description" content="Short notes by Chrissy Lum." />
-</svelte:head>
+<PageMeta title="Short Form" description="Short notes by Chrissy Lum." />
 
 <main>
   <header class="archive-header">

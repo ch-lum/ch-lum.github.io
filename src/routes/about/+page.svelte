@@ -1,7 +1,8 @@
-<svelte:head>
-  <title>About — Ch*!</title>
-  <meta name="description" content="About Chrissy Lum and where to find her online." />
-</svelte:head>
+<script lang="ts">
+  import PageMeta from '$lib/PageMeta.svelte';
+</script>
+
+<PageMeta title="About" description="About Chrissy Lum and where to find her online." />
 
 <main>
   <section class="about" aria-labelledby="about-title">

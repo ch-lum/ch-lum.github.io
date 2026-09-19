@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { untrack } from 'svelte';
   import { flip } from 'svelte/animate';
-  import { browser } from '$app/environment';
-  import { afterNavigate, pushState, replaceState } from '$app/navigation';
-  import { buildSearch, searchMatches } from '$lib/url-params';
+  import ArrangeSelect from '$lib/ArrangeSelect.svelte';
+  import CollectionPage from '$lib/CollectionPage.svelte';
+  import DetailsDialog from '$lib/DetailsDialog.svelte';
+  import PageMeta from '$lib/PageMeta.svelte';
+  import { parseCsv } from '$lib/csv';
+  import { formatPartialDate } from '$lib/dates';
+  import { initialSearchParams, syncUrl } from '$lib/url-sync.svelte';
   import musicCsv from '../../../content/music.csv?raw';
   import spotifyAlbums from '../../../content/spotify-albums.json';
 
@@ -17,34 +20,15 @@
   };
   type Album = SpotifyAlbum & { note: string; owned: boolean; synced: boolean };
   type SortKey = 'name' | 'artist' | 'releaseDate' | 'owned';
-  const sortKeys: SortKey[] = ['name', 'artist', 'releaseDate', 'owned'];
-
-  function parseLine(line: string) {
-    const values: string[] = [];
-    let value = '';
-    let quoted = false;
-    for (let index = 0; index < line.length; index += 1) {
-      const character = line[index];
-      if (character === '"' && line[index + 1] === '"') { value += '"'; index += 1; }
-      else if (character === '"') quoted = !quoted;
-      else if (character === ',' && !quoted) { values.push(value.trim()); value = ''; }
-      else value += character;
-    }
-    values.push(value.trim());
-    return values;
-  }
-
-  function parseMusicCsv(raw: string) {
-    const [headerLine, ...lines] = raw.trim().split(/\r?\n/);
-    const headers = parseLine(headerLine);
-    return lines.filter((line) => line.trim()).map((line) => {
-      const values = parseLine(line);
-      return Object.fromEntries(headers.map((header, index) => [header, values[index] ?? '']));
-    });
-  }
+  const sortOptions: { value: SortKey; label: string }[] = [
+    { value: 'name', label: 'Name' },
+    { value: 'artist', label: 'Artist' },
+    { value: 'releaseDate', label: 'Release Date' },
+    { value: 'owned', label: 'Owned' }
+  ];
 
   const cache = new Map((spotifyAlbums as SpotifyAlbum[]).map((album) => [album.id, album]));
-  const albums: Album[] = parseMusicCsv(musicCsv).map((entry) => {
+  const albums: Album[] = parseCsv(musicCsv).map((entry) => {
     const metadata = cache.get(entry.spotify_id);
     const owned = ['true', 'yes', '1', 'owned', 'x'].includes(entry.owned?.trim().toLowerCase());
     return metadata
@@ -62,36 +46,33 @@
         };
   });
 
-  // Initial state hydrates from the URL (once, at component init) so a
-  // deep link like /music/?sort=artist&album=<id> restores exactly that
-  // view. Invalid/unknown param values fall back to defaults. Guarded by
-  // `browser`, since this runs during prerendering too, where `location`
-  // doesn't exist — the prerendered HTML just reflects defaults, and
-  // hydration picks up the real query string an instant later.
-  const initialParams = new URLSearchParams(browser ? location.search : '');
-  function readSort(): SortKey {
-    const raw = initialParams.get('sort');
-    return (sortKeys.includes(raw as SortKey) ? raw : 'name') as SortKey;
+  // URL state, e.g. /music/?sort=artist&album=<id>. Invalid or unknown
+  // values fall back to defaults.
+  function readSort(params: URLSearchParams): SortKey {
+    const raw = params.get('sort');
+    return (sortOptions.some((option) => option.value === raw) ? raw : 'name') as SortKey;
   }
-  function readSelected(): Album | null {
-    const id = initialParams.get('album');
+  function readSelected(params: URLSearchParams): Album | null {
+    const id = params.get('album');
     return id ? (albums.find((album) => album.id === id) ?? null) : null;
   }
 
-  const initialSelected = readSelected();
-  let selected = $state<Album | null>(initialSelected);
-  let sortBy = $state<SortKey>(readSort());
-  let detailsDialog: HTMLDialogElement;
-  // Write-out bookkeeping — plain variables, not `$state`; see pins/ for the
-  // full rationale. `previousSelectedId` distinguishes "a new modal just
-  // opened" (push) from any other change (replace) and starts as the
-  // deep-linked album so a mount-time URL clean-up never pushes;
-  // `modalEntryPushed` lets closing the modal pop its history entry.
-  let previousSelectedId: string | null = initialSelected?.id ?? null;
-  let modalEntryPushed = false;
-  // Wait for SvelteKit's router before touching history — see pins/.
-  let urlReady = $state(false);
-  afterNavigate(() => { urlReady = true; });
+  const initialParams = initialSearchParams();
+  let selected = $state<Album | null>(readSelected(initialParams));
+  let sortBy = $state<SortKey>(readSort(initialParams));
+
+  syncUrl({
+    params: () => ({
+      sort: sortBy === 'name' ? null : sortBy,
+      album: selected?.id ?? null
+    }),
+    entry: () => selected?.id ?? null,
+    restore: (params) => {
+      sortBy = readSort(params);
+      const nextSelected = readSelected(params);
+      if ((nextSelected?.id ?? null) !== (selected?.id ?? null)) selected = nextSelected;
+    }
+  });
 
   const sortedAlbums = $derived(
     [...albums].sort((a, b) => {
@@ -101,123 +82,21 @@
       return a.name.localeCompare(b.name);
     })
   );
-
-  function showDetails(album: Album) {
-    selected = album;
-  }
-
-  function closeDetails() {
-    selected = null;
-  }
-
-  // Write the current sort/modal state out to the URL. Sort changes
-  // replace the current history entry; opening an album's modal pushes a
-  // new entry, so Back closes it. Uses `location` rather than `page.url`
-  // from `$app/state` — after a Back-then-Forward sequence through our own
-  // shallow-routed history entries, `page.url` doesn't always resync (a
-  // SvelteKit shallow-routing edge case), which previously caused this
-  // effect to "correct" the URL using stale data right after Forward
-  // navigation. `location` is always accurate and isn't reactive. SvelteKit's own
-  // pushState/replaceState, though, read `page.url` internally, and
-  // `page.url` *is* reactive — so those calls are wrapped in `untrack`.
-  // Without it this effect silently depends on `page.url` and re-runs, with
-  // stale local state, the moment SvelteKit's popstate handler updates it
-  // (which happens before our own popstate listener below has synced state
-  // from the URL), writing the just-closed modal's URL back onto the entry
-  // Back had returned to.
-  $effect(() => {
-    if (!urlReady) return;
-    const params = {
-      sort: sortBy === 'name' ? null : sortBy,
-      album: selected?.id ?? null
-    };
-    const selectedId = selected?.id ?? null;
-    const previousId = previousSelectedId;
-    previousSelectedId = selectedId;
-    if (searchMatches(location.search, params)) return;
-    if (selectedId === null && previousId !== null && modalEntryPushed) {
-      // Closing a modal that got its own history entry: pop it, like Back.
-      modalEntryPushed = false;
-      history.back();
-      return;
-    }
-    const search = buildSearch(params);
-    const url = `${location.pathname}${search ? `?${search}` : ''}`;
-    if (selectedId !== null && selectedId !== previousId) {
-      untrack(() => pushState(url, {}));
-      modalEntryPushed = true;
-    } else {
-      untrack(() => replaceState(url, {}));
-    }
-  });
-
-  // Read the URL back into state on Back/Forward navigation. A native
-  // `popstate` listener (rather than a $effect watching page.url) is used
-  // deliberately: `popstate` only ever fires for genuine Back/Forward, never
-  // for our own pushState/replaceState calls, so there's no risk of racing
-  // the write-out effect above — and `location.search` is the browser's own
-  // ground truth, sidestepping a SvelteKit shallow-routing edge case where
-  // `page.url` (from $app/state) doesn't always resync on Back-then-Forward
-  // sequences through our own history entries.
-  function syncFromLocation() {
-    const params = new URLSearchParams(location.search);
-
-    const rawSort = params.get('sort');
-    const nextSort = (sortKeys.includes(rawSort as SortKey) ? rawSort : 'name') as SortKey;
-    if (nextSort !== sortBy) sortBy = nextSort;
-
-    const rawAlbum = params.get('album');
-    const nextSelected = rawAlbum ? (albums.find((album) => album.id === rawAlbum) ?? null) : null;
-    if ((nextSelected?.id ?? null) !== (selected?.id ?? null)) selected = nextSelected;
-  }
-
-  // Keep the native <dialog> element in sync with `selected`.
-  $effect(() => {
-    if (!detailsDialog) return;
-    if (selected && !detailsDialog.open) detailsDialog.showModal();
-    else if (!selected && detailsDialog.open) detailsDialog.close();
-  });
-
-  function formatReleaseDate(date: string) {
-    if (!/^\d{4}(-\d{2})?(-\d{2})?$/.test(date)) return date;
-    const [year, month = '01', day = '01'] = date.split('-');
-    const options: Intl.DateTimeFormatOptions = date.length === 4
-      ? { year: 'numeric' }
-      : date.length === 7
-        ? { year: 'numeric', month: 'long' }
-        : { dateStyle: 'long' };
-    return new Intl.DateTimeFormat('en-US', options).format(new Date(`${year}-${month}-${day}T00:00:00`));
-  }
 </script>
 
-<svelte:window onpopstate={syncFromLocation} />
+<PageMeta title="Music" description="Albums I keep returning to, with personal notes." />
 
-<svelte:head>
-  <title>Music — Ch*!</title>
-  <meta name="description" content="Albums I keep returning to, with personal notes." />
-</svelte:head>
-
-<main>
-  <header class="page-heading">
-    <div><p class="eyebrow">A musical wishlist</p><h1>Music</h1></div>
-    <p class="intro">Purchasing albums is hard. Wanting to purchase is easy, so here we are.</p>
-  </header>
+<CollectionPage eyebrow="A musical wishlist" title="Music">
+  {#snippet intro()}Purchasing albums is hard. Wanting to purchase is easy, so here we are.{/snippet}
 
   <div class="controls">
-    <label>Arrange by
-      <select bind:value={sortBy}>
-        <option value="name">Name</option>
-        <option value="artist">Artist</option>
-        <option value="releaseDate">Release Date</option>
-        <option value="owned">Owned</option>
-      </select>
-    </label>
+    <ArrangeSelect bind:value={sortBy} options={sortOptions} />
   </div>
 
   <section class="albums" aria-label="Album archive">
     {#each sortedAlbums as album (album.id)}
       <article animate:flip={{ duration: 550 }}>
-        <button class="album" onclick={() => showDetails(album)}>
+        <button class="album" onclick={() => selected = album}>
           {#if album.artwork}
             <img class:owned={album.owned} src={album.artwork} alt={`Cover of ${album.name}`} />
           {:else}
@@ -232,53 +111,48 @@
       </article>
     {/each}
   </section>
-</main>
+</CollectionPage>
 
-<dialog bind:this={detailsDialog} onclose={() => selected = null} onclick={(event) => event.target === detailsDialog && closeDetails()}>
-  {#if selected}
-    <button class="close" onclick={closeDetails} aria-label="Close details">×</button>
-    <div class="dialog-layout">
-      <div>
-        {#if selected.artwork}<img class="dialog-art" class:owned={selected.owned} src={selected.artwork} alt={`Cover of ${selected.name}`} />{/if}
-        {#if selected.synced}
-          <iframe
-            title={`Listen to ${selected.name} on Spotify`}
-            src={`https://open.spotify.com/embed/album/${selected.id}?utm_source=generator&theme=0`}
-            width="100%"
-            height="152"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          ></iframe>
-        {/if}
-      </div>
-      <div class="details">
-        <p class="eyebrow">{selected.artists.join(', ')}</p>
-        <h2>{selected.name}</h2>
-        <dl>
-          <div><dt>Artists</dt><dd>{selected.artists.join(', ')}</dd></div>
-          <div><dt>Released</dt><dd>{formatReleaseDate(selected.releaseDate)}</dd></div>
-          <div><dt>Owned</dt><dd>{selected.owned ? 'Yes' : 'No'}</dd></div>
-        </dl>
-        <section class="note"><h3>A bit about it</h3><p>{selected.note || 'No note yet.'}</p></section>
-        <a class="modal-link" href={selected.spotifyUrl} target="_blank" rel="noreferrer">Listen on Spotify ↗</a>
-      </div>
+
+<DetailsDialog
+  item={selected}
+  onclose={() => selected = null}
+  describe={(album) => ({
+    eyebrow: album.artists.join(', '),
+    title: album.name,
+    rows: [
+      { label: 'Artists', value: album.artists.join(', ') },
+      { label: 'Released', value: formatPartialDate(album.releaseDate) },
+      { label: 'Owned', value: album.owned ? 'Yes' : 'No' }
+    ],
+    note: album.note
+  })}
+>
+  {#snippet media(album)}
+    <div>
+      {#if album.artwork}<img class="dialog-art" class:owned={album.owned} src={album.artwork} alt={`Cover of ${album.name}`} />{/if}
+      {#if album.synced}
+        <iframe
+          title={`Listen to ${album.name} on Spotify`}
+          src={`https://open.spotify.com/embed/album/${album.id}?utm_source=generator&theme=0`}
+          width="100%"
+          height="152"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      {/if}
     </div>
-  {/if}
-</dialog>
+  {/snippet}
+  {#snippet footer(album)}
+    <a class="modal-link" href={album.spotifyUrl} target="_blank" rel="noreferrer">Listen on Spotify ↗</a>
+  {/snippet}
+</DetailsDialog>
 
 <style>
-  main { width: min(76rem, calc(100% - 3rem)); margin: 0 auto; padding: 4rem 0 7rem; }
-  .page-heading { display: flex; align-items: end; justify-content: space-between; gap: 3rem; border-bottom: 1px solid rgb(48 43 36 / 35%); padding-bottom: 1.5rem; }
-  h1 { margin: 0; font-size: clamp(4rem, 10vw, 8rem); font-weight: 400; line-height: .85; }
-  .eyebrow { margin: 0 0 .65rem; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; }
-  .intro { max-width: 24rem; margin: 0; font-size: 1.05rem; line-height: 1.5; }
   .controls { display: flex; min-height: 5rem; align-items: center; justify-content: flex-end; }
-  label { display: flex; align-items: center; gap: .65rem; font-size: .85rem; }
-  select { border: 1px solid rgb(48 43 36 / 35%); background: transparent; color: inherit; font: inherit; padding: .55rem .9rem; }
   .albums { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); }
   article { min-width: 0; }
-  button { color: inherit; font: inherit; }
-  .album { display: block; width: 100%; border: 0; background: transparent; cursor: pointer; padding: 0; text-align: left; }
+  .album { display: block; width: 100%; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; padding: 0; text-align: left; }
   .album img, .missing-art { width: 100%; aspect-ratio: 1; object-fit: cover; box-shadow: 0 .8rem 1.8rem rgb(48 43 36 / 18%); transition: transform .3s ease, box-shadow .3s ease; }
   .owned { outline: 3px solid #b08d2f; outline-offset: 4px; }
   .missing-art { display: grid; place-items: center; background: rgb(255 255 255 / 30%); font-size: 4rem; }
@@ -288,27 +162,10 @@
   .album-copy strong { font-size: 1.05rem; font-weight: 400; }
   .album-copy small { opacity: .7; }
   .spotify-link, .modal-link { display: inline-block; margin-top: .6rem; font-size: .72rem; text-underline-offset: .25em; opacity: .7; }
-  dialog { width: min(62rem, calc(100% - 2rem)); max-height: calc(100vh - 2rem); overflow-y: auto; border: 1px solid rgb(48 43 36 / 40%); background: #edf0e4; color: #302b24; padding: clamp(1.5rem, 5vw, 3rem); }
-  dialog::backdrop { background: rgb(30 28 24 / 55%); backdrop-filter: blur(3px); }
-  .close { position: absolute; top: .7rem; right: 1rem; border: 0; background: transparent; cursor: pointer; font-size: 2rem; }
-  .dialog-layout { display: grid; grid-template-columns: minmax(15rem, .9fr) 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
   .dialog-art { width: 100%; aspect-ratio: 1; object-fit: cover; margin-bottom: 1rem; }
   iframe { display: block; border: 0; border-radius: 12px; }
-  .details { padding-top: 1rem; }
-  dialog h2 { margin: 0 0 1.5rem; font-size: clamp(2.3rem, 6vw, 4.5rem); font-weight: 400; line-height: 1; }
-  dl { margin: 0; }
-  dl div { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; border-top: 1px solid rgb(48 43 36 / 22%); padding: .65rem 0; }
-  dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
-  dd { margin: 0; }
-  .note { margin-top: 2.5rem; }
-  .note h3 { margin: 0 0 .7rem; font-size: .78rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; }
-  .note p { margin: 0; font-size: 1.05rem; line-height: 1.65; }
   @media (max-width: 650px) {
-    main { width: calc(100% - 2rem); padding-top: 2.5rem; }
-    .page-heading { display: block; }
-    .intro { margin-top: 1.5rem; }
     .albums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem; padding-top: 2.5rem; }
-    .dialog-layout { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) { .album img, .missing-art { transition: none; } }
 </style>
