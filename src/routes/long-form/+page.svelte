@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageHeader from '$lib/PageHeader.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import { formatDate } from '$lib/dates';
 
@@ -23,10 +24,7 @@
 <PageMeta title="Long Form" description="Long-form writing by Chrissy Lum." />
 
 <main>
-  <header>
-    <p>Things I put thought into</p>
-    <h1>Long Form</h1>
-  </header>
+  <PageHeader eyebrow="Things I put thought into" title="Long Form" />
 
   <ol aria-label="Long-form posts">
     {#each data.posts as post, index}
@@ -48,10 +46,7 @@
 
 <style>
   main { width: min(72rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 8rem; overflow: hidden; }
-  header { margin-bottom: clamp(4rem, 10vw, 8rem); border-bottom: 1px solid rgb(48 43 36 / 35%); padding-bottom: 1.5rem; }
-  header p { margin: 0 0 .7rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
-  h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 400; line-height: .9; }
-  ol { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin: 0; padding: 0; overflow-anchor: none; list-style: none; }
+  ol { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin: clamp(4rem, 10vw, 8rem) 0 0; padding: 0; overflow-anchor: none; list-style: none; }
   li { width: min(52rem, 88%); margin-left: auto; margin-right: auto; transform: translateX(var(--offset)); }
   article { width: fit-content; max-width: 100%; }
   h2 { margin: 0; font-size: clamp(1.25rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.15; }

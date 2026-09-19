@@ -37,7 +37,8 @@ The static production output is written to `build/`.
 - `src/routes/`: SvelteKit pages.
 - `src/lib/`: shared UI, including `SiteHeader.svelte`, home navigation, and the Leaflet pin map.
 - Shared building blocks for pages (reuse these rather than copying markup/styles between routes):
-  - `CollectionPage.svelte`: collection-page shell (width/padding, eyebrow + oversized title + intro + divider).
+  - `PageHeader.svelte`: the page title block (eyebrow, large serif title, optional intro or action, divider) used by Coffee, Music, Pins, Long Form, Short Form, and Projects. About intentionally has its own layout.
+  - `CollectionPage.svelte`: collection-page shell (width/padding plus `PageHeader`).
   - `CollectionGrid.svelte`: animated, optionally grouped card grid (Coffee, Pins).
   - `DetailsDialog.svelte`: pale-green details modal (picture, eyebrow, title, label/value rows, optional note).
   - `ArrangeSelect.svelte`: the "Arrange by" dropdown.
@@ -54,8 +55,9 @@ The static production output is written to `build/`.
 
 - The default background is sage green (`#CCD4B5`) with a subtle radial highlight.
 - The main typeface is Georgia/Times-style serif.
-- Coffee, Music, and Pins share a collection-page language: oversized serif title, eyebrow, right-aligned subtitle, thin divider, transparent controls, animated grids, and pale-green dialogs.
+- Coffee, Music, and Pins share a collection-page language: serif title, eyebrow, right-aligned subtitle, thin divider, transparent controls, animated grids, and pale-green dialogs.
 - When changing one archive, compare it with the other archive pages and preserve consistency unless the user requests a deliberate difference.
+- Mobile layouts kick in below 650px.
 - Keep layouts responsive. Two-column collections commonly become two compact columns on mobile; dialogs become one column.
 - Respect `prefers-reduced-motion`.
 - The shared header contains Home, About, Blog/Long Form, and CV. The autograph links home.

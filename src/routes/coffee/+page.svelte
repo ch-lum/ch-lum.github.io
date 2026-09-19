@@ -115,7 +115,7 @@
 
 <PageMeta title="Coffee" description="A visual archive of coffees I have brewed." />
 
-<CollectionPage eyebrow="A bean archive" title="Coffee" compactAt={600}>
+<CollectionPage eyebrow="A bean archive" title="Coffee">
   {#snippet intro()}At some point I stopped throwing away the bags.{/snippet}
 
   <div class="controls">
@@ -130,7 +130,6 @@
     group={arrangeBy === 'roastDate' ? null : (coffee) => coffee[arrangeBy as ClusterKey]}
     cardLabel={(coffee) => `View ${coffee.name} coffee details`}
     onselect={(coffee) => selected = coffee}
-    compactAt={600}
   >
     {#snippet art(coffee)}
       <img class="bag" src={coffee.thumbImage} alt={`${coffee.name} coffee bag from ${coffee.region}`} loading="lazy" decoding="async" />
@@ -155,7 +154,7 @@
   .controls { display: flex; min-height: 5rem; align-items: center; justify-content: flex-end; gap: 1rem; }
   .bag { width: 100%; height: 16rem; object-fit: contain; filter: drop-shadow(0 .7rem .5rem rgb(48 43 36 / 18%)); }
   .dialog-bag { width: 100%; height: 28rem; object-fit: contain; }
-  @media (max-width: 600px) {
+  @media (max-width: 650px) {
     .controls { align-items: flex-start; flex-direction: column; justify-content: center; }
     .bag { height: 11rem; }
     .dialog-bag { height: 14rem; }

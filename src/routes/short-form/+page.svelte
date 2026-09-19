@@ -1,5 +1,6 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
+  import PageHeader from '$lib/PageHeader.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import { formatDate } from '$lib/dates';
   import { initialSearchParams, syncUrl } from '$lib/url-sync.svelte';
@@ -84,10 +85,11 @@
 <PageMeta title="Short Form" description="Short notes by Chrissy Lum." />
 
 <main>
-  <header class="archive-header">
-    <div><p class="eyebrow">I wish I could share it all</p><h1>Short Form</h1></div>
-    <button class="menu-toggle" onclick={() => showMenu = !showMenu}>{showMenu ? 'Close menu' : 'Menu'}</button>
-  </header>
+  <PageHeader eyebrow="I wish I could share it all" title="Short Form">
+    {#snippet action()}
+      <button class="menu-toggle" onclick={() => showMenu = !showMenu}>{showMenu ? 'Close menu' : 'Menu'}</button>
+    {/snippet}
+  </PageHeader>
 
   {#if showMenu}
     <section class="menu" in:fade={{ duration: 180 }} aria-label="Short-form archive">
@@ -142,9 +144,7 @@
 
 <style>
   main { width: min(68rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 7rem; overflow-x: clip; }
-  .archive-header { display: flex; align-items: end; justify-content: space-between; gap: 2rem; border-bottom: 1px solid rgb(48 43 36 / 28%); padding-bottom: 1.25rem; }
-  .eyebrow, .menu-heading { margin: 0 0 .5rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
-  h1 { margin: 0; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 400; line-height: .9; }
+  .menu-heading { margin: 0 0 .5rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
   button { color: inherit; font: inherit; }
   .menu-toggle { border: 0; border-bottom: 1px solid currentColor; background: transparent; cursor: pointer; padding: .25rem 0; }
   .reader { padding-top: 2.25rem; }

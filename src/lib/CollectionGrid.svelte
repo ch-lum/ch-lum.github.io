@@ -6,7 +6,6 @@
   - `art` renders each card's picture.
   - `uniformRows` reserves room for group headings and two-line names on
     every card so rows line up (Pins); otherwise headings sit inline (Coffee).
-  - `compactAt`: viewport width (px) below which the grid becomes two columns.
 -->
 <script lang="ts" generics="T">
   import type { Snippet } from 'svelte';
@@ -22,7 +21,6 @@
     group = null,
     cardLabel,
     uniformRows = false,
-    compactAt = 650,
     label
   }: {
     items: T[];
@@ -34,7 +32,6 @@
     group?: ((item: T) => string) | null;
     cardLabel?: (item: T) => string;
     uniformRows?: boolean;
-    compactAt?: 600 | 650;
     label?: string;
   } = $props();
 
@@ -43,7 +40,7 @@
   }
 </script>
 
-<section class="collection" class:compact-600={compactAt === 600} class:compact-650={compactAt === 650} aria-label={label} aria-live="polite">
+<section class="collection" aria-label={label} aria-live="polite">
   {#each items as item, index (key(item))}
     <article animate:flip={{ duration: 650 }}>
       {#if group && uniformRows}
@@ -73,7 +70,6 @@
   .card-copy.uniform { min-height: 3rem; align-content: start; }
   .card-copy strong { font-size: 1rem; font-weight: 400; }
   .card-copy small { font-size: .78rem; opacity: .7; }
-  @media (max-width: 650px) { .collection.compact-650 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; } }
-  @media (max-width: 600px) { .collection.compact-600 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; } }
+  @media (max-width: 650px) { .collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; } }
   @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
 </style>

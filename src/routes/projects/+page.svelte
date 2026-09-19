@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageHeader from '$lib/PageHeader.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
 
   type Project = {
@@ -15,11 +16,9 @@
 <PageMeta title="Projects" description="Selected research, data, visualization, and education projects by Chrissy Lum." />
 
 <main>
-  <section class="intro" aria-labelledby="projects-title">
-    <p class="eyebrow">Some things I've done</p>
-    <h1 id="projects-title">Projects</h1>
-    <p class="career-note">Professionally, I am a data scientist looking at hotel room prices at Caesars Entertainment</p>
-  </section>
+  <PageHeader eyebrow="Some things I've done" title="Projects">
+    {#snippet intro()}Professionally, I am a data scientist looking at hotel room prices at Caesars Entertainment{/snippet}
+  </PageHeader>
 
   <section class="computer" aria-label="Project desktop">
     <div class="monitor">
@@ -48,10 +47,6 @@
 
 <style>
   main { width: min(76rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 8rem; }
-  .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 32rem); align-items: end; gap: 2rem 5rem; border-bottom: 1px solid rgb(48 43 36 / 35%); padding-bottom: 1.5rem; }
-  .eyebrow { grid-column: 1 / -1; margin: 0 0 -1.25rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
-  h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 400; line-height: .9; }
-  .career-note { margin: 0; font-size: clamp(.95rem, 1.5vw, 1.08rem); line-height: 1.6; }
   .computer { width: min(66rem, 100%); margin: clamp(4rem, 9vw, 7rem) auto 0; }
   .monitor { position: relative; z-index: 1; padding: clamp(.7rem, 1.6vw, 1.25rem); border: 2px solid #7e817d; border-radius: clamp(1rem, 2vw, 1.8rem); background: linear-gradient(145deg, #dadad2, #aaa9a1); box-shadow: inset 3px 3px 4px rgb(255 255 255 / 75%), inset -4px -4px 6px rgb(59 57 52 / 28%), 0 1.8rem 3rem rgb(48 43 36 / 22%); }
   .monitor::after { position: absolute; right: 2.2rem; bottom: .25rem; width: .45rem; height: .45rem; border-radius: 50%; background: #69a448; box-shadow: 0 0 .35rem #b9e69a; content: ''; }
@@ -80,8 +75,6 @@
   .base { width: 35%; height: 1.1rem; margin: 0 auto; border: 1px solid #85857e; border-radius: 50%; background: linear-gradient(#d5d5ce, #999991); box-shadow: 0 .6rem 1rem rgb(48 43 36 / 20%); }
   @media (max-width: 700px) {
     main { width: calc(100% - 2rem); padding-top: 2rem; }
-    .intro { grid-template-columns: 1fr; }
-    .eyebrow { grid-column: auto; margin-bottom: -1rem; }
     .screen { height: 41rem; aspect-ratio: auto; }
     .desktop { grid-template-columns: repeat(2, minmax(6rem, 1fr)); gap: 2.3rem .75rem; padding: 1.5rem .8rem 5rem; }
     .tooltip { position: fixed; top: auto; right: 1rem; bottom: 1rem; left: 1rem; width: auto; transform: translateY(.25rem); }

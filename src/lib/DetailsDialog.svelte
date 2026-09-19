@@ -8,8 +8,7 @@
   an "A bit about it" section, then the optional `footer`.
 
   `size` 'large' (Music, Pins) is wider with a bigger title; 'medium' (Coffee)
-  is narrower, vertically centred, and goes single-column below 600px
-  instead of 650px.
+  is narrower and vertically centred. Both go single-column below 650px.
 -->
 <script lang="ts" generics="T">
   import type { Snippet } from 'svelte';
@@ -82,6 +81,5 @@
   .medium dl div { grid-template-columns: 6.5rem 1fr; padding: .55rem 0; }
   .medium dt { font-size: .75rem; }
 
-  @media (max-width: 650px) { .large .dialog-layout { grid-template-columns: 1fr; } }
-  @media (max-width: 600px) { .medium .dialog-layout { grid-template-columns: 1fr; } }
+  @media (max-width: 650px) { .large .dialog-layout, .medium .dialog-layout { grid-template-columns: 1fr; } }
 </style>
