@@ -1,7 +1,7 @@
 <script lang="ts">
   import ArrangeSelect from '$lib/ArrangeSelect.svelte';
   import CollectionGrid from '$lib/CollectionGrid.svelte';
-  import CollectionPage from '$lib/CollectionPage.svelte';
+  import Page from '$lib/Page.svelte';
   import DetailsDialog from '$lib/DetailsDialog.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import { parseCsv } from '$lib/csv';
@@ -115,7 +115,7 @@
 
 <PageMeta title="Coffee" description="A visual archive of coffees I have brewed." />
 
-<CollectionPage eyebrow="A bean archive" title="Coffee">
+<Page eyebrow="A bean archive" title="Coffee">
   {#snippet intro()}At some point I stopped throwing away the bags.{/snippet}
 
   <div class="controls">
@@ -135,7 +135,7 @@
       <img class="bag" src={coffee.thumbImage} alt={`${coffee.name} coffee bag from ${coffee.region}`} loading="lazy" decoding="async" />
     {/snippet}
   </CollectionGrid>
-</CollectionPage>
+</Page>
 
 <DetailsDialog
   item={selected}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PageHeader from '$lib/PageHeader.svelte';
+  import Page from '$lib/Page.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import { formatDate } from '$lib/dates';
 
@@ -23,8 +23,7 @@
 
 <PageMeta title="Long Form" description="Long-form writing by Chrissy Lum." />
 
-<main>
-  <PageHeader eyebrow="Things I put thought into" title="Long Form" />
+<Page eyebrow="Things I put thought into" title="Long Form">
 
   <ol aria-label="Long-form posts">
     {#each data.posts as post, index}
@@ -42,11 +41,10 @@
       </li>
     {/each}
   </ol>
-</main>
+</Page>
 
 <style>
-  main { width: min(72rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 8rem; overflow: hidden; }
-  ol { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin: clamp(4rem, 10vw, 8rem) 0 0; padding: 0; overflow-anchor: none; list-style: none; }
+  ol { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin: clamp(4rem, 10vw, 8rem) 0 0; padding: 0; overflow: hidden; overflow-anchor: none; list-style: none; }
   li { width: min(52rem, 88%); margin-left: auto; margin-right: auto; transform: translateX(var(--offset)); }
   article { width: fit-content; max-width: 100%; }
   h2 { margin: 0; font-size: clamp(1.25rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.15; }
@@ -59,7 +57,6 @@
   .meta { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin: .8rem 0 0; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
   .description { max-width: 38rem; margin: .55rem 0 0; font-size: .95rem; line-height: 1.55; }
   @media (max-width: 600px) {
-    main { width: calc(100% - 2rem); padding-top: 2rem; }
     li { width: 92%; transform: translateX(calc(var(--offset) * .35)); }
     .details { grid-template-rows: 1fr; opacity: 1; }
   }

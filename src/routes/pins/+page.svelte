@@ -2,7 +2,7 @@
   import { slide } from 'svelte/transition';
   import ArrangeSelect from '$lib/ArrangeSelect.svelte';
   import CollectionGrid from '$lib/CollectionGrid.svelte';
-  import CollectionPage from '$lib/CollectionPage.svelte';
+  import Page from '$lib/Page.svelte';
   import DetailsDialog from '$lib/DetailsDialog.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import PinMap, { type MapPin } from '$lib/PinMap.svelte';
@@ -149,7 +149,7 @@
 
 <PageMeta title="Pins" description="A map and cabinet of pins collected from places I have visited." />
 
-<CollectionPage eyebrow="Oh, the places you'll go!" title="Pins & Places">
+<Page eyebrow="Oh, the places you'll go!" title="Pins & Places">
   {#snippet intro()}So this collection is only <i>most</i> of my pins.{/snippet}
 
   <div class="controls" aria-label="Collection controls">
@@ -205,7 +205,7 @@
       {#snippet art(pin)}<span class="pin-stage"><img src={pin.thumbImage} alt="" loading="lazy" decoding="async" /></span>{/snippet}
     </CollectionGrid>
   {/if}
-</CollectionPage>
+</Page>
 
 <DetailsDialog
   item={selected}

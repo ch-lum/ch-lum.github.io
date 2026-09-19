@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PageHeader from '$lib/PageHeader.svelte';
+  import Page from '$lib/Page.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
 
   type Project = {
@@ -15,10 +15,8 @@
 
 <PageMeta title="Projects" description="Selected research, data, visualization, and education projects by Chrissy Lum." />
 
-<main>
-  <PageHeader eyebrow="Some things I've done" title="Projects">
-    {#snippet intro()}Professionally, I am a data scientist looking at hotel room prices at Caesars Entertainment{/snippet}
-  </PageHeader>
+<Page eyebrow="Some things I've done" title="Projects">
+  {#snippet intro()}Professionally, I am a data scientist looking at hotel room prices at Caesars Entertainment{/snippet}
 
   <section class="computer" aria-label="Project desktop">
     <div class="monitor">
@@ -43,10 +41,9 @@
     <div class="stand" aria-hidden="true"></div>
     <div class="base" aria-hidden="true"></div>
   </section>
-</main>
+</Page>
 
 <style>
-  main { width: min(76rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 8rem; }
   .computer { width: min(66rem, 100%); margin: clamp(4rem, 9vw, 7rem) auto 0; }
   .monitor { position: relative; z-index: 1; padding: clamp(.7rem, 1.6vw, 1.25rem); border: 2px solid #7e817d; border-radius: clamp(1rem, 2vw, 1.8rem); background: linear-gradient(145deg, #dadad2, #aaa9a1); box-shadow: inset 3px 3px 4px rgb(255 255 255 / 75%), inset -4px -4px 6px rgb(59 57 52 / 28%), 0 1.8rem 3rem rgb(48 43 36 / 22%); }
   .monitor::after { position: absolute; right: 2.2rem; bottom: .25rem; width: .45rem; height: .45rem; border-radius: 50%; background: #69a448; box-shadow: 0 0 .35rem #b9e69a; content: ''; }
@@ -74,7 +71,6 @@
   .stand { width: 19%; height: 3.8rem; margin: -.2rem auto 0; background: linear-gradient(90deg, #999991, #d7d7cf 45%, #aaa9a1); clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%); }
   .base { width: 35%; height: 1.1rem; margin: 0 auto; border: 1px solid #85857e; border-radius: 50%; background: linear-gradient(#d5d5ce, #999991); box-shadow: 0 .6rem 1rem rgb(48 43 36 / 20%); }
   @media (max-width: 700px) {
-    main { width: calc(100% - 2rem); padding-top: 2rem; }
     .screen { height: 41rem; aspect-ratio: auto; }
     .desktop { grid-template-columns: repeat(2, minmax(6rem, 1fr)); gap: 2.3rem .75rem; padding: 1.5rem .8rem 5rem; }
     .tooltip { position: fixed; top: auto; right: 1rem; bottom: 1rem; left: 1rem; width: auto; transform: translateY(.25rem); }

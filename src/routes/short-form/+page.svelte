@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
-  import PageHeader from '$lib/PageHeader.svelte';
+  import Page from '$lib/Page.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import { formatDate } from '$lib/dates';
   import { initialSearchParams, syncUrl } from '$lib/url-sync.svelte';
@@ -84,12 +84,10 @@
 
 <PageMeta title="Short Form" description="Short notes by Chrissy Lum." />
 
-<main>
-  <PageHeader eyebrow="I wish I could share it all" title="Short Form">
-    {#snippet action()}
-      <button class="menu-toggle" onclick={() => showMenu = !showMenu}>{showMenu ? 'Close menu' : 'Menu'}</button>
-    {/snippet}
-  </PageHeader>
+<Page eyebrow="I wish I could share it all" title="Short Form">
+  {#snippet action()}
+    <button class="menu-toggle" onclick={() => showMenu = !showMenu}>{showMenu ? 'Close menu' : 'Menu'}</button>
+  {/snippet}
 
   {#if showMenu}
     <section class="menu" in:fade={{ duration: 180 }} aria-label="Short-form archive">
@@ -140,14 +138,13 @@
   {:else}
     <p class="empty">No short-form entries found.</p>
   {/if}
-</main>
+</Page>
 
 <style>
-  main { width: min(68rem, calc(100% - 3rem)); margin: 0 auto; padding: 3rem 0 7rem; overflow-x: clip; }
   .menu-heading { margin: 0 0 .5rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
   button { color: inherit; font: inherit; }
   .menu-toggle { border: 0; border-bottom: 1px solid currentColor; background: transparent; cursor: pointer; padding: .25rem 0; }
-  .reader { padding-top: 2.25rem; }
+  .reader { padding-top: 2.25rem; overflow-x: clip; }
   .reader-top { display: flex; align-items: start; justify-content: space-between; gap: 2rem; min-height: 4rem; }
   .metadata { display: grid; gap: .4rem; }
   .metadata time { font-size: .9rem; }
@@ -180,7 +177,6 @@
   li button:hover span, li button:focus-visible span, li button.current span { text-decoration: underline; text-underline-offset: .25em; }
   li time { flex: none; font-size: .78rem; opacity: .65; }
   @media (max-width: 600px) {
-    main { width: calc(100% - 2rem); padding-top: 2rem; }
     .reader-top { display: block; }
     nav { justify-content: flex-end; margin-top: 1.25rem; }
     .stage { grid-template-columns: 2rem minmax(0, 1fr) 2rem; min-height: 29rem; padding-top: 1.25rem; }

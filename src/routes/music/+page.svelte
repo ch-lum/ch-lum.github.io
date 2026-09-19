@@ -1,7 +1,7 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
   import ArrangeSelect from '$lib/ArrangeSelect.svelte';
-  import CollectionPage from '$lib/CollectionPage.svelte';
+  import Page from '$lib/Page.svelte';
   import DetailsDialog from '$lib/DetailsDialog.svelte';
   import PageMeta from '$lib/PageMeta.svelte';
   import { parseCsv } from '$lib/csv';
@@ -86,7 +86,7 @@
 
 <PageMeta title="Music" description="Albums I keep returning to, with personal notes." />
 
-<CollectionPage eyebrow="A musical wishlist" title="Music">
+<Page eyebrow="A musical wishlist" title="Music">
   {#snippet intro()}Purchasing albums is hard. Wanting to purchase is easy, so here we are.{/snippet}
 
   <div class="controls">
@@ -111,7 +111,7 @@
       </article>
     {/each}
   </section>
-</CollectionPage>
+</Page>
 
 
 <DetailsDialog

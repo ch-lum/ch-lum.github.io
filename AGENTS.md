@@ -37,8 +37,7 @@ The static production output is written to `build/`.
 - `src/routes/`: SvelteKit pages.
 - `src/lib/`: shared UI, including `SiteHeader.svelte`, home navigation, and the Leaflet pin map.
 - Shared building blocks for pages (reuse these rather than copying markup/styles between routes):
-  - `PageHeader.svelte`: the page title block (eyebrow, large serif title, optional intro or action, divider) used by Coffee, Music, Pins, Long Form, Short Form, and Projects. About intentionally has its own layout.
-  - `CollectionPage.svelte`: collection-page shell (width/padding plus `PageHeader`).
+  - `Page.svelte`: standard page frame (76rem content width, 3rem top / 8rem bottom spacing) with `PageHeader.svelte` on top: eyebrow, large serif title, optional intro or action, divider. Used by Coffee, Music, Pins, Long Form, Short Form, and Projects; About intentionally has its own layout.
   - `CollectionGrid.svelte`: animated, optionally grouped card grid (Coffee, Pins).
   - `DetailsDialog.svelte`: pale-green details modal (picture, eyebrow, title, label/value rows, optional note).
   - `ArrangeSelect.svelte`: the "Arrange by" dropdown.
